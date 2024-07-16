@@ -17,7 +17,7 @@ const Page: React.FC = () => {
       setVerify(verifyParam);
     }
   }, []);
-  if (!verify) return <p>Loading...</p>;
+
   return (
     <main className="flex min-h-screen items-center justify-center p-24">
       <div className="w-[365px] space-y-4 text-center">

@@ -19,6 +19,8 @@ const Page: React.FC = () => {
       setVerify(verifyParam);
       const tg = window?.Telegram?.WebApp;
       tg.ready();
+      const user = tg.initDataUnsafe?.user;
+      setUser(user);
     }
   }, []);
 

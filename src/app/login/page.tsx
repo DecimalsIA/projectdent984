@@ -13,7 +13,7 @@ const Page: React.FC = () => {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && window?.Telegram?.WebApp) {
       const params = new URLSearchParams(window.location.search);
       const verifyParam = params.get('verify');
       setVerify(verifyParam);

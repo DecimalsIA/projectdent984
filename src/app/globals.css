@@ -85,6 +85,26 @@ h2 {
   margin-bottom: 10px !important;
 }
 
+.fixedBotton {
+
+  position: fixed;
+  bottom: 0;
+}
+
+.fixedTop {
+
+  position: fixed;
+  top: 0;
+
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.mb-110 {
+  margin-bottom: 112px;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

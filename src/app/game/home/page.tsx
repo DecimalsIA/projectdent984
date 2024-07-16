@@ -127,74 +127,76 @@ const Home = () => {
             className="w-full mt-[-30px] max-w-md mx-auto"
           />
           {/* Bottom Section */}
-          <CardPambii className="beeCard w-full mt-8">
-            <div className="flex space-x-2 w-full">
-              <BadgePambii
-                icon={<FireIcon className="w-5 h-5" color="red" />}
-                number={250}
-                className="bg-border w-full"
-              />
-              <BadgePambii
-                icon={<FireIcon className="w-5 h-5" />}
-                number={150}
-                className="bg-border w-full"
-              />
-              <BadgePambii
-                icon={<FireIcon className="w-5 h-5" />}
-                number={350}
-                className="bg-border w-full"
-              />
-              <BadgePambii
-                icon={<FireIcon className="w-5 h-5" />}
-                number={450}
-                className="bg-border w-full"
-              />
-            </div>
-            <div className="w-full border-b-m">
-              <ProgressBarPambii
-                level={9}
-                current={2800}
-                max={3000}
-                barColor="bg-green-500"
-                backgroundColor="bg-gray-700"
-              />
-            </div>
-
-            <div className="flex justify-between items-center w-full text-xs">
-              <div className="w-full mr-3">
-                <ButtonPambii
-                  titleText="POWER RATE"
-                  color="#fff"
-                  bg="#52BE97"
-                  icon={<FireIcon style={{ color: '#fff' }} />}
-                >
-                  457
-                </ButtonPambii>
+          <div>
+            <CardPambii className="beeCard w-full mt-2">
+              <div className="flex space-x-2 w-full">
+                <BadgePambii
+                  icon={<FireIcon className="w-5 h-5" color="red" />}
+                  number={250}
+                  className="bg-border w-full"
+                />
+                <BadgePambii
+                  icon={<FireIcon className="w-5 h-5" />}
+                  number={150}
+                  className="bg-border w-full"
+                />
+                <BadgePambii
+                  icon={<FireIcon className="w-5 h-5" />}
+                  number={350}
+                  className="bg-border w-full"
+                />
+                <BadgePambii
+                  icon={<FireIcon className="w-5 h-5" />}
+                  number={450}
+                  className="bg-border w-full"
+                />
               </div>
-              <div className="w-full mt-[28px]">
-                {' '}
-                <ButtonPambii
-                  onClick={() => alert('Battle button clicked')}
-                  color="#fff"
-                  icon={<PencilIcon />}
-                >
-                  EDIT BEE
-                </ButtonPambii>
+              <div className="w-full border-b-m">
+                <ProgressBarPambii
+                  level={9}
+                  current={2800}
+                  max={3000}
+                  barColor="bg-green-500"
+                  backgroundColor="bg-gray-700"
+                />
               </div>
 
-              <div className=" w-full ml-3">
-                <ButtonPambii
-                  onClick={() => alert('Battle button clicked')}
-                  color="#fff"
-                  titleText="PAMBII"
-                  bg="#FF9E5D"
-                  icon={<IconPambii />}
-                >
-                  8000
-                </ButtonPambii>
+              <div className="flex justify-between items-center w-full text-xs">
+                <div className="w-full mr-3">
+                  <ButtonPambii
+                    titleText="POWER RATE"
+                    color="#fff"
+                    bg="#52BE97"
+                    icon={<FireIcon style={{ color: '#fff' }} />}
+                  >
+                    457
+                  </ButtonPambii>
+                </div>
+                <div className="w-full mt-[28px]">
+                  {' '}
+                  <ButtonPambii
+                    onClick={() => alert('Battle button clicked')}
+                    color="#fff"
+                    icon={<PencilIcon />}
+                  >
+                    EDIT BEE
+                  </ButtonPambii>
+                </div>
+
+                <div className=" w-full ml-3">
+                  <ButtonPambii
+                    onClick={() => alert('Battle button clicked')}
+                    color="#fff"
+                    titleText="PAMBII"
+                    bg="#FF9E5D"
+                    icon={<IconPambii />}
+                  >
+                    8000
+                  </ButtonPambii>
+                </div>
               </div>
-            </div>
-          </CardPambii>
+            </CardPambii>
+          </div>
         </>
       ),
     },
@@ -218,45 +220,49 @@ const Home = () => {
       style={{ backgroundImage: 'url(' + bgImgeHome.src + ')' }}
     >
       {/* Top Navigation */}
-      <div className="w-full">
-        <TabsPambii
-          tabs={tabs}
-          mode="background"
-          bg="#2a2a2a"
-          className="mt-4 w-full"
-        />
+      <div className="w-full mb-110">
+        <div className="w-full">
+          <TabsPambii
+            tabs={tabs}
+            mode="background"
+            bg="#2a2a2a"
+            className="mt-4"
+          />
+        </div>
       </div>
 
       {/* Bottom Navigation */}
-      <CardPambii className="beeCard w-full mb-[7px]">
-        <div className="flex w-full">
-          <ActionButtonPambii
-            icon={<BattleIcon />}
-            text="BATTLE"
-            onClick={() => alert('Battle button clicked')}
-          />{' '}
-          <ActionButtonPambii
-            icon={<ExploreIcon />}
-            text="EXPLORE"
-            onClick={() => alert('Battle button clicked')}
-          />{' '}
-          <ActionButtonPambii
-            icon={<RankingIcon />}
-            text="RANKING"
-            onClick={() => alert('Battle button clicked')}
-          />
-          <ActionButtonPambii
-            icon={<MarketPlaceIcon />}
-            text="MARKET"
-            onClick={() => alert('Battle button clicked')}
-          />
-          <ActionButtonPambii
-            icon={<InventoryIcon />}
-            text="INVENTORY"
-            href="https://example.com"
-          />
-        </div>
-      </CardPambii>
+      <div className="w-full fixedBotton p-3">
+        <CardPambii className="beeCard w-full mb-[7px]">
+          <div className="flex w-full ">
+            <ActionButtonPambii
+              icon={<BattleIcon />}
+              text="BATTLE"
+              onClick={() => alert('Battle button clicked')}
+            />{' '}
+            <ActionButtonPambii
+              icon={<ExploreIcon />}
+              text="EXPLORE"
+              onClick={() => alert('Battle button clicked')}
+            />{' '}
+            <ActionButtonPambii
+              icon={<RankingIcon />}
+              text="RANKING"
+              onClick={() => alert('Battle button clicked')}
+            />
+            <ActionButtonPambii
+              icon={<MarketPlaceIcon />}
+              text="MARKET"
+              onClick={() => alert('Battle button clicked')}
+            />
+            <ActionButtonPambii
+              icon={<InventoryIcon />}
+              text="INVENTORY"
+              href="https://example.com"
+            />
+          </div>
+        </CardPambii>
+      </div>
     </div>
   );
 };

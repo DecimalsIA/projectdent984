@@ -12,9 +12,9 @@ const Page: React.FC = () => {
   useEffect(() => {
     if (connected && publicKey) {
       const telegramBotURL = `https://t.me/PambiiGameBot?start=${publicKey.toBase58()}`;
-      // window.location.href = telegramBotURL;
+      window.location.href = telegramBotURL;
       // simulacion  redireccion juego home
-      window.location.href = '/game/home';
+      //window.location.href = '/game/home';
     }
   }, [connected, publicKey]);
 

@@ -3,16 +3,15 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+
 import { CardPambii, LogoGame } from 'pambii-devtrader-front';
 import ConnectWallet from '@/components/ConnectWallet';
 
 const Page: React.FC = () => {
   const router = useRouter();
   const { verify } = router.query;
-  console.log(router.query);
+  console.log(router?.query);
 
-  const [data, setData] = useState(null);
   return (
     <main className="flex min-h-screen items-center justify-center p-24">
       <div className="w-[365px] space-y-4 text-center">

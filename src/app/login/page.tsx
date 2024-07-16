@@ -9,7 +9,7 @@ import ConnectWallet from '@/components/ConnectWallet';
 
 const Page: React.FC = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { verify } = router.query;
   console.log(router.query);
 
   const [data, setData] = useState(null);
@@ -22,6 +22,7 @@ const Page: React.FC = () => {
           </h2>
           <LogoGame className="w-100 h-100 mb-4" />
           <ConnectWallet />
+          {verify}
           {JSON.stringify(router.query)}
         </CardPambii>
       </div>

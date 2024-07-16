@@ -5,10 +5,9 @@ import React from 'react';
 
 import { CardPambii, LogoGame } from 'pambii-devtrader-front';
 import ConnectWallet from '@/components/ConnectWallet';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 const Page: React.FC = () => {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 

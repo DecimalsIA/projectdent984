@@ -176,7 +176,6 @@ const Home = () => {
                 <ButtonPambii
                   onClick={() => alert('Battle button clicked')}
                   color="#fff"
-                  w="100px"
                   icon={<PencilIcon />}
                 >
                   EDIT BEE

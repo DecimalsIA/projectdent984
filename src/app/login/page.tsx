@@ -2,15 +2,15 @@
 
 'use client';
 import React from 'react';
-import { useRouter } from 'next/router';
 
 import { CardPambii, LogoGame } from 'pambii-devtrader-front';
 import ConnectWallet from '@/components/ConnectWallet';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 const Page: React.FC = () => {
   const router = useRouter();
-  const { verify } = router.query;
-  console.log(router?.query);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   return (
     <main className="flex min-h-screen items-center justify-center p-24">
@@ -21,8 +21,8 @@ const Page: React.FC = () => {
           </h2>
           <LogoGame className="w-100 h-100 mb-4" />
           <ConnectWallet />
-          ----llll {verify}
-          ---- 333 {JSON.stringify(router.query)}
+          ----llll {pathname}
+          ---- 333 {JSON.stringify(searchParams)}
         </CardPambii>
       </div>
     </main>

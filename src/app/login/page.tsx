@@ -26,7 +26,7 @@ const Page: React.FC = () => {
           <LogoGame className="w-100 h-100 mb-4" />
           <ConnectWallet />
           ----llll {verify}
-          ---- 333 {verifyParam}
+          ---- 333 {window.location.search}
         </CardPambii>
       </div>
     </main>

@@ -11,11 +11,13 @@ const Page: React.FC = () => {
   const [verify, setVerify] = useState<any>('');
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const verifyParam = params.get('verify');
-    setVerify(verifyParam);
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const verifyParam = params.get('verify');
+      setVerify(verifyParam);
+    }
   }, []);
-
+  if (!verify) return <p>Loading...</p>;
   return (
     <main className="flex min-h-screen items-center justify-center p-24">
       <div className="w-[365px] space-y-4 text-center">

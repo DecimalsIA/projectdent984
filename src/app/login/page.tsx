@@ -9,12 +9,16 @@ import { usePathname, useSearchParams } from 'next/navigation';
 
 const Page: React.FC = () => {
   const [verify, setVerify] = useState<any>('');
+  const [user, setUser] = useState<any>(null);
+  const [data, setData] = useState<any>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const verifyParam = params.get('verify');
       setVerify(verifyParam);
+      const tg = window?.Telegram?.WebApp;
+      tg.ready();
     }
   }, []);
 
@@ -27,8 +31,13 @@ const Page: React.FC = () => {
           </h2>
           <LogoGame className="w-100 h-100 mb-4" />
           <ConnectWallet />
-          ----llll {verify}
-          ---- 333
+          {user && (
+            <div>
+              <p>User: {user?.username}</p>
+              <p>First Name: {user?.first_name}</p>
+              <p>Last Name: {user?.last_name}</p>
+            </div>
+          )}
         </CardPambii>
       </div>
     </main>

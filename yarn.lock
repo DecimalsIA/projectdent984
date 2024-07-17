@@ -11975,10 +11975,10 @@ package-json-from-dist@^1.0.0:
   resolved "https://registry.npmjs.org/package-json-from-dist/-/package-json-from-dist-1.0.0.tgz"
   integrity sha512-dATvCeZN/8wQsGywez1mzHtTlP22H8OEfPrVMLNr4/eGa+ijtLn/6M5f0dY8UKNrC2O9UCU6SSoG3qRKnt7STw==
 
-pambii-devtrader-front@^1.0.14:
-  version "1.0.14"
-  resolved "https://registry.npmjs.org/pambii-devtrader-front/-/pambii-devtrader-front-1.0.14.tgz"
-  integrity sha512-3wlyxWvAaHWXhbelT0ZxTxLjXfL22pEIXruPICRdM0tC2B/+CXA/J0Fdxw85oT8IbSAn/KFXAC+BRY6hqZui1Q==
+pambii-devtrader-front@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.npmjs.org/pambii-devtrader-front/-/pambii-devtrader-front-1.0.17.tgz"
+  integrity sha512-f3xrdcZU9kyI6IRWs75Pcyj6uRRvMQeKp2w0eo9nY9FM2YuiuA0DmN2BrjFCQTqfk1ibTViHfnIASnKr1chxdA==
   dependencies:
     "@pixi/react" "^7.1.2"
     "@testing-library/jest-dom" "^5.17.0"

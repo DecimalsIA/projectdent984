@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable jsx-a11y/alt-text */
 'use client';
 
-import SolanaIcon from '@/components/icons/SolanaIcon';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import { useEffect } from 'react';
@@ -12,7 +13,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     if (connected && publicKey) {
       const telegramBotURL = `https://t.me/PambiiGameBot?verify=${publicKey.toBase58()}`;
-      window.location.href = telegramBotURL;
+      //  window.location.href = telegramBotURL;
       // simulacion  redireccion juego home
       //window.location.href = '/game/home';
     }
@@ -48,6 +49,18 @@ const Page: React.FC = () => {
             >
               Go to Game
             </ButtonPambii>
+            <div className="w-[317px] h-[50px] px-4 pt-2.5 pb-4 bg-blue-500 rounded-[10px] shadow-inner flex-col justify-center items-center inline-flex">
+              <div className="w-[317px] h-[42px] bg-blue-500 rounded-[10px] shadow border-2 border-white/opacity-20"></div>
+              <div className="rounded-[10px] justify-center items-center gap-2 inline-flex">
+                <img
+                  className="w-[22px] h-[22px] shadow"
+                  src="https://via.placeholder.com/22x22"
+                />
+                <div className="text-white text-xl font-semibold font-['Poppins'] leading-normal tracking-tight">
+                  Connect your SOL wallet
+                </div>
+              </div>
+            </div>
           </>
         ) : (
           <>

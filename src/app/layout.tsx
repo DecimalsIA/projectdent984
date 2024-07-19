@@ -6,7 +6,7 @@ import './globals.css';
 import { WalletContext } from '@/context/WalletContext';
 import { useEffect, useState } from 'react';
 import useInjectScript from '@/hooks/useInjectScript';
-import Image from 'next/image';
+
 import PambiiLoader from '@/components/PambiiLoader';
 import { AuthProvider } from '@/context/AuthContext';
 const inter = Inter({ subsets: ['latin'] });

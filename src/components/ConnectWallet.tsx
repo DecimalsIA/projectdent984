@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 'use client';
-
+import * as Sentry from '@sentry/nextjs';
 import React, { useEffect, useCallback, useState } from 'react';
 import {
   useWallet,
@@ -59,10 +59,10 @@ const ConnectWallet: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(obj),
       });
       const data = await response.json();
-
+      Sentry.captureException(data);
       if (response.ok && data.message === 'User already registered') {
         setUser((prev) => ({ ...prev, id: data.id }));
       } else if (response.ok && data.message === 'User registered') {
@@ -115,8 +115,10 @@ const ConnectWallet: React.FC = () => {
     } catch (error) {
       if (error instanceof WalletNotSelectedError) {
         console.error('Wallet not selected');
+        Sentry.captureException('Wallet not selected');
       } else {
         console.error(error);
+        Sentry.captureException(error);
       }
     }
   }, [

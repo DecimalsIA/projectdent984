@@ -147,7 +147,7 @@ const ConnectWallet: React.FC = () => {
       icon={<SolanaIcon width={24} height={24} />}
       onClick={handleConnect}
     >
-      Connect your SOL wallet
+      Connect your SOL wallet {tgUser?.first_name}
     </ButtonPambii>
   );
 };

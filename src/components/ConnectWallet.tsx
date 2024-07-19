@@ -40,32 +40,36 @@ const ConnectWallet: React.FC = () => {
       setIsPhantomApp(true);
     }
     if (tgUser) {
-      setUser({
+      const userTel = {
         idUser: tgUser.id.toString(),
         nomTlram: `${tgUser.first_name} ${tgUser.last_name}`,
         userName: tgUser.username,
         language_code: tgUser.language_code,
-      });
-      registerUser();
+      };
+      setUser(userTel);
+      registerUser(userTel);
     }
   }, [tgUser]);
 
-  const registerUser = useCallback(async () => {
-    const response = await fetch('/api/register-user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    });
-    const data = await response.json();
+  const registerUser = useCallback(
+    async (obj: User) => {
+      const response = await fetch('/api/register-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      });
+      const data = await response.json();
 
-    if (response.ok && data.message === 'User already registered') {
-      setUser((prev) => ({ ...prev, id: data.id }));
-    } else if (response.ok && data.message === 'User registered') {
-      setUser((prev) => ({ ...prev, id: data.id }));
-    }
-  }, [user]);
+      if (response.ok && data.message === 'User already registered') {
+        setUser((prev) => ({ ...prev, id: data.id }));
+      } else if (response.ok && data.message === 'User registered') {
+        setUser((prev) => ({ ...prev, id: data.id }));
+      }
+    },
+    [user],
+  );
 
   const registerConnection = useCallback(
     async (publicKey: string) => {

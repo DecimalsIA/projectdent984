@@ -67,20 +67,22 @@ const ConnectWallet: React.FC = () => {
 
   const registerConnection = useCallback(
     async (publicKey: string) => {
-      const response = await fetch('/api/register-connection', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ idUser: user.idUser, publicKey }),
-      });
-      const data = await response.json();
+      if (user && user.idUser) {
+        const response = await fetch('/api/register-connection', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ idUser: user.idUser, publicKey }),
+        });
+        const data = await response.json();
 
-      if (response.ok && data.idWallet) {
-        router.push('/game/home');
+        if (response.ok && data.idWallet) {
+          router.push('/game/home');
+        }
       }
     },
-    [user.idUser, router],
+    [user, router],
   );
 
   const handleConnect = useCallback(async () => {

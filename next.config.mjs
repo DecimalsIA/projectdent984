@@ -38,6 +38,7 @@ const nextConfig = {
   },
   org: 'wwwfredyteherantocom',
   project: 'pambii',
+  silent: true,
 
   // An auth token is required for uploading source maps.
   authToken: process.env.SENTRY_AUTH_TOKEN,

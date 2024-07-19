@@ -49,7 +49,10 @@ const Home = () => {
             )}
           </>
         ) : (
-          <>{(isPhantomInstalled || isPhantomConnected) && <VerifySession />}</>
+          <>
+            {user?.id && <VerifySession />}
+            {isPhantomInstalled && <VerifySession />}
+          </>
         )}
       </>
     </div>

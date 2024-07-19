@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const { withSentryConfig } = require('@sentry/nextjs');
+import { withSentryConfig } from '@sentry/nextjs';
 const nextConfig = {
   webpack(config) {
     // Grab the existing rule that handles SVG imports

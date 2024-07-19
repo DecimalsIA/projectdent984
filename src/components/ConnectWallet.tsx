@@ -29,7 +29,7 @@ const ConnectWallet: React.FC = () => {
   }
 
   const [user, setUser] = useState<User | null>({});
-
+  console.log('tgUser', tgUser);
   useEffect(() => {
     if (
       typeof window !== 'undefined' &&

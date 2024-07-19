@@ -34,8 +34,8 @@ const VerifySession = () => {
       if (response.ok && data.active) {
         if (!data.idWallet) {
           setAuthenticated(false);
-          const deeplink = `https://phantom.app/ul/browse/https://pambii-front-next.vercel.app?ref=https://pambii-front-next.vercel.app`;
-          // window.location.href = deeplink;
+          const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app?ref=https://pambii-front.vercel.app/`;
+          window.location.href = deeplink;
           console.log(deeplink);
         } else {
           setAuthenticated(true);
@@ -49,9 +49,9 @@ const VerifySession = () => {
           router.push('/login'); // Redirigir a la página de registro si es la primera vez
         } else {
           // router.push('/connect-wallet'); // Redirigir a la página para conectar la wallet
-          const deeplink = `https://phantom.app/ul/browse/https://pambii-front-next.vercel.app?ref=https://pambii-front-next.vercel.app`;
-          //  window.location.href = deeplink;
-          console.log(deeplink);
+          const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app?ref=https://pambii-front.vercel.app/`;
+          window.location.href = deeplink;
+          //console.log(deeplink);
         }
       }
     };

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
@@ -45,6 +46,7 @@ const ConnectWallet: React.FC = () => {
         userName: tgUser.username,
         language_code: tgUser.language_code,
       });
+      registerUser();
     }
   }, [tgUser]);
 
@@ -97,7 +99,7 @@ const ConnectWallet: React.FC = () => {
           await registerConnection(publicKey.toBase58());
         }
       } else {
-        const deeplink = `https://phantom.app/ul/browse/https://pambii-front-next.vercel.app?ref=https://pambii-front-next.vercel.app`;
+        const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app?ref=https://pambii-front.vercel.app/`;
         window.location.href = deeplink;
         console.log(deeplink);
       }

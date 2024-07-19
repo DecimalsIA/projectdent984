@@ -99,7 +99,9 @@ const ConnectWallet: React.FC = () => {
       if (isPhantomApp) {
         await connect();
         if (publicKey) {
-          await registerUser();
+          if (user) {
+            await registerUser(user);
+          }
           await registerConnection(publicKey.toBase58());
         }
       } else {

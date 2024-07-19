@@ -1,53 +1,87 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
+'use client';
 
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState } from 'react';
 import {
   useWallet,
   WalletNotSelectedError,
-} from "@solana/wallet-adapter-react";
-import { useRouter } from "next/navigation";
-import { Keypair } from "@solana/web3.js";
-import { PhantomWalletName } from "@solana/wallet-adapter-wallets";
-import { ButtonPambii } from "pambii-devtrader-front";
-import SolanaIcon from "./icons/SolanaIcon";
+} from '@solana/wallet-adapter-react';
+import { useRouter } from 'next/navigation';
+import { Keypair } from '@solana/web3.js';
+import { PhantomWalletName } from '@solana/wallet-adapter-wallets';
+import { ButtonPambii } from 'pambii-devtrader-front';
+import SolanaIcon from './icons/SolanaIcon';
+import { useTelegram } from '@/context/TelegramContext';
 
 const ConnectWallet: React.FC = () => {
   const { publicKey, wallet, connect, connecting, connected, select } =
     useWallet();
+  const { setShowBackButton, user: tgUser } = useTelegram();
   const router = useRouter();
-  const [isTelegram, setIsTelegram] = useState(false);
   const [isPhantomApp, setIsPhantomApp] = useState(false);
   const [dappKeypair] = useState(Keypair.generate());
-console.log(wallet)
 
- useEffect(() => {
-    if (typeof window !== 'undefined' && window.solana && window.solana.isPhantom) {
-      setIsPhantomApp(true);
-    }
-  }, []);
+  interface User {
+    idUser?: string;
+    nomTlram?: string;
+    userName?: string;
+    language_code?: string;
+  }
+
+  const [user, setUser] = useState<User | null>({});
 
   useEffect(() => {
-    const registerConnection = async (publicKey: string) => {
-      await fetch("/api/register-connection", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ publicKey }),
-      });
-    };
-
-    if (connected && publicKey) {
-      registerConnection(publicKey.toBase58());
-      if (isTelegram) {
-        const telegramBotURL = `https://t.me/PambiiGameBot?start=${publicKey.toBase58()}`;
-        window.location.href = telegramBotURL;
-      } else {
-        router.push("/verify/"+publicKey);
-      }
+    if (
+      typeof window !== 'undefined' &&
+      window.solana &&
+      window.solana.isPhantom
+    ) {
+      setIsPhantomApp(true);
     }
-  }, [connected, publicKey, router, isTelegram]);
+    if (tgUser) {
+      setUser({
+        idUser: tgUser.id.toString(),
+        nomTlram: `${tgUser.first_name} ${tgUser.last_name}`,
+        userName: tgUser.username,
+        language_code: tgUser.language_code,
+      });
+    }
+  }, [tgUser]);
+
+  const registerUser = useCallback(async () => {
+    const response = await fetch('/api/register-user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    });
+    const data = await response.json();
+
+    if (response.ok && data.message === 'User already registered') {
+      setUser((prev) => ({ ...prev, id: data.id }));
+    } else if (response.ok && data.message === 'User registered') {
+      setUser((prev) => ({ ...prev, id: data.id }));
+    }
+  }, [user]);
+
+  const registerConnection = useCallback(
+    async (publicKey: string) => {
+      const response = await fetch('/api/register-connection', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idUser: user.idUser, publicKey }),
+      });
+      const data = await response.json();
+
+      if (response.ok && data.idWallet) {
+        router.push('/game/home');
+      }
+    },
+    [user.idUser, router],
+  );
 
   const handleConnect = useCallback(async () => {
     if (!wallet) {
@@ -56,36 +90,40 @@ console.log(wallet)
     try {
       if (isPhantomApp) {
         await connect();
+        if (publicKey) {
+          await registerUser();
+          await registerConnection(publicKey.toBase58());
+        }
       } else {
         const deeplink = `https://phantom.app/ul/browse/https://pambii-front-next.vercel.app?ref=https://pambii-front-next.vercel.app`;
-
         window.location.href = deeplink;
         console.log(deeplink);
       }
     } catch (error) {
       if (error instanceof WalletNotSelectedError) {
-        console.error("Wallet not selected");
+        console.error('Wallet not selected');
       } else {
         console.error(error);
       }
     }
-  }, [connect, isPhantomApp, select, wallet]);
+  }, [
+    connect,
+    isPhantomApp,
+    publicKey,
+    select,
+    wallet,
+    registerUser,
+    registerConnection,
+  ]);
 
   useEffect(() => {
-    // Detectar si se está en la webapp de Telegram
     const userAgent = navigator.userAgent || navigator.vendor;
-
-    if (userAgent.includes("Telegram")) {
-      setIsTelegram(true);
-    }
-    // Detectar si se está en la aplicación de Phantom
-    if (userAgent.includes("Phantom")) {
+    if (userAgent.includes('Phantom')) {
       setIsPhantomApp(true);
     }
   }, []);
 
   useEffect(() => {
-    // Conectar automáticamente si estamos en la aplicación Phantom
     if (isPhantomApp) {
       handleConnect();
     }

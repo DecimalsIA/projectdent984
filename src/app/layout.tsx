@@ -1,20 +1,16 @@
 /* eslint-disable @next/next/no-sync-scripts */
 'use client';
-import type { Metadata } from 'next';
+import { NextIntlClientProvider } from 'next-intl';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { WalletContext } from '@/context/WalletContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useInjectScript from '@/hooks/useInjectScript';
-
+import Image from 'next/image';
+import PambiiLoader from '@/components/PambiiLoader';
+import { AuthProvider } from '@/context/AuthContext';
 const inter = Inter({ subsets: ['latin'] });
-/*
-export const metadata: Metadata = {
-  title: 'PAMBII GAME',
-  description:
-    'Get ready to be PAMBI-fied, Solana fam! PAMBI is a revolutionary meme coin with a unique twist – it&#x27;s backed by a team of talented creators crafting engaging content. This project isn&#x27;t just about fleeting trends  ',
-};
- */
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,19 +21,31 @@ export default function RootLayout({
   useInjectScript('https://telegram.org/js/telegram-web-app.js', () =>
     setIsScriptLoaded(true),
   );
-  if (!isScriptLoaded) {
-    return (
-      <html lang="en" suppressHydrationWarning>
-        <body className={inter.className}>
-          <div>Loading...</div>
-        </body>
-      </html>
-    );
-  }
+  const [messages, setMessages] = useState({});
+  useEffect(() => {
+    async function loadMessages() {
+      const locale = navigator.language.split('-')[0] || 'en'; // Obtener el idioma del navegador
+      const response = await fetch(`/messages/${locale}.json`);
+      const data = await response.json();
+
+      setMessages(data);
+    }
+
+    loadMessages();
+  }, []);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <WalletContext>{children}</WalletContext>
+        <NextIntlClientProvider locale="en" messages={messages}>
+          {isScriptLoaded ? (
+            <AuthProvider>
+              <WalletContext>{children}</WalletContext>
+            </AuthProvider>
+          ) : (
+            <PambiiLoader />
+          )}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

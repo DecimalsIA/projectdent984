@@ -1,0 +1,14 @@
+{
+  "Index": {
+    "title": "Bienvenido a nuestro sitio web 99 ",
+    "go_app": "Go to Telegam APP"
+  },
+  "NotTelegramMobile": {
+    "title": "Usa la aplicación Telegram en tu móvil,",
+    "sub_title": "to playing PAMBII Universe",
+    "ext_title": "Pambii is only available, telegram mobile"
+  },
+  "Loading": {
+    "loader": "Loading.."
+  }
+}

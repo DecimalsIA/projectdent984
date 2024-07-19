@@ -1,38 +1,52 @@
 'use client';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-
-import { ButtonPambii } from 'pambii-devtrader-front';
 import { useTelegram } from '@/context/TelegramContext';
+import { isMobile } from 'react-device-detect';
+import NotTelegramMobile from '@/components/NotTelegramMobile';
+import Link from 'next/link';
+import { ButtonPambii } from 'pambii-devtrader-front';
+import { useTranslations } from 'next-intl';
+import { useAuth } from '@/context/AuthContext';
+import VerifySession from '@/components/VerifySession';
 
 const Home = () => {
-  const { showBackButton, setShowBackButton, user } = useTelegram();
-  const [verify, setVerify] = useState<string | null>(null);
+  const t = useTranslations('Index');
+  const { setShowBackButton, user } = useTelegram();
+  const { isAuthenticated } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setShowBackButton(false);
-  }, [setShowBackButton, showBackButton]);
+    if (user?.id) setShowBackButton(false);
+  }, [setShowBackButton, user?.id]);
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const verifyParam = queryParams.get('verify');
-    console.log('verify--->', verifyParam);
-    setVerify(verifyParam);
-  }, []);
-
+    if (!isLoading) {
+      setIsLoading(false);
+    }
+  }, [isAuthenticated, isLoading]);
+  // isMobile && user?.id
   return (
     <div>
-      <h1>
-        Telegram WebApp <p>Bienvenido, {user?.first_name}</p>
-      </h1>
-      <hr />
-      <div>
+      <>
         {' '}
-        <Link href="/game">
-          <ButtonPambii>IR AL GAME</ButtonPambii>{' '}
-        </Link>
-        {verify && <p>El parámetro de verificación es: {verify}</p>}
-      </div>
+        {true ? (
+          <>{isLoading && <VerifySession />}</>
+        ) : (
+          <>
+            {' '}
+            <NotTelegramMobile />
+            {isMobile && (
+              <div className="w-full flex flex-col items-center justify-center font-pop mt-8">
+                <div className="w-[315px]  mt-10 flex flex-col items-center justify-start gap-6">
+                  <Link href="https://t.me/PambiiGameBot/pambii">
+                    <ButtonPambii> {t('go_app')} </ButtonPambii>{' '}
+                  </Link>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </>
     </div>
   );
 };

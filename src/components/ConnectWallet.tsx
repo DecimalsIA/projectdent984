@@ -13,6 +13,7 @@ import { PhantomWalletName } from '@solana/wallet-adapter-wallets';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import SolanaIcon from './icons/SolanaIcon';
 import { useTelegram } from '@/context/TelegramContext';
+import { generateAuthToken } from '@/utils/auth';
 
 const ConnectWallet: React.FC = () => {
   const { publicKey, wallet, connect, connecting, connected, select } =
@@ -99,6 +100,8 @@ const ConnectWallet: React.FC = () => {
       if (isPhantomApp) {
         await connect();
         if (publicKey) {
+          const idsession = generateAuthToken({ publicKey });
+          localStorage.setItem('authToken', idsession);
           if (user) {
             await registerUser(user);
           }

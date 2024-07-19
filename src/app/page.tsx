@@ -35,17 +35,10 @@ const Home = () => {
   return (
     <div>
       <>
-        {' '}
-        {isMobile && user?.id ? (
-          <>{isLoading && <VerifySession />}</>
-        ) : (
+        {!isMobile ? (
           <>
-            {isMobile && isPhantomInstalled ? (
-              <VerifySession />
-            ) : (
-              <NotTelegramMobile />
-            )}{' '}
-            {isMobile && (
+            <NotTelegramMobile />
+            {!user?.id && (
               <div className="w-full flex flex-col items-center justify-center font-pop mt-8">
                 <div className="w-[315px]  mt-10 flex flex-col items-center justify-start gap-6">
                   <Link href="https://t.me/PambiiGameBot/pambii">
@@ -55,6 +48,8 @@ const Home = () => {
               </div>
             )}
           </>
+        ) : (
+          <>{(isPhantomInstalled || isPhantomConnected) && <VerifySession />}</>
         )}
       </>
     </div>

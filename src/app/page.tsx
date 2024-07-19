@@ -8,12 +8,19 @@ import { ButtonPambii } from 'pambii-devtrader-front';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/context/AuthContext';
 import VerifySession from '@/components/VerifySession';
+import usePhantomWallet from '@/hooks/usePhantomWallet';
 
 const Home = () => {
   const t = useTranslations('Index');
   const { setShowBackButton, user } = useTelegram();
   const { isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const {
+    isPhantomInstalled,
+    isPhantomConnected,
+    connectToPhantom,
+    disconnectFromPhantom,
+  } = usePhantomWallet();
 
   useEffect(() => {
     if (user?.id) setShowBackButton(false);
@@ -33,8 +40,11 @@ const Home = () => {
           <>{isLoading && <VerifySession />}</>
         ) : (
           <>
-            {' '}
-            <NotTelegramMobile />
+            {isMobile && isPhantomInstalled ? (
+              <VerifySession />
+            ) : (
+              <NotTelegramMobile />
+            )}{' '}
             {isMobile && (
               <div className="w-full flex flex-col items-center justify-center font-pop mt-8">
                 <div className="w-[315px]  mt-10 flex flex-col items-center justify-start gap-6">

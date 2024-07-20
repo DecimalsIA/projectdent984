@@ -48,7 +48,7 @@ const Home = () => {
   return (
     <div>
       <>
-        {!isMobile ? (
+        {isMobile ? (
           <>
             <NotTelegramMobile />
             {!user?.id && (
@@ -62,7 +62,7 @@ const Home = () => {
             )}
           </>
         ) : (
-          <>{isPhantomInstalled || (user?.id && <VerifySession />)}</>
+          <>{user?.id && <VerifySession />}</>
         )}
       </>
     </div>

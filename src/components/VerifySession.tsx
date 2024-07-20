@@ -16,7 +16,7 @@ const VerifySession = () => {
 
   useEffect(() => {
     const verifySession = async () => {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('USERDATA');
 
       if (!token) {
         setAuthenticated(false);

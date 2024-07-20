@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDocuments, updateDocument } from '../../../utils/firebase';
 import { UserDocument } from '../../../types/user';
 import { generateAuthToken } from '@/utils/auth';
-
+import * as Sentry from '@sentry/nextjs';
 
 const DB = process.env.NEXT_PUBLIC_FIREBASE_USER_COLLETION || 'USERS';
 
@@ -22,9 +22,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: 'User not found' }, { status: 404 });
   }
 
+
   const currentUser = existingUsers[0];
 
   if (currentUser.idWallet && currentUser.idWallet !== publicKey) {
+    Sentry.captureException(currentUser)
     return NextResponse.json({
       message: 'Wallet already registered with a different key',
       id: currentUser.id,
@@ -46,6 +48,7 @@ export async function POST(req: NextRequest) {
   try {
     if (currentUser.id) {
       await updateDocument(DB, currentUser.id, updateData);
+      Sentry.captureException(currentUser)
     } else {
       throw new Error('Invalid user ID');
     }

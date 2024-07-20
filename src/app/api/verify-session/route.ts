@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { getDocuments } from '../../../utils/firebase';
-const DB = process.env.NEXT_PUBLIC_FIREBASE_USER_COLLETION || 'USERS';
 
+const DB = process.env.NEXT_PUBLIC_FIREBASE_USER_COLLECTION || 'USERS';
 const secretKey = process.env.JWT_SECRET_KEY || 'your-secret-key';
+
 const base64Decode = (base64: string): string | object => {
   const buffer: Buffer = Buffer.from(base64, 'base64');
   const decodedString: string = buffer.toString('utf-8');
@@ -15,22 +16,21 @@ const base64Decode = (base64: string): string | object => {
   }
 };
 
-
 export async function POST(req: NextRequest) {
-  const { token } = await req.json();
-
-  if (!token) {
-    return NextResponse.json({ message: 'Missing token' }, { status: 400 });
-  }
-
-  // Log the token for debugging
-  console.log('Received token:', token);
-
   try {
-    const decodePlain = base64Decode(token);
-    const decoded = decodePlain;
+    const { token } = await req.json();
 
-    // Log the decoded token for debugging
+    if (!token) {
+      return NextResponse.json({ message: 'Missing token' }, { status: 400 });
+    }
+
+    console.log('Received token:', token);
+
+    const decoded = base64Decode(token);
+    if (typeof decoded !== 'object' || !('id' in decoded)) {
+      return NextResponse.json({ message: 'Invalid token structure' }, { status: 400 });
+    }
+
     console.log('Decoded token:', decoded);
 
     const userDoc = await getDocuments(DB, 'id', (decoded as { id: string }).id);
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Wallet not connected', active: false, firstTime: false }, { status: 401 });
     }
 
-    return NextResponse.json({ session: decoded, active: true, idWallet: user.idWallet });
+    return NextResponse.json({ session: decoded, active: true, idWallet: user.idWallet }, { status: 200 });
   } catch (error) {
     console.log('Error during token verification:', error);
 

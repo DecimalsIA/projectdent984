@@ -24,6 +24,7 @@ const VerifySession = () => {
         router.push('/login');
         return;
       }
+      console.log({ token, idWallet });
       const response = await fetch('/api/verify-session', {
         method: 'POST',
         headers: {

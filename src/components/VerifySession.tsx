@@ -40,21 +40,20 @@ const VerifySession = () => {
         if (!data.idWallet) {
           setAuthenticated(false);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-          // window.location.href = deeplink;
+          window.location.href = deeplink;
           console.log('1', deeplink);
         } else {
           setAuthenticated(true);
           router.push('/game/home');
         }
       } else {
-        console.log('data', data);
         setAuthenticated(false);
         if (data.firstTime) {
           router.push('/login');
         } else {
+          alert(data.message);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-          //window.location.href = deeplink;
-          console.log('2', deeplink);
+          window.location.href = deeplink;
         }
       }
     };

@@ -29,7 +29,7 @@ const Home = () => {
         setStartParam(param);
         decodeFromBase64(param);
         localStorage.setItem('USERDATA', param);
-        localStorage.setItem('authToken', json.idsession);
+        localStorage.setItem('authToken', json?.idsession);
       }
       console.log('Parametro recibido:', param);
     } else {

@@ -48,9 +48,8 @@ const VerifySession = () => {
         console.log('data', data);
         setAuthenticated(false);
         if (data.firstTime) {
-          router.push('/login'); // Redirigir a la página de registro si es la primera vez
+          router.push('/login');
         } else {
-          // router.push('/connect-wallet'); // Redirigir a la página para conectar la wallet
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
           window.location.href = deeplink;
           //console.log(deeplink);

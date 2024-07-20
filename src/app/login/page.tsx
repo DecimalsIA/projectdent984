@@ -14,7 +14,7 @@ const Page: React.FC = () => {
       <div className="w-[365px] space-y-4 text-center">
         <CardPambii className=" text-white">
           <h2 className="text-xl font-bold mb-4">
-            <span className="title">Sign Up on</span> <p>{tgUser?.id}</p>
+            <span className="title">Sign Up on</span>
           </h2>
           <LogoGame className="w-100 h-100 mb-4" />
           <ConnectWallet idUserTelegram={tgUser?.id} />

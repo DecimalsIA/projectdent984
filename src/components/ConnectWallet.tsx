@@ -27,7 +27,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   const [dappKeypair] = useState(Keypair.generate());
 
   const [input, setInput] = useState<string>('');
-  const { json, base64, encodeToBase64, decodeFromBase64 } = useBase64();
+  const { base64, encodeToBase64, decodeFromBase64 } = useBase64();
 
   interface User {
     idUser?: string;
@@ -131,12 +131,10 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
     if (isPhantomApp) {
       await connect();
       if (publicKey?.toBase58()) {
-        console.log('publicKey', publicKey);
-
         if (user) {
           await registerUser(user);
         }
-        console.log(publicKey);
+
         await registerConnection(publicKey.toBase58());
       }
     } else {
@@ -175,7 +173,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
       icon={<SolanaIcon width="24px" height="24px" />}
       onClick={handleConnect}
     >
-      Connect your SOL wallet {tgUser?.first_name}
+      Connect your SOL wallet
     </ButtonPambii>
   );
 };

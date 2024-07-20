@@ -33,7 +33,11 @@ export default function RootLayout({
     }
 
     loadMessages();
-  }, []);
+    if (isScriptLoaded) {
+      Telegram?.WebApp?.expand();
+      eruda.init();
+    }
+  }, [isScriptLoaded]);
 
   return (
     <html lang="en" suppressHydrationWarning>

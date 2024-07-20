@@ -14,8 +14,10 @@ import { ButtonPambii } from 'pambii-devtrader-front';
 import SolanaIcon from './icons/SolanaIcon';
 import { useTelegram } from '@/context/TelegramContext';
 import { generateAuthToken } from '@/utils/auth';
-
-const ConnectWallet: React.FC = () => {
+interface PageProps {
+  idUserTelegram?: any;
+}
+const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   const { publicKey, wallet, connect, connecting, connected, select } =
     useWallet();
   const { setShowBackButton, user: tgUser } = useTelegram();
@@ -31,7 +33,7 @@ const ConnectWallet: React.FC = () => {
   }
 
   const [user, setUser] = useState<User | null>({});
-  console.log('tgUser', tgUser);
+
   useEffect(() => {
     if (
       typeof window !== 'undefined' &&
@@ -74,13 +76,13 @@ const ConnectWallet: React.FC = () => {
 
   const registerConnection = useCallback(
     async (publicKey: string) => {
-      if (user && user.idUser) {
+      if (idUserTelegram) {
         const response = await fetch('/api/register-connection', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ idUser: user.idUser, publicKey }),
+          body: JSON.stringify({ idUser: idUserTelegram, publicKey }),
         });
         const data = await response.json();
 
@@ -89,7 +91,7 @@ const ConnectWallet: React.FC = () => {
         }
       }
     },
-    [user, router],
+    [idUserTelegram, router],
   );
 
   const handleConnect = useCallback(async () => {

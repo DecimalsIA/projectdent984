@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   if (!idUser || !publicKey) {
     return NextResponse.json({ message: 'Missing idUser or publicKey' }, { status: 400 });
   }
-  console.log('idUser', idUser)
+
   // Check if the user exists
   const existingUsers = await getDocuments(DB, 'idUser', idUser) as UserDocument[];
   console.log('existingUsers', existingUsers)

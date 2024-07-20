@@ -9,19 +9,16 @@ import { useTranslations } from 'next-intl';
 import { useAuth } from '@/context/AuthContext';
 import VerifySession from '@/components/VerifySession';
 import usePhantomWallet from '@/hooks/usePhantomWallet';
+import { useSearchParams } from 'next/navigation';
 
 const Home = () => {
   const t = useTranslations('Index');
   const { setShowBackButton, user } = useTelegram();
   const { isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const {
-    isPhantomInstalled,
-    isPhantomConnected,
-    connectToPhantom,
-    disconnectFromPhantom,
-  } = usePhantomWallet();
-
+  const { isPhantomInstalled } = usePhantomWallet();
+  const searchParams = useSearchParams();
+  const newApp = searchParams.get('new');
   useEffect(() => {
     if (user?.id) setShowBackButton(false);
   }, [setShowBackButton, user?.id]);
@@ -31,9 +28,9 @@ const Home = () => {
       setIsLoading(false);
     }
   }, [isAuthenticated, isLoading]);
-  // isMobile && user?.id
   return (
     <div>
+      Parametro {newApp}
       <>
         {!isMobile ? (
           <>
@@ -49,10 +46,7 @@ const Home = () => {
             )}
           </>
         ) : (
-          <>
-            {user?.id && <VerifySession />}
-            {isPhantomInstalled && <VerifySession />}
-          </>
+          <>{isPhantomInstalled || (user?.id && <VerifySession />)}</>
         )}
       </>
     </div>

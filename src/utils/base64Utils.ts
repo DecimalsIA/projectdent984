@@ -1,6 +1,6 @@
 // utils/base64Utils.ts
 
-export const base64Decode = (base64: string): string | object => {
+export const base64Decode = (base64: string): any => {
   const buffer: Buffer = Buffer.from(base64, 'base64');
   const decodedString: string = buffer.toString('utf-8');
   try {

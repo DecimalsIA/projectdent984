@@ -15,13 +15,13 @@ export async function POST(req: NextRequest) {
     console.log('Received token:', token);
 
     const decoded = base64Decode(token);
+    console.log('Decoded token:', decoded);
+
     if (typeof decoded !== 'object' || !('id' in decoded)) {
       return NextResponse.json({ message: 'Invalid token structure' }, { status: 400 });
     }
 
     const decodedJson = decoded as { id: string };
-    console.log('Decoded token:', decodedJson);
-
     const userDoc = await getDocuments(DB, 'id', decodedJson.id);
 
     if (userDoc.length === 0) {

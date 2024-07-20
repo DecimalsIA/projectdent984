@@ -14,6 +14,7 @@ import { ButtonPambii } from 'pambii-devtrader-front';
 import SolanaIcon from './icons/SolanaIcon';
 import { useTelegram } from '@/context/TelegramContext';
 import useBase64 from '@/hooks/useBase64';
+import useRedirectAndClose from '@/hooks/useRedirectAndClose';
 
 interface PageProps {
   idUserTelegram?: any;
@@ -21,10 +22,11 @@ interface PageProps {
 
 const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   const { publicKey, wallet, connect, select } = useWallet();
-  const { user: tgUser, closeApp } = useTelegram();
+  const { user: tgUser } = useTelegram();
   const router = useRouter();
   const [isPhantomApp, setIsPhantomApp] = useState(false);
   const [dappKeypair] = useState(Keypair.generate());
+  const { closeApp } = useRedirectAndClose();
 
   const [input, setInput] = useState<string>('');
   const { base64, encodeToBase64, decodeFromBase64 } = useBase64();
@@ -136,8 +138,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
       }
     } else {
       const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${idUserTelegram}?ref=https://pambii-front.vercel.app`;
-      window.location.href = deeplink;
-      closeApp();
+      closeApp(deeplink);
     }
   }, [
     connect,

@@ -8,11 +8,13 @@ import { useRouter } from 'next/navigation';
 import PambiiLoader from './PambiiLoader';
 
 import { useTelegram } from '@/context/TelegramContext';
+import useRedirectAndClose from '@/hooks/useRedirectAndClose';
 
 const VerifySession = () => {
   const { setAuthenticated } = useAuth();
   const router = useRouter();
-  const { user: tgUser, closeApp } = useTelegram();
+  const { user: tgUser } = useTelegram();
+  const { closeApp } = useRedirectAndClose();
 
   useEffect(() => {
     const verifySession = async () => {
@@ -40,8 +42,7 @@ const VerifySession = () => {
         if (!data.idWallet) {
           setAuthenticated(false);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-          window.location.href = deeplink;
-          closeApp();
+          closeApp(deeplink);
         } else {
           setAuthenticated(true);
           router.push('/game/home');
@@ -53,8 +54,7 @@ const VerifySession = () => {
         } else {
           alert(data.message);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-          window.location.href = deeplink;
-          closeApp();
+          closeApp(deeplink);
         }
       }
     };

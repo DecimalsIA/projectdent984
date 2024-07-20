@@ -109,7 +109,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
           await registerConnection(publicKey.toBase58());
         }
       } else {
-        const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app?ref=https://pambii-front.vercel.app/`;
+        const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app?idUser=?idUser=${idUserTelegram}&ref=https://pambii-front.vercel.app?idUser=${idUserTelegram}`;
         window.location.href = deeplink;
         console.log(deeplink);
       }

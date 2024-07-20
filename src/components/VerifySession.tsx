@@ -34,7 +34,7 @@ const VerifySession = () => {
       });
 
       const data = await response.json();
-
+      console.log('data', data);
       if (response.ok && data.active) {
         if (!data.idWallet) {
           setAuthenticated(false);

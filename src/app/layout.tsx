@@ -33,9 +33,16 @@ export default function RootLayout({
     }
 
     loadMessages();
+
     if (isScriptLoaded) {
       Telegram?.WebApp?.expand();
-      eruda.init();
+      import('eruda')
+        .then((eruda) => {
+          eruda.default.init();
+        })
+        .catch((err) => {
+          console.error('Failed to load eruda', err);
+        });
     }
   }, [isScriptLoaded]);
 

@@ -4,3 +4,10 @@ declare module "*.svg" {
   const src: string;
   export default src;
 }
+declare module 'eruda' {
+  const eruda: {
+    init: () => void;
+    [key: string]: any; // Para permitir otras propiedades dinámicas
+  };
+  export default eruda;
+}

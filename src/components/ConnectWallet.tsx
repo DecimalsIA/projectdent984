@@ -20,7 +20,7 @@ interface PageProps {
 const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   const { publicKey, wallet, connect, connecting, connected, select } =
     useWallet();
-  const { setShowBackButton, user: tgUser } = useTelegram();
+  const { user: tgUser } = useTelegram();
   const router = useRouter();
   const [isPhantomApp, setIsPhantomApp] = useState(false);
   const [dappKeypair] = useState(Keypair.generate());
@@ -86,7 +86,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
         const data = await response.json();
 
         if (response.ok && data.idWallet) {
-          //router.push('/game/home');
+          router.push('/game/home');
         }
       }
     },
@@ -109,7 +109,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
           await registerConnection(publicKey.toBase58());
         }
       } else {
-        const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app?idUser=?idUser=${idUserTelegram}&ref=https://pambii-front.vercel.app?idUser=${idUserTelegram}`;
+        const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login?idUser=${idUserTelegram}&ref=https://pambii-front.vercel.app/login?idUser=${idUserTelegram}`;
         window.location.href = deeplink;
         console.log(deeplink);
       }

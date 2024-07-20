@@ -1,20 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
 import { getDocuments } from '../../../utils/firebase';
+import { base64Decode } from '../../../utils/base64Utils';
 
 const DB = process.env.NEXT_PUBLIC_FIREBASE_USER_COLLECTION || 'USERS';
-const secretKey = process.env.JWT_SECRET_KEY || 'your-secret-key';
-
-const base64Decode = (base64: string): string | object => {
-  const buffer: Buffer = Buffer.from(base64, 'base64');
-  const decodedString: string = buffer.toString('utf-8');
-  try {
-    const json: object = JSON.parse(decodedString);
-    return json;
-  } catch (error) {
-    return decodedString;
-  }
-};
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,9 +19,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid token structure' }, { status: 400 });
     }
 
-    console.log('Decoded token:', decoded);
+    const decodedJson = decoded as { id: string };
+    console.log('Decoded token:', decodedJson);
 
-    const userDoc = await getDocuments(DB, 'id', (decoded as { id: string }).id);
+    const userDoc = await getDocuments(DB, 'id', decodedJson.id);
 
     if (userDoc.length === 0) {
       return NextResponse.json({ message: 'Session not found', active: false, firstTime: true }, { status: 401 });
@@ -45,7 +34,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Wallet not connected', active: false, firstTime: false }, { status: 401 });
     }
 
-    return NextResponse.json({ session: decoded, active: true, idWallet: user.idWallet }, { status: 200 });
+    return NextResponse.json({ session: decodedJson, active: true, idWallet: user.idWallet }, { status: 200 });
   } catch (error) {
     console.log('Error during token verification:', error);
 

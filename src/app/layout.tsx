@@ -6,7 +6,7 @@ import './globals.css';
 import { WalletContext } from '@/context/WalletContext';
 import { useEffect, useState } from 'react';
 import useInjectScript from '@/hooks/useInjectScript';
-
+import eruda from 'eruda';
 import PambiiLoader from '@/components/PambiiLoader';
 import { AuthProvider } from '@/context/AuthContext';
 const inter = Inter({ subsets: ['latin'] });
@@ -22,6 +22,7 @@ export default function RootLayout({
     setIsScriptLoaded(true),
   );
   const [messages, setMessages] = useState({});
+
   useEffect(() => {
     async function loadMessages() {
       const locale = navigator.language.split('-')[0] || 'en'; // Obtener el idioma del navegador
@@ -30,7 +31,10 @@ export default function RootLayout({
 
       setMessages(data);
     }
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp)
+      Telegram?.WebApp?.expand();
 
+    eruda.init();
     loadMessages();
   }, []);
 

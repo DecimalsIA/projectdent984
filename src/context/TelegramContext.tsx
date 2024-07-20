@@ -26,6 +26,7 @@ interface TelegramContextProps {
   setBackButtonClickHandler: (handler: () => void) => void;
   isScriptLoaded: boolean;
   user: TelegramUser | null;
+  closeApp: () => void;
 }
 
 const TelegramContext = createContext<TelegramContextProps | undefined>(
@@ -97,12 +98,19 @@ export const TelegramProvider: React.FC<{ children: ReactNode }> = ({
         setShowBackButton,
         setBackButtonClickHandler,
         isScriptLoaded,
+        closeApp,
         user,
       }}
     >
       {children}
     </TelegramContext.Provider>
   );
+};
+
+export const closeApp = () => {
+  setTimeout(() => {
+    window.Telegram.WebApp.close();
+  }, 1000);
 };
 
 export const useTelegram = (): TelegramContextProps => {

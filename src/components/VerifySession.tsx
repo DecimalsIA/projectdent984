@@ -12,7 +12,7 @@ import { useTelegram } from '@/context/TelegramContext';
 const VerifySession = () => {
   const { setAuthenticated } = useAuth();
   const router = useRouter();
-  const { user: tgUser } = useTelegram();
+  const { user: tgUser, closeApp } = useTelegram();
 
   useEffect(() => {
     const verifySession = async () => {
@@ -41,7 +41,7 @@ const VerifySession = () => {
           setAuthenticated(false);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
           window.location.href = deeplink;
-          window.Telegram.WebApp.close();
+          closeApp();
         } else {
           setAuthenticated(true);
           router.push('/game/home');
@@ -54,7 +54,7 @@ const VerifySession = () => {
           alert(data.message);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
           window.location.href = deeplink;
-          window.Telegram.WebApp.close();
+          closeApp();
         }
       }
     };

@@ -21,7 +21,7 @@ interface PageProps {
 
 const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   const { publicKey, wallet, connect, select } = useWallet();
-  const { user: tgUser } = useTelegram();
+  const { user: tgUser, closeApp } = useTelegram();
   const router = useRouter();
   const [isPhantomApp, setIsPhantomApp] = useState(false);
   const [dappKeypair] = useState(Keypair.generate());
@@ -137,7 +137,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
     } else {
       const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${idUserTelegram}?ref=https://pambii-front.vercel.app`;
       window.location.href = deeplink;
-      console.log(deeplink);
+      closeApp();
     }
   }, [
     connect,

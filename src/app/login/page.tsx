@@ -13,6 +13,8 @@ const Page: React.FC = () => {
 
   const idUser = searchParams.get('idUser');
   const idP = tgUser?.id ? tgUser?.id : idUser;
+  alert(idP);
+  alert(window.location.search);
   return (
     <main className="flex min-h-screen items-center justify-center p-24">
       <div className="w-[365px] space-y-4 text-center">

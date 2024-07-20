@@ -25,7 +25,10 @@ const Home = () => {
     // Asegúrate de que el objeto window.Telegram.WebApp esté disponible
     if (window.Telegram && window.Telegram.WebApp) {
       const param = window.Telegram.WebApp.initDataUnsafe.start_param;
-      setStartParam(param);
+      if (param) {
+        setStartParam(param);
+      }
+
       console.log('Parametro recibido:', param);
     } else {
       console.error('Telegram WebApp no está disponible.');

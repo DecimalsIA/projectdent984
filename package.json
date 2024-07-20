@@ -36,7 +36,8 @@
     "react-dom": "^18",
     "react-i18next": "^15.0.0",
     "react-qrcode-logo": "^3.0.0",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "eruda": "^3.2.1"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

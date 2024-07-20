@@ -42,7 +42,7 @@ const Home = () => {
   }, [isAuthenticated, isLoading]);
   return (
     <div>
-      Parametro {newApp}
+      Parametro {newApp} {startParam}
       <>
         {!isMobile ? (
           <>

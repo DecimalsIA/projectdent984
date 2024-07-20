@@ -13,16 +13,21 @@ import { PhantomWalletName } from '@solana/wallet-adapter-wallets';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import SolanaIcon from './icons/SolanaIcon';
 import { useTelegram } from '@/context/TelegramContext';
-import { generateAuthToken } from '@/utils/auth';
+import useBase64 from '@/hooks/useBase64';
+
 interface PageProps {
   idUserTelegram?: any;
 }
+
 const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   const { publicKey, wallet, connect, select } = useWallet();
   const { user: tgUser } = useTelegram();
   const router = useRouter();
   const [isPhantomApp, setIsPhantomApp] = useState(false);
   const [dappKeypair] = useState(Keypair.generate());
+
+  const [input, setInput] = useState<string>('');
+  const { json, base64, encodeToBase64, decodeFromBase64 } = useBase64();
 
   interface User {
     idUser?: string;
@@ -31,7 +36,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
     language_code?: string;
   }
 
-  const [user, setUser] = useState<User | null>({});
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     if (
@@ -52,6 +57,17 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
       registerUser(userTel);
     }
   }, [tgUser]);
+  const handleEncode = () => {
+    try {
+      const inputJson = JSON.parse(input);
+      encodeToBase64(inputJson);
+    } catch {
+      encodeToBase64(input);
+    }
+  };
+  const handleDecode = () => {
+    decodeFromBase64(input);
+  };
 
   const registerUser = useCallback(
     async (obj: User) => {
@@ -76,8 +92,8 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
     async (publicKeyWallet: string) => {
       if (idUserTelegram) {
         try {
-          const wallet = publicKey?.toBase58();
-          alert(wallet);
+          const walletAddress = publicKey?.toBase58();
+          console.log('registerConnection', walletAddress);
           const response = await fetch('/api/register-connection', {
             method: 'POST',
             headers: {
@@ -87,9 +103,14 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
           });
 
           const data = await response.json();
-
+          console.log(data);
+          setInput(data);
+          handleEncode();
+          // base64
           if (response.ok && data.idWallet) {
-            router.push('/game/home');
+            // router.push('/game/home');
+            window.location.href =
+              'https://t.me/PambiiGameBot/pambii?startapp=' + base64;
           } else {
             console.error('Failed to register connection:', data);
           }
@@ -98,36 +119,30 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
         }
       }
     },
-    [idUserTelegram, router],
+    [idUserTelegram, router, publicKey],
   );
 
   const handleConnect = useCallback(async () => {
+    console.log('1');
     if (!wallet) {
       select(PhantomWalletName);
     }
-    try {
-      if (isPhantomApp) {
-        await connect();
-        if (publicKey) {
-          const idsession = generateAuthToken({ publicKey });
-          localStorage.setItem('authToken', idsession);
-          if (user) {
-            await registerUser(user);
-          }
-          alert(publicKey.toBase58());
-          await registerConnection(publicKey.toBase58());
+
+    if (isPhantomApp) {
+      await connect();
+      if (publicKey?.toBase58()) {
+        console.log('publicKey', publicKey);
+
+        if (user) {
+          await registerUser(user);
         }
-      } else {
-        const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${idUserTelegram}?ref=https://pambii-front.vercel.app`;
-        window.location.href = deeplink;
-        console.log(deeplink);
+        console.log(publicKey);
+        await registerConnection(publicKey.toBase58());
       }
-    } catch (error) {
-      if (error instanceof WalletNotSelectedError) {
-        console.error('Wallet not selected');
-      } else {
-        console.error(error);
-      }
+    } else {
+      const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${idUserTelegram}?ref=https://pambii-front.vercel.app`;
+      window.location.href = deeplink;
+      console.log(deeplink);
     }
   }, [
     connect,

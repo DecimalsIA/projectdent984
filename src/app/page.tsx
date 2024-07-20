@@ -10,6 +10,7 @@ import { useAuth } from '@/context/AuthContext';
 import VerifySession from '@/components/VerifySession';
 import usePhantomWallet from '@/hooks/usePhantomWallet';
 import { useSearchParams } from 'next/navigation';
+import useBase64 from '@/hooks/useBase64';
 
 const Home = () => {
   const t = useTranslations('Index');
@@ -18,6 +19,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { isPhantomInstalled } = usePhantomWallet();
   const [startParam, setStartParam] = useState('');
+  const { json, decodeFromBase64 } = useBase64();
 
   useEffect(() => {
     // Asegúrate de que el objeto window.Telegram.WebApp esté disponible
@@ -25,12 +27,15 @@ const Home = () => {
       const param = window.Telegram.WebApp.initDataUnsafe.start_param;
       if (param) {
         setStartParam(param);
+        decodeFromBase64(param);
+        localStorage.setItem('USERDATA', param);
+        localStorage.setItem('authToken', json.idsession);
       }
       console.log('Parametro recibido:', param);
     } else {
       console.error('Telegram WebApp no está disponible.');
     }
-  }, []);
+  }, [decodeFromBase64, json.idsession]);
   useEffect(() => {
     if (user?.id) setShowBackButton(false);
   }, [setShowBackButton, user?.id]);

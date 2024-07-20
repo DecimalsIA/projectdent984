@@ -7,7 +7,7 @@ import { generateAuthToken } from '@/utils/auth';
 const DB = process.env.NEXT_PUBLIC_FIREBASE_USER_COLLETION || 'USERS';
 
 export async function POST(req: NextRequest) {
-  const { idUser, publicKey } = await req.json();
+  const { idUser, publicKeyWallet: publicKey } = await req.json();
   const idsession = generateAuthToken({ publicKey })
 
   if (!idUser || !publicKey) {
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
       id: currentUser.id,
       idWallet: currentUser.idWallet,
       lastActivity: currentUser.lastActivity,
-      idsession
+
     });
   }
 
@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
       message: 'Session updated',
       id: currentUser.id,
       idWallet: publicKey,
+      idsession,
       lastActivity: updateData.lastActivity,
 
     });

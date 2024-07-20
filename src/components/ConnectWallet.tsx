@@ -73,19 +73,28 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   );
 
   const registerConnection = useCallback(
-    async (publicKey: string) => {
+    async (publicKeyWallet: string) => {
       if (idUserTelegram) {
-        const response = await fetch('/api/register-connection', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ idUser: idUserTelegram, publicKey }),
-        });
-        const data = await response.json();
+        try {
+          const wallet = publicKey?.toBase58();
+          alert(wallet);
+          const response = await fetch('/api/register-connection', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idUser: idUserTelegram, publicKeyWallet }),
+          });
 
-        if (response.ok && data.idWallet) {
-          router.push('/game/home');
+          const data = await response.json();
+
+          if (response.ok && data.idWallet) {
+            router.push('/game/home');
+          } else {
+            console.error('Failed to register connection:', data);
+          }
+        } catch (error) {
+          console.error('Error registering connection:', error);
         }
       }
     },
@@ -105,6 +114,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
           if (user) {
             await registerUser(user);
           }
+          alert(publicKey.toBase58());
           await registerConnection(publicKey.toBase58());
         }
       } else {

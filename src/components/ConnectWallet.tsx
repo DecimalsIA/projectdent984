@@ -18,8 +18,7 @@ interface PageProps {
   idUserTelegram?: any;
 }
 const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
-  const { publicKey, wallet, connect, connecting, connected, select } =
-    useWallet();
+  const { publicKey, wallet, connect, select } = useWallet();
   const { user: tgUser } = useTelegram();
   const router = useRouter();
   const [isPhantomApp, setIsPhantomApp] = useState(false);
@@ -148,7 +147,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
       className="mb-4"
       w="317px"
       color="white"
-      icon={<SolanaIcon width={24} height={24} />}
+      icon={<SolanaIcon width="24px" height="24px" />}
       onClick={handleConnect}
     >
       Connect your SOL wallet {tgUser?.first_name}

@@ -16,6 +16,7 @@ const PambiiLoader: React.FC = () => {
             width={120}
             height={120}
             alt="Picture of the author"
+            unoptimized
           />
         </div>
 

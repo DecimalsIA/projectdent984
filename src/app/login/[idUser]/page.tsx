@@ -4,10 +4,10 @@
 import React, { useEffect, useState } from 'react';
 import { CardPambii, LogoGame } from 'pambii-devtrader-front';
 import ConnectWallet from '@/components/ConnectWallet';
-import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation';
 const Page: React.FC = () => {
-  const router = useRouter();
-  const idUser = router.query.idUser;
+  const { idUser } = useParams();
+  console.log(idUser);
 
   return (
     <main className="flex min-h-screen items-center justify-center p-24">

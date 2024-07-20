@@ -31,10 +31,11 @@ export default function RootLayout({
 
       setMessages(data);
     }
-    if (typeof window !== 'undefined' && window.Telegram?.WebApp)
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
       Telegram?.WebApp?.expand();
+      eruda.init();
+    }
 
-    eruda.init();
     loadMessages();
   }, []);
 

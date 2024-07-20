@@ -60,7 +60,7 @@ const VerifySession = () => {
     };
 
     verifySession();
-  }, [router, setAuthenticated, tgUser?.id]);
+  }, [closeApp, router, setAuthenticated, tgUser?.id]);
   return <PambiiLoader />;
 };
 

@@ -44,14 +44,14 @@ const VerifySession = () => {
 */
 
       if (token) {
-        if (!json.idWallet) {
-          setAuthenticated(false);
-          const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-          // window.location.href = deeplink;
-          console.log('1', deeplink);
-        } else {
+        if (json.session) {
           setAuthenticated(true);
           router.push('/game/home');
+        } else {
+          setAuthenticated(false);
+          const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
+          window.location.href = deeplink;
+          console.log('1', deeplink);
         }
       } else {
         setAuthenticated(false);
@@ -59,7 +59,7 @@ const VerifySession = () => {
           router.push('/login');
         } else {
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-          //window.location.href = deeplink;
+          window.location.href = deeplink;
           console.log('2', deeplink);
         }
       }
@@ -69,7 +69,7 @@ const VerifySession = () => {
   }, [
     decodeFromBase64,
     json.firstTime,
-    json.idWallet,
+    json.session,
     router,
     setAuthenticated,
     tgUser?.id,

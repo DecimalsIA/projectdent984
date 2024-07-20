@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import PambiiLoader from './PambiiLoader';
-import * as Sentry from '@sentry/nextjs';
+
 import { useTelegram } from '@/context/TelegramContext';
 
 const VerifySession = () => {
@@ -19,7 +19,6 @@ const VerifySession = () => {
       const token = localStorage.getItem('authToken');
 
       if (!token) {
-        Sentry.captureException(token);
         setAuthenticated(false);
         router.push('/login');
         return;
@@ -35,7 +34,6 @@ const VerifySession = () => {
       });
 
       const data = await response.json();
-      Sentry.captureException(data);
 
       if (response.ok && data.active) {
         if (!data.idWallet) {
@@ -45,14 +43,12 @@ const VerifySession = () => {
           console.log(deeplink);
         } else {
           setAuthenticated(true);
-
           router.push('/game/home');
         }
       } else {
         console.log('data', data);
         setAuthenticated(false);
         if (data.firstTime) {
-          Sentry.captureException('Else verifySession', data);
           router.push('/login'); // Redirigir a la página de registro si es la primera vez
         } else {
           // router.push('/connect-wallet'); // Redirigir a la página para conectar la wallet

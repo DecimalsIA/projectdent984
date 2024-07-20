@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-import { withSentryConfig } from '@sentry/nextjs';
+
 const nextConfig = {
   webpack(config) {
     // Grab the existing rule that handles SVG imports
@@ -36,12 +36,6 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
-  org: 'wwwfredyteherantocom',
-  project: 'pambii',
-  silent: true,
-
-  // An auth token is required for uploading source maps.
-  authToken: process.env.SENTRY_AUTH_TOKEN,
 };
 
-export default withSentryConfig(nextConfig);
+export default nextConfig;

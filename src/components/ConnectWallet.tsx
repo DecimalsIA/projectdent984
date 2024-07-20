@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 'use client';
-import * as Sentry from '@sentry/nextjs';
+
 import React, { useEffect, useCallback, useState } from 'react';
 import {
   useWallet,
@@ -64,7 +64,6 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
         body: JSON.stringify(obj),
       });
       const data = await response.json();
-      Sentry.captureException(data);
       if (response.ok && data.message === 'User already registered') {
         setUser((prev) => ({ ...prev, id: data.id }));
       } else if (response.ok && data.message === 'User registered') {
@@ -87,7 +86,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
         const data = await response.json();
 
         if (response.ok && data.idWallet) {
-          router.push('/game/home');
+          //router.push('/game/home');
         }
       }
     },
@@ -117,10 +116,8 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
     } catch (error) {
       if (error instanceof WalletNotSelectedError) {
         console.error('Wallet not selected');
-        Sentry.captureException('Wallet not selected');
       } else {
         console.error(error);
-        Sentry.captureException(error);
       }
     }
   }, [

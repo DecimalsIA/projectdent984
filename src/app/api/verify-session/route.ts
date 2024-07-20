@@ -6,13 +6,18 @@ const DB = process.env.NEXT_PUBLIC_FIREBASE_USER_COLLECTION || 'USERS';
 
 export async function POST(req: NextRequest) {
   try {
-    const { token } = await req.json();
+    const { token, wallet } = await req.json();
 
     if (!token) {
       return NextResponse.json({ message: 'Missing token' }, { status: 400 });
     }
 
+    if (!wallet) {
+      return NextResponse.json({ message: 'Missing wallet' }, { status: 400 });
+    }
+
     console.log('Received token:', token);
+    console.log('Received wallet:', wallet);
 
     const decoded = base64Decode(token);
     console.log('Decoded token:', decoded);
@@ -32,6 +37,10 @@ export async function POST(req: NextRequest) {
 
     if (!user.idWallet) {
       return NextResponse.json({ message: 'Wallet not connected', active: false, firstTime: false }, { status: 401 });
+    }
+
+    if (user.idWallet !== wallet) {
+      return NextResponse.json({ message: 'Wallet does not match', active: false, firstTime: false }, { status: 401 });
     }
 
     return NextResponse.json({ session: decodedJson, active: true, idWallet: user.idWallet }, { status: 200 });

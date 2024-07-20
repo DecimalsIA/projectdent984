@@ -17,6 +17,7 @@ const VerifySession = () => {
   useEffect(() => {
     const verifySession = async () => {
       const token = localStorage.getItem('USERDATA');
+      const idWallet = localStorage.getItem('idWallet');
 
       if (!token) {
         setAuthenticated(false);
@@ -30,7 +31,7 @@ const VerifySession = () => {
           'Content-Type': 'application/json',
           Authorization: token,
         },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ token, idWallet }),
       });
 
       const data = await response.json();

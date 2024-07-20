@@ -30,12 +30,13 @@ const Home = () => {
         decodeFromBase64(param);
         localStorage.setItem('USERDATA', param);
         localStorage.setItem('authToken', json?.idsession);
+        localStorage.setItem('idWallet', json?.idWallet);
       }
       console.log('Parametro recibido:', param);
     } else {
       console.error('Telegram WebApp no está disponible.');
     }
-  }, [decodeFromBase64, json?.idsession]);
+  }, [decodeFromBase64, json?.idsession, json?.idWallet]);
   useEffect(() => {
     if (user?.id) setShowBackButton(false);
   }, [setShowBackButton, user?.id]);

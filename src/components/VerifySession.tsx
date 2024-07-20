@@ -41,7 +41,7 @@ const VerifySession = () => {
           setAuthenticated(false);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
           window.location.href = deeplink;
-          console.log('1', deeplink);
+          window.Telegram.WebApp.close();
         } else {
           setAuthenticated(true);
           router.push('/game/home');
@@ -53,7 +53,8 @@ const VerifySession = () => {
         } else {
           alert(data.message);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-          //  window.location.href = deeplink;
+          window.location.href = deeplink;
+          window.Telegram.WebApp.close();
         }
       }
     };

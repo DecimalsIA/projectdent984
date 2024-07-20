@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (!idWallet) {
-      return NextResponse.json({ message: 'Missing wallet' }, { status: 400 });
+      return NextResponse.json({ message: 'Missing wallet connect to Phantom wallet' }, { status: 400 });
     }
 
     console.log('Received token:', token);

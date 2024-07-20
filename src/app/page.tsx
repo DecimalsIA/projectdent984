@@ -35,7 +35,7 @@ const Home = () => {
     } else {
       console.error('Telegram WebApp no está disponible.');
     }
-  }, [decodeFromBase64, json.idsession]);
+  }, [decodeFromBase64, json?.idsession]);
   useEffect(() => {
     if (user?.id) setShowBackButton(false);
   }, [setShowBackButton, user?.id]);
@@ -47,7 +47,6 @@ const Home = () => {
   }, [isAuthenticated, isLoading]);
   return (
     <div>
-      Parametro {startParam}
       <>
         {!isMobile ? (
           <>

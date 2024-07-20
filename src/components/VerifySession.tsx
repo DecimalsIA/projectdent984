@@ -24,7 +24,6 @@ const VerifySession = () => {
         router.push('/login');
         return;
       }
-
       const response = await fetch('/api/verify-session', {
         method: 'POST',
         headers: {
@@ -53,7 +52,7 @@ const VerifySession = () => {
         } else {
           alert(data.message);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-          window.location.href = deeplink;
+          //  window.location.href = deeplink;
         }
       }
     };

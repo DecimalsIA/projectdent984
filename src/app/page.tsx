@@ -9,7 +9,6 @@ import { useTranslations } from 'next-intl';
 import { useAuth } from '@/context/AuthContext';
 import VerifySession from '@/components/VerifySession';
 import usePhantomWallet from '@/hooks/usePhantomWallet';
-import { useSearchParams } from 'next/navigation';
 import useBase64 from '@/hooks/useBase64';
 
 const Home = () => {

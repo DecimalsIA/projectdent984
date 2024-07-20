@@ -65,9 +65,6 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
       encodeToBase64(input);
     }
   };
-  const handleDecode = () => {
-    decodeFromBase64(input);
-  };
 
   const registerUser = useCallback(
     async (obj: User) => {

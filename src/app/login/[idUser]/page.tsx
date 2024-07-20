@@ -4,14 +4,14 @@
 import React, { useEffect, useState } from 'react';
 import { CardPambii, LogoGame } from 'pambii-devtrader-front';
 import ConnectWallet from '@/components/ConnectWallet';
-import { useSearchParams } from 'next/navigation';
-import { useTelegram } from '@/context/TelegramContext';
 
+import { useTelegram } from '@/context/TelegramContext';
+import { useRouter } from 'next/router';
 const Page: React.FC = () => {
-  const searchParams = useSearchParams();
+  const router = useRouter();
   const { user: tgUser } = useTelegram();
 
-  const idUser = searchParams.get('idUser');
+  const idUser = router.query.idUser;
   const idP = tgUser?.id ? tgUser?.id : idUser;
   return (
     <main className="flex min-h-screen items-center justify-center p-24">

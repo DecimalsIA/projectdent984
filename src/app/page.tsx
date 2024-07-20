@@ -17,8 +17,6 @@ const Home = () => {
   const { isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const { isPhantomInstalled } = usePhantomWallet();
-  const searchParams = useSearchParams();
-  const newApp = searchParams.get('new');
   const [startParam, setStartParam] = useState('');
 
   useEffect(() => {
@@ -28,7 +26,6 @@ const Home = () => {
       if (param) {
         setStartParam(param);
       }
-
       console.log('Parametro recibido:', param);
     } else {
       console.error('Telegram WebApp no está disponible.');
@@ -45,7 +42,7 @@ const Home = () => {
   }, [isAuthenticated, isLoading]);
   return (
     <div>
-      Parametro {newApp} {startParam}
+      Parametro {startParam}
       <>
         {!isMobile ? (
           <>

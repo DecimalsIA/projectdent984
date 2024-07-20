@@ -40,7 +40,6 @@ const VerifySession = () => {
           setAuthenticated(false);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
           window.location.href = deeplink;
-          console.log(deeplink);
         } else {
           setAuthenticated(true);
           router.push('/game/home');

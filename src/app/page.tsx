@@ -19,6 +19,18 @@ const Home = () => {
   const { isPhantomInstalled } = usePhantomWallet();
   const searchParams = useSearchParams();
   const newApp = searchParams.get('new');
+  const [startParam, setStartParam] = useState('');
+
+  useEffect(() => {
+    // Asegúrate de que el objeto window.Telegram.WebApp esté disponible
+    if (window.Telegram && window.Telegram.WebApp) {
+      const param = window.Telegram.WebApp.initDataUnsafe.start_param;
+      setStartParam(param);
+      console.log('Parametro recibido:', param);
+    } else {
+      console.error('Telegram WebApp no está disponible.');
+    }
+  }, []);
   useEffect(() => {
     if (user?.id) setShowBackButton(false);
   }, [setShowBackButton, user?.id]);

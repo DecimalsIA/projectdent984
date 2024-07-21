@@ -28,10 +28,10 @@ export async function POST(req: NextRequest) {
     if (!user.idWallet) {
       return NextResponse.json({ message: 'Wallet not connected', active: false, firstTime: false }, { status: 401 });
     }
-
-    if (user.idWallet !== idWallet) {
-      return NextResponse.json({ message: 'Wallet does not match', active: false, firstTime: false }, { status: 401 });
-    }
+    /*
+        if (user.idWallet !== idWallet) {
+          return NextResponse.json({ message: 'Wallet does not match', active: false, firstTime: false }, { status: 401 });
+        }*/
 
     return NextResponse.json({ session: user, active: true, idWallet: user.idWallet }, { status: 200 });
   } catch (error) {

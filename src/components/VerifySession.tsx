@@ -16,10 +16,15 @@ const VerifySession = () => {
 
   useEffect(() => {
     const verifySession = async () => {
-      const token = localStorage.getItem('USERDATA');
-      const idWallet = localStorage.getItem('idWallet');
+      const token = localStorage.getItem('USERDATA')
+        ? localStorage.getItem('USERDATA')
+        : sessionStorage.getItem('USERDATA');
+      const idWallet = localStorage.getItem('idWallet')
+        ? localStorage.getItem('idWallet')
+        : sessionStorage.getItem('idWallet');
 
       if (!token) {
+        console.log('data.token', token);
         setAuthenticated(false);
         router.push('/login');
         return;
@@ -48,6 +53,7 @@ const VerifySession = () => {
       } else {
         setAuthenticated(false);
         if (data.firstTime) {
+          console.log('data.firstTime', data.firstTime);
           router.push('/login');
         } else {
           alert(data.message);

@@ -24,12 +24,17 @@ const Home = () => {
     // Asegúrate de que el objeto window.Telegram.WebApp esté disponible
     if (window.Telegram && window.Telegram.WebApp) {
       const param = window.Telegram.WebApp.initDataUnsafe.start_param;
+      console.log('param', param);
       if (param) {
         setStartParam(param);
         decodeFromBase64(param);
         localStorage.setItem('USERDATA', param);
         localStorage.setItem('authToken', json?.idsession);
         localStorage.setItem('idWallet', json?.idWallet);
+
+        sessionStorage.setItem('USERDATA', param);
+        sessionStorage.setItem('authToken', json?.idsession);
+        sessionStorage.setItem('idWallet', json?.idWallet);
       }
       console.log('Parametro recibido:', param);
     } else {

@@ -105,12 +105,19 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
           handleEncode();
           // base64
           if (response.ok && data.idWallet) {
-            // router.push('/game/home');
+            // router.push('/game/home');c
+            // router.push('/game/home');  https://t.me/PambiiGameBot/pambii?startapp=test&startApp=test
             window.location.href =
-              'https://t.me/PambiiGameBot/pambii?startapp=' + base64;
+              'https://t.me/PambiiGameBot/pambii?startapp=' +
+              base64 +
+              '&startApp' +
+              base64;
             console.log(
               'web',
-              'https://t.me/PambiiGameBot/pambii?startapp=' + base64,
+              'https://t.me/PambiiGameBot/pambii?startapp=' +
+                base64 +
+                '&startApp' +
+                base64,
             );
           } else {
             console.error('Failed to register connection:', data);
@@ -173,7 +180,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
       icon={<SolanaIcon width="24px" height="24px" />}
       onClick={handleConnect}
     >
-      Connect your SOL wallet
+      Connect your SOL wallet -- {base64}
     </ButtonPambii>
   );
 };

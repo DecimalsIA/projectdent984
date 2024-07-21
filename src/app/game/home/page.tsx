@@ -21,9 +21,11 @@ import {
 } from 'pambii-devtrader-front';
 import UserHome from '@/components/UserHome';
 import { useRouter } from 'next/navigation';
+import { useTelegram } from '@/context/TelegramContext';
 
 const Home = () => {
   const router = useRouter();
+  const { user } = useTelegram();
   const handleClick = (name: string) => {
     alert(`Clicked on ${name}`);
   };
@@ -127,7 +129,7 @@ const Home = () => {
 
           <div>
             <CardPambii className="beeCard w-full mt-2">
-              <UserHome />
+              <UserHome userName={`${user?.first_name} ${user?.last_name}`} />
               <div className="flex space-x-2 w-full">
                 <BadgePambii
                   icon={<FireIcon className="w-5 h-5" color="red" />}

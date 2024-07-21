@@ -18,9 +18,7 @@ const VerifySession = () => {
         const param = window.Telegram.WebApp.initDataUnsafe.start_param;
         console.log('param', param);
       }
-      const token = localStorage.getItem('USERDATA')
-        ? localStorage.getItem('USERDATA')
-        : sessionStorage.getItem('USERDATA');
+      const token = tgUser?.id.toString();
       const idWallet = localStorage.getItem('idWallet')
         ? localStorage.getItem('idWallet')
         : sessionStorage.getItem('idWallet');

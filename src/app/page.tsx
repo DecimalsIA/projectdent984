@@ -21,6 +21,7 @@ const Home = () => {
   const { json, decodeFromBase64 } = useBase64();
 
   useEffect(() => {
+    console.log('param--->');
     // Asegúrate de que el objeto window.Telegram.WebApp esté disponible
     if (window.Telegram && window.Telegram.WebApp) {
       const param = window.Telegram.WebApp.initDataUnsafe.start_param;

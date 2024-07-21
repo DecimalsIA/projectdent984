@@ -16,6 +16,10 @@ const VerifySession = () => {
 
   useEffect(() => {
     const verifySession = async () => {
+      if (window.Telegram && window.Telegram.WebApp) {
+        const param = window.Telegram.WebApp.initDataUnsafe.start_param;
+        console.log('param', param);
+      }
       const token = localStorage.getItem('USERDATA')
         ? localStorage.getItem('USERDATA')
         : sessionStorage.getItem('USERDATA');

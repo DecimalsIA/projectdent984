@@ -108,6 +108,10 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
             // router.push('/game/home');
             window.location.href =
               'https://t.me/PambiiGameBot/pambii?startapp=' + base64;
+            console.log(
+              'web',
+              'https://t.me/PambiiGameBot/pambii?startapp=' + base64,
+            );
           } else {
             console.error('Failed to register connection:', data);
           }

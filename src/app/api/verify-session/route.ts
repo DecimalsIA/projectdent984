@@ -6,28 +6,18 @@ const DB = process.env.NEXT_PUBLIC_FIREBASE_USER_COLLECTION || 'USERS';
 
 export async function POST(req: NextRequest) {
   try {
-    const { token, idWallet } = await req.json();
+    const { idUSer, idWallet } = await req.json();
 
-    if (!token) {
+    if (!idUSer) {
       return NextResponse.json({ message: 'Missing token' }, { status: 400 });
     }
+    /*
+        if (!idWallet) {
+          return NextResponse.json({ message: 'Missing wallet connect to Phantom wallet' }, { status: 400 });
+        } */
 
-    if (!idWallet) {
-      return NextResponse.json({ message: 'Missing wallet connect to Phantom wallet' }, { status: 400 });
-    }
 
-    console.log('Received token:', token);
-    console.log('Received wallet:', idWallet);
-
-    const decoded = base64Decode(token);
-    console.log('Decoded token:', decoded);
-
-    if (typeof decoded !== 'object' || !('id' in decoded)) {
-      return NextResponse.json({ message: 'Invalid token structure' }, { status: 400 });
-    }
-
-    const decodedJson = decoded as { id: string };
-    const userDoc = await getDocuments(DB, 'id', decodedJson.id);
+    const userDoc = await getDocuments(DB, 'idUSer', idUSer);
 
     if (userDoc.length === 0) {
       return NextResponse.json({ message: 'Session not found', active: false, firstTime: true }, { status: 401 });
@@ -43,7 +33,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Wallet does not match', active: false, firstTime: false }, { status: 401 });
     }
 
-    return NextResponse.json({ session: decodedJson, active: true, idWallet: user.idWallet }, { status: 200 });
+    return NextResponse.json({ session: user, active: true, idWallet: user.idWallet }, { status: 200 });
   } catch (error) {
     console.log('Error during token verification:', error);
 

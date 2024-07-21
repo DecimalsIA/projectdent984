@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -40,7 +38,7 @@ const VerifySession = () => {
           'Content-Type': 'application/json',
           Authorization: token,
         },
-        body: JSON.stringify({ token, idWallet }),
+        body: JSON.stringify({ idUSer: tgUser?.id, idWallet }),
       });
 
       const data = await response.json();
@@ -60,7 +58,6 @@ const VerifySession = () => {
           console.log('data.firstTime', data.firstTime);
           router.push('/login');
         } else {
-          alert(data.message);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
           window.location.href = deeplink;
         }

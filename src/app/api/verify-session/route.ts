@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         } */
 
 
-    const userDoc = await getDocuments(DB, 'idUSer', idUSer);
+    const userDoc = await getDocuments(DB, 'idUser', idUSer);
 
     if (userDoc.length === 0) {
       return NextResponse.json({ message: 'Session not found', active: false, firstTime: true }, { status: 401 });

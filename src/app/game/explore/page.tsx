@@ -14,7 +14,6 @@ const ExplorePage: React.FC = () => {
       title: 'Stats',
       icon: <StatsIcon />,
       onClick: () => router.push('/game/stats'),
-      state: 'active',
     },
   ];
 

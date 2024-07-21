@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
   const activeRoute = pathname.split('/game/')[1];
 
   return (
-    <div className="fixedBotton">
+    <div className="fixedBotton z-20">
       <CardPambii className="beeCard w-full mb-[7px]">
         <div className="flex w-full ">
           <ActionButtonPambii

@@ -36,7 +36,7 @@ const VerifySession = () => {
           'Content-Type': 'application/json',
           Authorization: token,
         },
-        body: JSON.stringify({ idUSer: tgUser?.id, idWallet }),
+        body: JSON.stringify({ idUSer: tgUser?.id.toString(), idWallet }),
       });
 
       const data = await response.json();

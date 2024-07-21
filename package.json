@@ -23,6 +23,7 @@
     "accept-language": "^3.0.18",
     "axios": "^1.7.2",
     "crypto": "^1.0.1",
+    "eruda": "^3.2.1",
     "firebase": "^10.12.4",
     "i18next": "^23.12.1",
     "jsonwebtoken": "^9.0.2",
@@ -30,14 +31,14 @@
     "next-i18next": "^15.3.0",
     "next-intl": "^3.17.1",
     "node-fetch": "^3.3.2",
-    "pambii-devtrader-front": "^1.0.20",
+    "pambii-devtrader-front": "^1.0.25",
     "react": "^18",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18",
     "react-i18next": "^15.0.0",
+    "react-icons": "^5.2.1",
     "react-qrcode-logo": "^3.0.0",
-    "uuid": "^10.0.0",
-    "eruda": "^3.2.1"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

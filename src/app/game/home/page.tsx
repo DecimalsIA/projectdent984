@@ -5,30 +5,25 @@ import React from 'react';
 import bgImgeHome from '../../assets/bg-home.png';
 import imgSprite from '../../assets/fuego1.png';
 import {
-  ActionButtonPambii,
   BadgePambii,
-  BattleIcon,
   BeeIcon,
   ButtonPambii,
   CardPambii,
-  ExploreIcon,
   FireIcon,
   ForceIcon,
-  HomeIcon,
   IconPambii,
-  InventoryIcon,
-  MarketPlaceIcon,
   PencilIcon,
   ProgressBarPambii,
   RankingIcon,
-  SettingIcon,
   SlidePambii,
   StatsIcon,
-  TablePambii,
   TabsPambii,
-  WalletIcon,
 } from 'pambii-devtrader-front';
+import UserHome from '@/components/UserHome';
+import { useRouter } from 'next/navigation';
+
 const Home = () => {
+  const router = useRouter();
   const handleClick = (name: string) => {
     alert(`Clicked on ${name}`);
   };
@@ -99,56 +94,60 @@ const Home = () => {
   ];
   const tabs = [
     {
-      title: 'Home',
-      icon: <HomeIcon />,
-      content: (
-        <>
-          {/* Main Content */}
-          <div className="w-full">
-            <div className="flex justify-between space-x-2">
-              <div className="items-start z-10">
-                <ActionButtonPambii
-                  icon={<WalletIcon />}
-                  onClick={() => alert('Battle button clicked')}
-                />
-              </div>
+      title: 'Ranking',
+      icon: <RankingIcon />,
+      onClick: () => router.push('/game/ranking'),
+    },
+    {
+      title: 'Stats',
+      icon: <StatsIcon />,
+      onClick: () => router.push('/game/stats'),
+    },
+  ];
 
-              <div className="items-end z-10">
-                <ActionButtonPambii
-                  icon={<SettingIcon />}
-                  onClick={() => alert('Battle button clicked')}
-                />
-              </div>
-            </div>
-          </div>
-          {/* Middle Section */}
+  return (
+    <div
+      className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4"
+      style={{ backgroundImage: 'url(' + bgImgeHome.src + ')' }}
+    >
+      {/* Top Navigation */}
+      <div className="mb-110">
+        <div className="w-full">
+          <TabsPambii
+            tabs={tabs}
+            mode="background"
+            bg="#2a2a2a"
+            className="mt-4 mb-8"
+          />
+
           <SlidePambii
             slides={slideData}
-            className="w-full mt-[-30px] max-w-md mx-auto"
+            className="w-full mt-[10px] max-w-md mx-auto"
           />
-          {/* Bottom Section */}
+
           <div>
             <CardPambii className="beeCard w-full mt-2">
+              <UserHome />
               <div className="flex space-x-2 w-full">
                 <BadgePambii
                   icon={<FireIcon className="w-5 h-5" color="red" />}
                   number={250}
-                  className="bg-border w-full"
+                  className="bg-border w-full badge"
                 />
                 <BadgePambii
                   icon={<FireIcon className="w-5 h-5" />}
                   number={150}
-                  className="bg-border w-full"
+                  className="bg-border w-full badge"
                 />
                 <BadgePambii
                   icon={<FireIcon className="w-5 h-5" />}
                   number={350}
-                  className="bg-border w-full"
+                  className="bg-border w-full badge"
                 />
                 <BadgePambii
                   icon={<FireIcon className="w-5 h-5" />}
                   number={450}
-                  className="bg-border w-full"
+                  className="bg-border w-full badge"
                 />
               </div>
               <div className="w-full border-b-m">
@@ -172,11 +171,12 @@ const Home = () => {
                     457
                   </ButtonPambii>
                 </div>
-                <div className="w-full mt-[28px]">
+                <div className="w-full mt-[10px]">
                   {' '}
                   <ButtonPambii
                     onClick={() => alert('Battle button clicked')}
                     color="#fff"
+                    className="fz15"
                     icon={<PencilIcon />}
                   >
                     EDIT BEE
@@ -197,71 +197,7 @@ const Home = () => {
               </div>
             </CardPambii>
           </div>
-        </>
-      ),
-    },
-    {
-      title: 'Stats',
-      icon: <StatsIcon />,
-      content: (
-        <>
-          {' '}
-          <section className="mb-8">
-            <TablePambii data={beeData} />
-          </section>
-        </>
-      ),
-    },
-  ];
-
-  return (
-    <div
-      className="min-h-screen bg-cover bg-center flex flex-col items-center justify-between p-4"
-      style={{ backgroundImage: 'url(' + bgImgeHome.src + ')' }}
-    >
-      {/* Top Navigation */}
-      <div className="w-full mb-110">
-        <div className="w-full">
-          <TabsPambii
-            tabs={tabs}
-            mode="background"
-            bg="#2a2a2a"
-            className="mt-4"
-          />
         </div>
-      </div>
-
-      {/* Bottom Navigation */}
-      <div className="w-full fixedBotton p-3">
-        <CardPambii className="beeCard w-full mb-[7px]">
-          <div className="flex w-full ">
-            <ActionButtonPambii
-              icon={<BattleIcon />}
-              text="BATTLE"
-              onClick={() => alert('Battle button clicked')}
-            />{' '}
-            <ActionButtonPambii
-              icon={<ExploreIcon />}
-              text="EXPLORE"
-              onClick={() => alert('Battle button clicked')}
-            />{' '}
-            <ActionButtonPambii
-              icon={<RankingIcon />}
-              text="RANKING"
-              onClick={() => alert('Battle button clicked')}
-            />
-            <ActionButtonPambii
-              icon={<MarketPlaceIcon />}
-              text="MARKET"
-              onClick={() => alert('Battle button clicked')}
-            />
-            <ActionButtonPambii
-              icon={<InventoryIcon />}
-              text="INVENTORY"
-              href="https://example.com"
-            />
-          </div>
-        </CardPambii>
       </div>
     </div>
   );

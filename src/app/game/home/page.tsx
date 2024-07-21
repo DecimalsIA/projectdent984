@@ -156,7 +156,7 @@ const Home = () => {
                   level={9}
                   current={2800}
                   max={3000}
-                  barColor="bg-green-500"
+                  barColor="bg-green-500 glow"
                   backgroundColor="bg-gray-700"
                 />
               </div>

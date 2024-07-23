@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { RankingIcon, StatsIcon, TabsPambii } from 'pambii-devtrader-front';
 
-const BattlePage: React.FC = () => {
+const SelectArenaPage: React.FC = () => {
   const tabs = [
     {
       title: 'Ranking',
@@ -20,9 +20,9 @@ const BattlePage: React.FC = () => {
   const router = useRouter();
   return (
     <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
-      <div className="mb-110">Battless</div>
+      <div className="mb-110">Battless arena</div>
     </div>
   );
 };
 
-export default BattlePage;
+export default SelectArenaPage;

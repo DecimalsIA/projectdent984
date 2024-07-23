@@ -267,6 +267,8 @@ h2 {
   }
 }
 
+
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

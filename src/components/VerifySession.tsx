@@ -45,7 +45,8 @@ const VerifySession = () => {
         if (!data.idWallet) {
           setAuthenticated(false);
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-          window.location.href = deeplink;
+
+          router.push(deeplink);
         } else {
           setAuthenticated(true);
           router.push('/game/home');
@@ -57,10 +58,12 @@ const VerifySession = () => {
           router.push('/login');
         } else {
           const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-          window.location.href = deeplink;
+
+          router.push(deeplink);
         }
       }
     };
+    // https://phantom.app/ul/browse/https%3A%2F%2Fmagiceden.io%2Fitem-details%2F8yjN8iRuoiYiKW487cnW9vn6mLBR5E8aCNKsBRmTP9vN?ref=https%3A%2F%2Fmagiceden.io
 
     verifySession();
   }, [router, setAuthenticated, tgUser?.id]);

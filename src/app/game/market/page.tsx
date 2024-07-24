@@ -1,12 +1,12 @@
 'use client';
 
 import BeePartsCarousel from '@/components/BeePartsCarousel';
+import ModalPambii from '@/components/ModalPambii';
 import { useRouter } from 'next/navigation';
 import {
   FireAnimated,
   HeartIcon,
   IconPambii,
-  ModalPambii,
   MoneyIcon,
   RankingIcon,
   StatsIcon,

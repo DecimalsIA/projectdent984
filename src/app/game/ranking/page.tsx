@@ -87,7 +87,7 @@ const RankingPage: React.FC = () => {
           tabs={tabs}
           mode="background"
           bg="#2a2a2a"
-          className="mt-4 mb-8"
+          className="mt-4 mb-3"
         />
       </div>
       <TablePambii className="w-full" data={beeData} />

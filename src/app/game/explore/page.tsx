@@ -1,34 +1,139 @@
 'use client';
 
+import ExplorationInfo from '@/components/Exploration';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { RankingIcon, StatsIcon, TabsPambii } from 'pambii-devtrader-front';
+import { ButtonPambii, CardPambii, SlidePambii } from 'pambii-devtrader-front';
+import { useState } from 'react';
+
+const slideData = [
+  {
+    image: '/assets/bee-characters/arena/explore.png',
+    title: 'EXPLORATION',
+    type: 'hard',
+    subtittle: '1,054,352 Pooled PAMBII',
+    powers: [
+      {
+        power: 'Hard',
+        powerIcon: (
+          <Image
+            src="/assets/bee-characters/icons/hard.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+      },
+    ],
+    habilites: [],
+    abilitiesData: [],
+  },
+  // Añade más objetos según sea necesario
+];
+
+const badgesData = [
+  {
+    Icon: (
+      <Image
+        src="/assets/bee-characters/icons/dollar.svg"
+        alt="fire"
+        width={18}
+        height={18}
+      />
+    ),
+    text: 'Exploration fee:',
+    value: '20 PAMBII',
+  },
+  {
+    Icon: (
+      <Image
+        src="/assets/bee-characters/icons/archive.svg"
+        alt="fire"
+        width={18}
+        height={18}
+      />
+    ),
+    text: 'Maximum win amount:',
+    value: '35 PAMBII',
+  },
+  {
+    Icon: (
+      <Image
+        src="/assets/bee-characters/icons/crown.svg"
+        alt="fire"
+        width={18}
+        height={18}
+      />
+    ),
+    text: 'Maximum win rate:',
+    value: '70%',
+  },
+];
 
 const ExplorePage: React.FC = () => {
-  const tabs = [
-    {
-      title: 'Ranking',
-      icon: <RankingIcon />,
-      onClick: () => router.push('/game/ranking'),
-    },
-    {
-      title: 'Stats',
-      icon: <StatsIcon />,
-      onClick: () => router.push('/game/stats'),
-    },
-  ];
+  const [cardType, setCardType] = useState<string>(slideData[0].type ?? '');
+  const [abilitiesData, setAbilitiesData] = useState<any>(
+    slideData[0].abilitiesData ?? [],
+  );
 
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
   const router = useRouter();
+  const handleSelectArena = () => {
+    alert(cardType);
+  };
+
+  const handlePrevSlide = () => {
+    setCurrentSlide((prevSlide) => {
+      const newSlide = prevSlide > 0 ? prevSlide - 1 : slideData.length - 1;
+      setCardType(slideData[newSlide].type);
+      setAbilitiesData(slideData[newSlide].abilitiesData ?? []);
+
+      return newSlide;
+    });
+  };
+
+  const handleNextSlide = () => {
+    setCurrentSlide((prevSlide) => {
+      const newSlide = prevSlide < slideData.length - 1 ? prevSlide + 1 : 0;
+      setCardType(slideData[newSlide].type);
+      setAbilitiesData(slideData[newSlide].abilitiesData ?? []);
+
+      return newSlide;
+    });
+  };
+
   return (
-    <div className='className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full'>
-      <div className="w-full">
-        <TabsPambii
-          tabs={tabs}
-          mode="background"
-          bg="#2a2a2a"
-          className="mt-4 mb-8"
-        />
-      </div>
-      Explore
+    <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+      <CardPambii
+        type={cardType}
+        className="bg-gray-200 w-full card-pambii-b  text-black flex items-center justify-center"
+      >
+        <div className="w-full flex">
+          <SlidePambii
+            slides={slideData}
+            className="w-full max-w-md mx-auto"
+            onPrevSlide={handlePrevSlide}
+            onNextSlide={handleNextSlide}
+          />
+        </div>
+        <ExplorationInfo badges={badgesData} />
+
+        <ButtonPambii
+          color="white"
+          className="mb-2"
+          onClick={handleSelectArena}
+          icon={
+            <Image
+              src="/assets/bee-characters/icons/IconMap.svg"
+              alt="Select arena"
+              width={24}
+              height={24}
+            />
+          }
+        >
+          Explore
+        </ButtonPambii>
+      </CardPambii>
     </div>
   );
 };

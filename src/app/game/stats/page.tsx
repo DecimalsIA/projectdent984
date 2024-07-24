@@ -1,9 +1,32 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { RankingIcon, StatsIcon, TabsPambii } from 'pambii-devtrader-front';
+import {
+  BeeIcon,
+  RankingIcon,
+  StatsIcon,
+  TablePambii,
+  TabsPambii,
+} from 'pambii-devtrader-front';
 
 const StatsPage: React.FC = () => {
+  const handleClick = (name: string) => {
+    alert(`Clicked on ${name}`);
+  };
+  const beeData = [
+    {
+      name: 'ABEJITACHULA',
+      level: 9,
+      icon: <BeeIcon className="text-orange-500" />,
+      onClick: () => handleClick('ABEJITACHULA'),
+    },
+    {
+      name: 'BEE NAME',
+      level: 7,
+      icon: <BeeIcon className="text-orange-500" />,
+      onClick: () => handleClick('BEE NAME'),
+    },
+  ];
   const tabs = [
     {
       title: 'Ranking',
@@ -26,10 +49,10 @@ const StatsPage: React.FC = () => {
           tabs={tabs}
           mode="background"
           bg="#2a2a2a"
-          className="mt-4 mb-8"
+          className="mt-4 mb-3"
         />
       </div>
-      contenudo
+      <TablePambii className="w-full" data={beeData} />
     </div>
   );
 };

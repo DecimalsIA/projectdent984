@@ -251,6 +251,10 @@ h2 {
   animation: shine 2s infinite;
 }
 
+.btonNav {
+  bottom: -31px;
+  z-index: -1;
+}
 
 
 @keyframes shine {
@@ -267,7 +271,135 @@ h2 {
   }
 }
 
+.card-pambii-b {
+  gap: 8px !important;
+}
 
+.explorationText {
+  position: relative;
+  font-weight: 500;
+}
+
+.explorationBoldIcon {
+  width: 18px;
+  position: relative;
+  height: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.explorationBadgeText {
+  position: relative;
+  line-height: 120%;
+  font-weight: 500;
+}
+
+.explorationAchievementContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.explorationBadgeText1 {
+  position: relative;
+  font-size: 12px;
+  line-height: 120%;
+  font-weight: 500;
+  color: #fff;
+}
+
+.explorationBadgeMinibuttonTooltip {
+  align-self: stretch;
+  border-radius: 24px;
+  background-color: #292929;
+  border: 1px solid #434343;
+  box-sizing: border-box;
+  height: 35px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+}
+
+.explorationAbilities {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.explorationContainer1 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: center;
+  font-size: 10px;
+  color: #626262;
+}
+
+.explorationContainer {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  text-align: left;
+  font-size: 12px;
+  color: #fff;
+  font-family: Poppins;
+}
+
+
+.badgetext-explore {
+  width: 100%;
+  position: relative;
+  font-size: 12px;
+  line-height: 120%;
+  font-weight: 500;
+  font-family: Poppins;
+  color: #4e4e4e;
+  text-align: center;
+  display: inline-block;
+}
+
+.badgetext {
+  width: 100%;
+  position: relative;
+  font-size: 12px;
+  line-height: 120%;
+  font-weight: 500;
+  font-family: Poppins;
+  color: #4e4e4e;
+  text-align: center;
+  display: inline-block;
+}
+
+.flex-bage-table {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-bage-table>.mr-2 {
+  margin-right: 8px !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
 
 @layer utilities {
   .text-balance {

@@ -1,14 +1,9 @@
 'use client';
 
+import ExplorationInfo from '@/components/Exploration';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import {
-  AbilitiesPambii,
-  ButtonPambii,
-  CardPambii,
-  HeartIcon,
-  SlidePambii,
-} from 'pambii-devtrader-front';
+import { ButtonPambii, CardPambii, SlidePambii } from 'pambii-devtrader-front';
 import { useState } from 'react';
 
 const slideData = [
@@ -29,14 +24,13 @@ const slideData = [
         ),
       },
     ],
-    habilites: [],
-    abilitiesData: [
+    habilites: [
       {
         id: 1,
         name: 'Ability 1',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/fire.png"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 1"
             width={18}
             height={18}
@@ -48,7 +42,7 @@ const slideData = [
         name: 'Ability 2',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/fire.png"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 2"
             width={18}
             height={18}
@@ -60,7 +54,7 @@ const slideData = [
         name: 'Ability 3',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/fire.png"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 3"
             width={18}
             height={18}
@@ -72,7 +66,7 @@ const slideData = [
         name: 'Ability 4',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/fire.png"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 4"
             width={18}
             height={18}
@@ -84,7 +78,7 @@ const slideData = [
         name: 'Ability 5',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/fire.png"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 5"
             width={18}
             height={18}
@@ -111,7 +105,7 @@ const slideData = [
         ),
       },
     ],
-    abilitiesData: [
+    habilites: [
       {
         id: 1,
         name: 'Ability 1',
@@ -191,13 +185,13 @@ const slideData = [
         ),
       },
     ],
-    abilitiesData: [
+    habilites: [
       {
         id: 1,
         name: 'Ability 1',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/syringe.svg"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 1"
             width={18}
             height={18}
@@ -209,7 +203,7 @@ const slideData = [
         name: 'Ability 2',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/syringe.svg"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 2"
             width={18}
             height={18}
@@ -221,7 +215,7 @@ const slideData = [
         name: 'Ability 3',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/syringe.svg"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 3"
             width={18}
             height={18}
@@ -233,7 +227,7 @@ const slideData = [
         name: 'Ability 4',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/syringe.svg"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 4"
             width={18}
             height={18}
@@ -245,7 +239,7 @@ const slideData = [
         name: 'Ability 5',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/syringe.svg"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 5"
             width={18}
             height={18}
@@ -304,64 +298,7 @@ const slideData = [
         ),
       },
     ],
-    habilities: [
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    abilitiesData: [
+    habilites: [
       {
         id: 1,
         name: 'Ability 1',
@@ -379,7 +316,7 @@ const slideData = [
         name: 'Ability 2',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/fire.png"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 2"
             width={18}
             height={18}
@@ -391,7 +328,7 @@ const slideData = [
         name: 'Ability 3',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/fire.png"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 3"
             width={18}
             height={18}
@@ -403,7 +340,7 @@ const slideData = [
         name: 'Ability 4',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/ghost.svg"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 4"
             width={18}
             height={18}
@@ -415,7 +352,7 @@ const slideData = [
         name: 'Ability 5',
         icon: (
           <Image
-            src="/assets/bee-characters/icons/bottle.svg"
+            src="/assets/bee-characters/icons/sledgehammer.svg"
             alt="Ability 5"
             width={18}
             height={18}
@@ -427,27 +364,58 @@ const slideData = [
   // Añade más objetos según sea necesario
 ];
 
-const BattlePage: React.FC = () => {
+const badgesData = [
+  {
+    Icon: (
+      <Image
+        src="/assets/bee-characters/icons/win.svg"
+        alt="fire"
+        width={18}
+        height={18}
+      />
+    ),
+    text: 'Total wins:',
+    value: '9.850',
+  },
+  {
+    Icon: (
+      <Image
+        src="/assets/bee-characters/icons/sperience.svg"
+        alt="fire"
+        width={18}
+        height={18}
+      />
+    ),
+    text: 'Total experience obtained:',
+    value: '9.850',
+  },
+  {
+    Icon: (
+      <Image
+        src="/assets/bee-characters/icons/dollar.svg"
+        alt="fire"
+        width={18}
+        height={18}
+      />
+    ),
+    text: 'Total PAMBII obtained:',
+    value: '1.200',
+  },
+];
+
+const StatsBeePage: React.FC = () => {
   const [cardType, setCardType] = useState<string>(slideData[0].type ?? '');
-  const [abilitiesData, setAbilitiesData] = useState<any>(
-    slideData[0].abilitiesData ?? [],
-  );
-  const [habilities, setHabilities] = useState<any>(
-    slideData[0].habilities ?? [],
-  );
+
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const router = useRouter();
   const handleSelectArena = () => {
     alert(cardType);
-    router.push('/game/battle/select-arena');
   };
 
   const handlePrevSlide = () => {
     setCurrentSlide((prevSlide) => {
       const newSlide = prevSlide > 0 ? prevSlide - 1 : slideData.length - 1;
       setCardType(slideData[newSlide].type);
-      setAbilitiesData(slideData[newSlide].abilitiesData ?? []);
-      setHabilities(slideData[newSlide].habilities ?? []);
       return newSlide;
     });
   };
@@ -456,8 +424,6 @@ const BattlePage: React.FC = () => {
     setCurrentSlide((prevSlide) => {
       const newSlide = prevSlide < slideData.length - 1 ? prevSlide + 1 : 0;
       setCardType(slideData[newSlide].type);
-      setAbilitiesData(slideData[newSlide].abilitiesData ?? []);
-      setHabilities(slideData[newSlide].habilities ?? []);
       return newSlide;
     });
   };
@@ -466,7 +432,7 @@ const BattlePage: React.FC = () => {
     <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
       <CardPambii
         type={cardType}
-        className="bg-gray-200 w-full text-black card-pambii-b flex items-center justify-center"
+        className="bg-gray-200 w-full card-pambii-b  text-black flex items-center justify-center"
       >
         <div className="w-full flex flex-row justify-center flex-wrap gap-1">
           <SlidePambii
@@ -477,28 +443,26 @@ const BattlePage: React.FC = () => {
           />
         </div>
 
-        {abilitiesData && (
-          <div className="w-full">
-            <AbilitiesPambii abilities={abilitiesData} />
-          </div>
-        )}
+        <ExplorationInfo badges={badgesData} />
+
         <ButtonPambii
           color="white"
+          className="mb-2"
           onClick={handleSelectArena}
           icon={
             <Image
-              src="/assets/bee-characters/icons/nextBatteleorArena.svg"
+              src="/assets/bee-characters/icons/edit.svg"
               alt="Select arena"
               width={24}
               height={24}
             />
           }
         >
-          Select arena
+          Edit bee
         </ButtonPambii>
       </CardPambii>
     </div>
   );
 };
 
-export default BattlePage;
+export default StatsBeePage;

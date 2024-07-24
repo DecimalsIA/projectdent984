@@ -1,38 +1,66 @@
-// BeePartsCarousel.tsx
-import React, { useState } from 'react';
-import BeePartsComponent from './BeeParts';
+/* eslint-disable @next/next/no-img-element */
+import { FunctionComponent } from 'react';
+import styles from './BeePartsCategory.module.css';
 
 interface BeePart {
   name: string;
   image: string;
+  icon: string;
 }
 
-interface BeePartsCarouselProps {
+interface Category {
   title: string;
-  link: string;
   parts: BeePart[];
+  link: string;
 }
 
-const BeePartsCarousel: React.FC<BeePartsCarouselProps> = ({
-  parts,
-  link,
-  title,
+interface BeePartsCategoryProps {
+  category: Category;
+  onCategoryClick?: () => void; // Callback for category click
+  onPartClick?: (part: BeePart, index: any) => void; // Callback for part click
+}
+
+const BeePartsCategory: FunctionComponent<BeePartsCategoryProps> = ({
+  category,
+  onCategoryClick,
+  onPartClick,
 }) => {
   return (
-    <div className="beepartscategory-carousel">
-      <div className="beepartcategory-carousel">
-        {title && (
-          <a href={link} className="badgetext-carousel">
-            <div> {title}</div>
-            <div></div>
-          </a>
-        )}
+    <div className={styles.beepartscategory}>
+      <div
+        className={styles.beepartcategory}
+        onClick={onCategoryClick} // Category click handler
+      >
+        <div className={styles.badgetext}>{category.title}</div>
+        <img
+          className={styles.boldArrowsAltArrowRigh}
+          alt=""
+          src="/assets/bee-characters/icons/arowr.svg"
+        />
       </div>
-      <div className="flex">
-        <BeePartsComponent partsData={parts} />
+      <div className={styles.carrusel}>
+        {category.parts.map((part, index) => (
+          <div
+            key={index}
+            className={styles.cardbeepart}
+            onClick={() => onPartClick?.(part, index)} // Part click handler
+          >
+            <div className={styles.beepartcontainer}>
+              <img
+                className={styles.beeimageIcon}
+                alt={part.name}
+                src={part.image}
+              />
+            </div>
+            <div className={styles.beepartname}>
+              <img className={styles.fire11Icon} alt="" src={part.icon} />
+              <div className={styles.badgetext}>{part.name}</div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-export default BeePartsCarousel;
+export default BeePartsCategory;

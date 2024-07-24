@@ -1,0 +1,101 @@
+.beepartscategory {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
+  text-align: left;
+  font-size: 16px;
+  color: #fff;
+  font-family: Poppins;
+  overflow-x: hidden;
+  /* Oculta cualquier desbordamiento en el eje x */
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.beepartcategory {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.carrusel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  /* Permite el desplazamiento horizontal */
+  scrollbar-width: none;
+  /* Oculta la barra de desplazamiento en Firefox */
+  -ms-overflow-style: none;
+  /* Oculta la barra de desplazamiento en IE y Edge */
+}
+
+.carrusel::-webkit-scrollbar {
+  display: none;
+  /* Oculta la barra de desplazamiento en Chrome, Safari, y Opera */
+}
+
+.cardbeepart {
+  flex: 0 0 auto;
+  /* Asegura que los elementos no se reduzcan ni crezcan para llenar el contenedor */
+  margin-right: 12px;
+  /* Espacio entre tarjetas, ajusta según sea necesario */
+  width: 150px;
+  /* Ancho fijo para cada tarjeta */
+  border-radius: 8px;
+  border: 1px solid #434343;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.badgetext {
+  position: relative;
+  line-height: 120%;
+  font-weight: 500;
+}
+
+.boldArrowsAltArrowRigh {
+  width: 18px;
+  height: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.beeimageIcon,
+.beeimageIcon1,
+.beeimageIcon2 {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.fire11Icon {
+  width: 18px;
+  height: 18px;
+  object-fit: cover;
+}
+
+.beepartname {
+  width: 100%;
+  background-color: #303030;
+  border-top: 1px solid #434343;
+  box-sizing: border-box;
+  height: 31px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 7px;
+  gap: 6px;
+}

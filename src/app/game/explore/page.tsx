@@ -108,7 +108,7 @@ const ExplorePage: React.FC = () => {
         type={cardType}
         className="bg-gray-200 w-full card-pambii-b  text-black flex items-center justify-center"
       >
-        <div className="w-full flex">
+        <div className="w-full flex flex-row justify-center flex-wrap gap-1">
           <SlidePambii
             slides={slideData}
             className="w-full max-w-md mx-auto"

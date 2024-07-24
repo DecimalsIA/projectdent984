@@ -1,0 +1,134 @@
+/* BeePartsComponent.css */
+
+/* Estilos aplicables solo dentro de .beeparts-bodycontainer */
+.beeparts-bodycontainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+.beeparts-bodycontainer .beeparts-bodyinventory {
+  display: flex;
+  flex-direction: column;
+}
+
+.beeparts-bodycontainer .beeparts-beepartscategory {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 18px;
+}
+
+.beeparts-bodycontainer .beeparts-beepartcategory {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.beeparts-bodycontainer .beeparts-badgetext {
+  align-self: stretch;
+  position: relative;
+  line-height: 120%;
+  font-weight: 500;
+}
+
+.beeparts-bodycontainer .beeparts-badgetext1 {
+  align-self: stretch;
+  position: relative;
+  font-size: 14px;
+  line-height: 150%;
+  font-weight: 500;
+}
+
+.beeparts-bodycontainer .beeparts-these-special-parts,
+.beeparts-bodycontainer .beeparts-p {
+  margin: 0;
+}
+
+.beeparts-bodycontainer .beeparts-p {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.beeparts-bodycontainer .beeparts-carrusel {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 10px;
+  min-width: 190px;
+  align-items: center;
+}
+
+.beeparts-bodycontainer .beeparts-cardbeepart,
+.beeparts-bodycontainer .beeparts-cardbeepart1,
+.beeparts-bodycontainer .beeparts-cardbeepart3 {
+  border-radius: 8px;
+  border: 1px solid #434343;
+  height: 149px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  width: 100%;
+}
+
+.beeparts-bodycontainer .beeparts-beepartcontainer {
+  background-color: #292929;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  width: 100%;
+}
+
+.beeparts-bodycontainer .beeparts-beeimage-icon,
+.beeparts-bodycontainer .beeparts-beeimage-icon1,
+.beeparts-bodycontainer .beeparts-beeimage-icon2,
+.beeparts-bodycontainer .beeparts-beeimage-icon3,
+.beeparts-bodycontainer .beeparts-beeimage-icon4,
+.beeparts-bodycontainer .beeparts-beeimage-icon5 {
+  object-fit: contain;
+}
+
+.beeparts-bodycontainer .beeparts-fire-1-1-icon,
+.beeparts-bodycontainer .beeparts-gost-con-borde-gris-1-1-icon {
+  object-fit: contain;
+}
+
+.beeparts-bodycontainer .beeparts-badgetext2 {
+  line-height: 120%;
+  font-weight: 500;
+}
+
+.beeparts-bodycontainer .beeparts-beepartname {
+  background-color: #303030;
+  border-top: 1px solid #434343;
+  height: 34px;
+  display: flex;
+  padding: 8px;
+  gap: 6px;
+  width: 100%;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 3px;
+}
+
+.cate {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: stretch;
+  justify-content: flex-start;
+}

@@ -11,30 +11,39 @@ import {
   MarketPlaceIcon,
   NavFloatButtons,
 } from 'pambii-devtrader-front';
-const navButtons = [
-  {
-    text: 'SPECIAL MARKET',
-    iconUrl: 'Icon.svg',
-    url: '#',
-    onClick: () => console.log('Special Market clicked'),
-  },
-  {
-    text: 'PUBLIC MARKET',
-    iconComponent: <span className="icon-placeholder">🔍</span>, // Ejemplo de componente de ícono
-    url: '#',
-    onClick: () => console.log('Public Market clicked'),
-  },
-];
+import { FaShoppingBasket } from 'react-icons/fa';
 
 const Footer: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const activeRoute = pathname.split('/game/')[1];
   console.log('--->', activeRoute);
+  const navButtons = [
+    {
+      text: 'SPECIAL MARKET',
+      iconComponent: (
+        <MarketPlaceIcon color="#fff" width="24px" height="24px" />
+      ),
+      url: '',
+      onClick: () => router.push('/game/market/special'),
+      active: activeRoute === 'market/special' ? true : false,
+    },
+    {
+      text: 'PUBLIC MARKET',
+      iconComponent: (
+        <FaShoppingBasket className="w-[24px] h-[24px]" color="#fff" />
+      ), // Ejemplo de componente de ícono
+      url: '',
+      onClick: () => router.push('/game/market/public'),
+      active: activeRoute === 'market/public' ? true : false,
+    },
+  ];
 
   return (
     <div className="fixedBotton z-20">
-      {activeRoute === 'market' && (
+      {(activeRoute === 'market' ||
+        activeRoute === 'market/special' ||
+        activeRoute === 'market/public') && (
         <NavFloatButtons classNav="btonNav" navButtons={navButtons} />
       )}
 
@@ -44,7 +53,7 @@ const Footer: React.FC = () => {
             icon={<BattleIcon color="#fff" width="24px" height="24px" />}
             text="battle"
             buttonColor={
-              activeRoute === 'battle' || '/battle/select-arena'
+              activeRoute === 'battle' || activeRoute === 'select-arena'
                 ? '#4068f5'
                 : 'rgb(78, 78, 78)'
             }
@@ -68,7 +77,11 @@ const Footer: React.FC = () => {
             icon={<MarketPlaceIcon color="#fff" width="24px" height="24px" />}
             text="market"
             buttonColor={
-              activeRoute === 'market' ? '#4068f5' : 'rgb(78, 78, 78)'
+              activeRoute === 'market' ||
+              activeRoute === 'market/public' ||
+              activeRoute === 'market/special'
+                ? '#4068f5'
+                : 'rgb(78, 78, 78)'
             }
             onClick={() => router.push('/game/market')}
           />

@@ -8,9 +8,6 @@ import {
   HeartIcon,
   IconPambii,
   MoneyIcon,
-  RankingIcon,
-  StatsIcon,
-  TabsPambii,
 } from 'pambii-devtrader-front';
 import { useState } from 'react';
 

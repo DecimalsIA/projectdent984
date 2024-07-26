@@ -10,7 +10,7 @@ import eruda from 'eruda';
 import PambiiLoader from '@/components/PambiiLoader';
 import { AuthProvider } from '@/context/AuthContext';
 const inter = Inter({ subsets: ['latin'] });
-
+import { Toaster } from 'react-hot-toast';
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -52,6 +52,7 @@ export default function RootLayout({
         <NextIntlClientProvider locale="en" messages={messages}>
           {isScriptLoaded ? (
             <AuthProvider>
+              <Toaster position="bottom-center" />
               <WalletContext>{children}</WalletContext>
             </AuthProvider>
           ) : (

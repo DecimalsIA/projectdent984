@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ButtonPambii, CardPambii, SlidePambii } from 'pambii-devtrader-front';
 import { useState } from 'react';
-
+import { toast } from 'react-hot-toast';
 const slideData = [
   {
     image: '/assets/bee-characters/fuego.png',
@@ -481,7 +481,11 @@ const ExplorePage: React.FC = () => {
 
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const router = useRouter();
+  const notify = () => {
+    toast.success('Hello, this is a success notification!');
+  };
   const handleSelectArena = () => {
+    notify();
     router.push('/game/explore/bee/run');
   };
 
@@ -500,7 +504,6 @@ const ExplorePage: React.FC = () => {
       const newSlide = prevSlide < slideData.length - 1 ? prevSlide + 1 : 0;
       setCardType(slideData[newSlide].type);
       setAbilitiesData(slideData[newSlide].abilitiesData ?? []);
-
       return newSlide;
     });
   };

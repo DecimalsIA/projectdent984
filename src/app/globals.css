@@ -8,6 +8,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  scroll-behavior: smooth;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -583,6 +584,45 @@ h2 {
 .fire-1-1-icon-carousel {
   width: 24px;
   height: 24px;
+}
+
+.name-title {
+  width: 100%;
+  position: relative;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-family: Poppins;
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+}
+
+.name-sub-title {
+  width: 100%;
+  position: relative;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: Poppins;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  display: inline-block;
+}
+
+.selectbeecontainer {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.prueba11Icon {
+  width: 179px;
+  position: relative;
+  height: 179px;
+  object-fit: cover;
 }
 
 

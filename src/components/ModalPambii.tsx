@@ -19,12 +19,13 @@ type ButtonData = {
 
 type ModalData = {
   title: string;
-  image: string;
-  badges: BadgeData[];
-  powerTitle: string;
-  description: string;
-  buttons: ButtonData[];
-  bonus: BadgeData[];
+  subtitle?: string;
+  image?: string;
+  badges?: BadgeData[];
+  powerTitle?: string;
+  description?: string;
+  buttons?: ButtonData[];
+  bonus?: BadgeData[];
   onClose: () => void;
 };
 
@@ -36,6 +37,7 @@ type ModalPambiiProps = {
 const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
   const {
     title,
+    subtitle,
     image,
     badges,
     powerTitle,
@@ -56,17 +58,19 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
-              <div className="flex">
-                {bonus.map((bonus, index) => (
-                  <BadgePambii
-                    key={index}
-                    bg="#292929"
-                    icon={bonus.icon}
-                    number={bonus.value}
-                    text={bonus?.textBadge}
-                  />
-                ))}
-              </div>
+              {bonus && (
+                <div className="flex">
+                  {bonus?.map((bonus, index) => (
+                    <BadgePambii
+                      key={index}
+                      bg="#292929"
+                      icon={bonus.icon}
+                      number={bonus.value}
+                      text={bonus?.textBadge}
+                    />
+                  ))}
+                </div>
+              )}
               <div className="flex flex-col items-start">
                 <h3 className="text-white text-sm font-bold">{title}</h3>
               </div>
@@ -89,44 +93,66 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
             </button>
           </div>
 
-          <div className="">
-            <CardPambii className="bg-gray-200 text-sm flex items-center justify-center">
-              <img src={image} alt={title} className="w-32 h-32" />
-            </CardPambii>
-          </div>
-          <div className="flex flex-col items-start flex-grow">
-            <h3 className=" font-bold mb-2">
-              <span className="text-base">{'Attack name:  '}</span>
-              <span className="text-red-500 ">{powerTitle}</span>
-            </h3>
-          </div>
-          <div className="flex flex-col items-start flex-grow">
-            <h3 className=" font-bold mb-2 text-sm">Description:</h3>
-            <p className="text-wrap text-left text-neutral-500 mb-4 text-sm font-normal font-['Poppins'] leading-[16px] tracking-tight">
-              {description}
-            </p>
-          </div>
+          {image && (
+            <div className="">
+              <CardPambii className="bg-gray-200 text-sm flex items-center justify-center">
+                <img src={image} alt={title} className="w-32 h-32" />
+              </CardPambii>
+            </div>
+          )}
+          {powerTitle && (
+            <div className="flex flex-col items-start flex-grow">
+              <h3 className=" font-bold mb-2">
+                <span className="text-base">{'Attack name:  '}</span>
+                <span className="text-red-500 ">{powerTitle}</span>
+              </h3>
+            </div>
+          )}
+          {subtitle && (
+            <div className="flex flex-col items-start flex-grow">
+              <p className="text-wrap text-left mb-2 text-sm font-normal font-['Poppins'] leading-[16px] tracking-tight">
+                {subtitle}
+              </p>
+            </div>
+          )}
 
-          <div className="flex flex-wrap gap-2 w-full items-start break-words">
-            {badges.map((badge, index) => (
-              <BadgePambii key={index} icon={badge.icon} number={badge.value} />
+          {description && (
+            <div className="flex flex-col items-start flex-grow">
+              <h3 className=" font-bold mb-2 text-sm">Description:</h3>
+              <p className="text-wrap text-left text-neutral-500 mb-4 text-sm font-normal font-['Poppins'] leading-[16px] tracking-tight">
+                {description}
+              </p>
+            </div>
+          )}
+
+          {badges && (
+            <div className="flex flex-wrap gap-2 w-full items-start break-words">
+              {badges.map((badge, index) => (
+                <BadgePambii
+                  key={index}
+                  icon={badge.icon}
+                  number={badge.value}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        {buttons && (
+          <div className="flex justify-between space-x-4 mb-1 footer-modal p-4">
+            {buttons.map((button, index) => (
+              <ButtonPambii
+                key={index}
+                bg={button.bg}
+                color={button.color}
+                icon={button.icon}
+                onClick={button.onClick}
+                className="w-full"
+              >
+                {button.text}
+              </ButtonPambii>
             ))}
           </div>
-        </div>
-        <div className="flex justify-between space-x-4 mb-1 footer-modal p-4">
-          {buttons.map((button, index) => (
-            <ButtonPambii
-              key={index}
-              bg={button.bg}
-              color={button.color}
-              icon={button.icon}
-              onClick={button.onClick}
-              className="w-full"
-            >
-              {button.text}
-            </ButtonPambii>
-          ))}
-        </div>
+        )}
       </div>
     </div>
   );

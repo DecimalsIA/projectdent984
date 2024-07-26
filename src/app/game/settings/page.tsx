@@ -1,31 +1,58 @@
 'use client';
 
+import Delete from '@/components/icons/Delete';
+import Globe from '@/components/icons/Globe';
+import ModalPambii from '@/components/ModalPambii';
 import { useRouter } from 'next/navigation';
-import { BeeIcon, TablePambii } from 'pambii-devtrader-front';
+import { BeeIcon, FireAnimated, TablePambii } from 'pambii-devtrader-front';
+import { useState } from 'react';
 
 const SettingsPage: React.FC = () => {
-  const handleClick = (name: string) => {
-    alert(`Clicked on ${name}`);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+  const handleModal = () => {
+    setIsModalOpen(true);
   };
+  const modalData = {
+    title: 'DELETE ACCOUNT',
+    subtitle:
+      'Do you want to delete your account permanently? Remember that this action is reversible and all your data will be permanently deleted.',
+    buttons: [
+      {
+        text: 'DELETE ACCOUNT',
+        bg: '#ea5555',
+        color: 'white',
+        w: 'full',
+        icon: <Delete />,
+        onClick: () => alert('DELETE ACCOUNT'),
+      },
+    ],
+
+    onClose: () => setIsModalOpen(false),
+  };
+
   const beeData = [
     {
       name: 'LANGUAJE',
       text: 'ENDN',
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('LANGUAJE'),
+      icon: <Globe />,
+      onClick: () => router.push('/game/settings/languaje'),
     },
     {
       name: 'DELETE ACCOUNT',
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('DELETE ACCOUNT'),
+      icon: <Delete />,
+      onClick: () => handleModal(),
     },
   ];
 
-  const router = useRouter();
   return (
-    <div className='className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full'>
-      <TablePambii className="w-full" data={beeData} />
-    </div>
+    <>
+      {' '}
+      {isModalOpen && <ModalPambii data={modalData} />}
+      <div className='className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full'>
+        <TablePambii className="w-full" data={beeData} />
+      </div>
+    </>
   );
 };
 

@@ -79,7 +79,7 @@ const ExplorePage: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const router = useRouter();
   const handleSelectArena = () => {
-    alert(cardType);
+    router.push('/game/explore/bee');
   };
 
   const handlePrevSlide = () => {

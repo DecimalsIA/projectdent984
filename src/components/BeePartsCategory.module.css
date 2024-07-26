@@ -46,7 +46,7 @@
   /* Asegura que los elementos no se reduzcan ni crezcan para llenar el contenedor */
   margin-right: 12px;
   /* Espacio entre tarjetas, ajusta según sea necesario */
-  width: 150px;
+  /*width: 150px;*/
   /* Ancho fijo para cada tarjeta */
   border-radius: 8px;
   border: 1px solid #434343;

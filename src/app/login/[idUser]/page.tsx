@@ -7,7 +7,6 @@ import ConnectWallet from '@/components/ConnectWallet';
 import { useParams } from 'next/navigation';
 const Page: React.FC = () => {
   const { idUser } = useParams();
-  console.log(idUser);
 
   return (
     <main className="flex min-h-screen items-center justify-center p-24">

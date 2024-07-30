@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import bgImgeHome from '../../assets/bg-home.png';
 import imgSprite from '../../assets/fuego1.png';
 import {
@@ -25,60 +25,15 @@ import { useTelegram } from '@/context/TelegramContext';
 
 const Home = () => {
   const router = useRouter();
+  const { setShowBackButton } = useTelegram();
+  useEffect(() => {
+    setShowBackButton(false);
+  }, [setShowBackButton]);
   const { user } = useTelegram();
   const handleClick = (name: string) => {
     alert(`Clicked on ${name}`);
   };
-  const beeData = [
-    {
-      name: 'ABEJITACHULA',
-      level: 9,
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('ABEJITACHULA'),
-    },
-    {
-      name: 'BEE NAME',
-      level: 7,
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('BEE NAME'),
-    },
-    {
-      name: 'BEE NAME',
-      level: 6,
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('BEE NAME'),
-    },
-    {
-      name: 'BEE NAME',
-      level: 5,
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('BEE NAME'),
-    },
-    {
-      name: 'BEE NAME',
-      level: 5,
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('BEE NAME'),
-    },
-    {
-      name: 'BEE NAME',
-      level: 3,
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('BEE NAME'),
-    },
-    {
-      name: 'BEE NAME',
-      level: 2,
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('BEE NAME'),
-    },
-    {
-      name: 'BEE NAME',
-      level: 1,
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('BEE NAME'),
-    },
-  ];
+
   const slideData = [
     {
       image: imgSprite.src,

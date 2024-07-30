@@ -66,6 +66,17 @@ export const getDocumentById = async (collectionName: string, docId: string): Pr
     return null;
   }
 };
+/**
+ * Retrieves all documents from the specified collection.
+ * @param {string} collectionName - The name of the collection.
+ * @returns {Promise<object[]>} - An array of all documents in the collection.
+ */
+export const getAllDocuments = async (collectionName: string): Promise<object[]> => {
+  const collectionRef = collection(db, collectionName);
+  const querySnapshot = await getDocs(collectionRef);
+  const documents = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  return documents;
+};
 
 /**
  * Runs a transaction to create a user if it doesn't already exist.

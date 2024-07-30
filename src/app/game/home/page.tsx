@@ -25,14 +25,8 @@ import { useTelegram } from '@/context/TelegramContext';
 
 const Home = () => {
   const router = useRouter();
-  const { setShowBackButton } = useTelegram();
-  useEffect(() => {
-    setShowBackButton(false);
-  }, [setShowBackButton]);
+
   const { user } = useTelegram();
-  const handleClick = (name: string) => {
-    alert(`Clicked on ${name}`);
-  };
 
   const slideData = [
     {

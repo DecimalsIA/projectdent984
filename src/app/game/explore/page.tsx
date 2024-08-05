@@ -11,7 +11,49 @@ const slideData = [
     image: '/assets/bee-characters/arena/explore.png',
     title: 'EXPLORATION',
     type: 'hard',
-    subtittle: '1,054,352 Pooled PAMBII',
+    subtittle: '2 Pooled PAMBII',
+    powers: [
+      {
+        power: 'Hard',
+        powerIcon: (
+          <Image
+            src="/assets/bee-characters/icons/hard.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+      },
+    ],
+    habilites: [],
+    abilitiesData: [],
+  },
+  {
+    image: '/assets/bee-characters/arena/explore.png',
+    title: 'EXPLORATION',
+    type: 'hard',
+    subtittle: '1 Pooled PAMBII',
+    powers: [
+      {
+        power: 'Hard',
+        powerIcon: (
+          <Image
+            src="/assets/bee-characters/icons/hard.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+      },
+    ],
+    habilites: [],
+    abilitiesData: [],
+  },
+  {
+    image: '/assets/bee-characters/arena/explore.png',
+    title: 'EXPLORATION',
+    type: 'hard',
+    subtittle: '3 Pooled PAMBII',
     powers: [
       {
         power: 'Hard',
@@ -32,42 +74,120 @@ const slideData = [
 ];
 
 const badgesData = [
-  {
-    Icon: (
-      <Image
-        src="/assets/bee-characters/icons/dollar.svg"
-        alt="fire"
-        width={18}
-        height={18}
-      />
-    ),
-    text: 'Exploration fee:',
-    value: '20 PAMBII',
-  },
-  {
-    Icon: (
-      <Image
-        src="/assets/bee-characters/icons/archive.svg"
-        alt="fire"
-        width={18}
-        height={18}
-      />
-    ),
-    text: 'Maximum win amount:',
-    value: '35 PAMBII',
-  },
-  {
-    Icon: (
-      <Image
-        src="/assets/bee-characters/icons/crown.svg"
-        alt="fire"
-        width={18}
-        height={18}
-      />
-    ),
-    text: 'Maximum win rate:',
-    value: '70%',
-  },
+  [
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/dollar.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Explorationw fee:',
+      value: '20 PAMBII',
+    },
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/archive.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Maximum wine amount:',
+      value: '35 PAMBII',
+    },
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/crown.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Maximum win rate:',
+      value: '70%',
+    },
+  ],
+  [
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/dollar.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Exploration fee:',
+      value: '20 PAMBII',
+    },
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/archive.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Maximum win amount:',
+      value: '35 PAMBII',
+    },
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/crown.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Maximum win rate:',
+      value: '70%',
+    },
+  ],
+  [
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/dollar.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Exploration fee:',
+      value: '20 PAMBII',
+    },
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/archive.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Maximum win amount:',
+      value: '35 PAMBII',
+    },
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/crown.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Maximum win rate:',
+      value: '70%',
+    },
+  ],
 ];
 
 const ExplorePage: React.FC = () => {
@@ -116,7 +236,7 @@ const ExplorePage: React.FC = () => {
             onNextSlide={handleNextSlide}
           />
         </div>
-        <ExplorationInfo badges={badgesData} />
+        <ExplorationInfo badges={badgesData[currentSlide]} />
 
         <ButtonPambii
           color="white"

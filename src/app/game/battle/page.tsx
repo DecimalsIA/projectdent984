@@ -293,7 +293,7 @@ const slideData = [
         ),
       },
       {
-        power: 'Whater',
+        power: 'Water',
         powerIcon: (
           <Image
             src="/assets/bee-characters/icons/bottle.svg"

@@ -1,196 +1,197 @@
 'use client';
 
 import ExplorationInfo from '@/components/Exploration';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ButtonPambii, CardPambii, SlidePambii } from 'pambii-devtrader-front';
 import { useState } from 'react';
 
-const slideData = [
-  {
-    image: '/assets/bee-characters/arena/explore.png',
-    title: 'EXPLORATION',
-    type: 'hard',
-    subtittle: '2 Pooled PAMBII',
-    powers: [
-      {
-        power: 'Hard',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/hard.svg"
-            alt="fire"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    habilites: [],
-    abilitiesData: [],
-  },
-  {
-    image: '/assets/bee-characters/arena/explore.png',
-    title: 'EXPLORATION',
-    type: 'hard',
-    subtittle: '1 Pooled PAMBII',
-    powers: [
-      {
-        power: 'Hard',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/hard.svg"
-            alt="fire"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    habilites: [],
-    abilitiesData: [],
-  },
-  {
-    image: '/assets/bee-characters/arena/explore.png',
-    title: 'EXPLORATION',
-    type: 'hard',
-    subtittle: '3 Pooled PAMBII',
-    powers: [
-      {
-        power: 'Hard',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/hard.svg"
-            alt="fire"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    habilites: [],
-    abilitiesData: [],
-  },
-  // Añade más objetos según sea necesario
-];
-
-const badgesData = [
-  [
-    {
-      Icon: (
-        <Image
-          src="/assets/bee-characters/icons/dollar.svg"
-          alt="fire"
-          width={18}
-          height={18}
-        />
-      ),
-      text: 'Explorationw fee:',
-      value: '20 PAMBII',
-    },
-    {
-      Icon: (
-        <Image
-          src="/assets/bee-characters/icons/archive.svg"
-          alt="fire"
-          width={18}
-          height={18}
-        />
-      ),
-      text: 'Maximum wine amount:',
-      value: '35 PAMBII',
-    },
-    {
-      Icon: (
-        <Image
-          src="/assets/bee-characters/icons/crown.svg"
-          alt="fire"
-          width={18}
-          height={18}
-        />
-      ),
-      text: 'Maximum win rate:',
-      value: '70%',
-    },
-  ],
-  [
-    {
-      Icon: (
-        <Image
-          src="/assets/bee-characters/icons/dollar.svg"
-          alt="fire"
-          width={18}
-          height={18}
-        />
-      ),
-      text: 'Exploration fee:',
-      value: '20 PAMBII',
-    },
-    {
-      Icon: (
-        <Image
-          src="/assets/bee-characters/icons/archive.svg"
-          alt="fire"
-          width={18}
-          height={18}
-        />
-      ),
-      text: 'Maximum win amount:',
-      value: '35 PAMBII',
-    },
-    {
-      Icon: (
-        <Image
-          src="/assets/bee-characters/icons/crown.svg"
-          alt="fire"
-          width={18}
-          height={18}
-        />
-      ),
-      text: 'Maximum win rate:',
-      value: '70%',
-    },
-  ],
-  [
-    {
-      Icon: (
-        <Image
-          src="/assets/bee-characters/icons/dollar.svg"
-          alt="fire"
-          width={18}
-          height={18}
-        />
-      ),
-      text: 'Exploration fee:',
-      value: '20 PAMBII',
-    },
-    {
-      Icon: (
-        <Image
-          src="/assets/bee-characters/icons/archive.svg"
-          alt="fire"
-          width={18}
-          height={18}
-        />
-      ),
-      text: 'Maximum win amount:',
-      value: '35 PAMBII',
-    },
-    {
-      Icon: (
-        <Image
-          src="/assets/bee-characters/icons/crown.svg"
-          alt="fire"
-          width={18}
-          height={18}
-        />
-      ),
-      text: 'Maximum win rate:',
-      value: '70%',
-    },
-  ],
-];
-
 const ExplorePage: React.FC = () => {
+  const t = useTranslations('EXPLORE');
+  const slideData = [
+    {
+      image: '/assets/bee-characters/arena/easy.png',
+      title: 'EXPLORATION',
+      type: 'easy',
+      subtittle: '2 Pooled PAMBII',
+      powers: [
+        {
+          power: t('POWER_EASY'),
+          powerIcon: (
+            <Image
+              src="/assets/bee-characters/icons/easy.svg"
+              alt="fire"
+              width={18}
+              height={18}
+            />
+          ),
+        },
+      ],
+      habilites: [],
+      abilitiesData: [],
+    },
+    {
+      image: '/assets/bee-characters/arena/middle.png',
+      title: 'EXPLORATION',
+      type: 'middle',
+      subtittle: '1 Pooled PAMBII',
+      powers: [
+        {
+          power: t('POWER_MIDDLE'),
+          powerIcon: (
+            <Image
+              src="/assets/bee-characters/icons/middle.svg"
+              alt="fire"
+              width={18}
+              height={18}
+            />
+          ),
+        },
+      ],
+      habilites: [],
+      abilitiesData: [],
+    },
+    {
+      image: '/assets/bee-characters/arena/hard.png',
+      title: 'EXPLORATION',
+      type: 'hard',
+      subtittle: '3 Pooled PAMBII',
+      powers: [
+        {
+          power: t('POWER_HARD'),
+          powerIcon: (
+            <Image
+              src="/assets/bee-characters/icons/hard.svg"
+              alt="fire"
+              width={18}
+              height={18}
+            />
+          ),
+        },
+      ],
+      habilites: [],
+      abilitiesData: [],
+    },
+    // Añade más objetos según sea necesario
+  ];
+
+  const badgesData = [
+    [
+      {
+        Icon: (
+          <Image
+            src="/assets/bee-characters/icons/dollar.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+        text: 'Explorationw fee:',
+        value: '20 PAMBII',
+      },
+      {
+        Icon: (
+          <Image
+            src="/assets/bee-characters/icons/archive.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+        text: 'Maximum wine amount:',
+        value: '35 PAMBII',
+      },
+      {
+        Icon: (
+          <Image
+            src="/assets/bee-characters/icons/crown.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+        text: 'Maximum win rate:',
+        value: '70%',
+      },
+    ],
+    [
+      {
+        Icon: (
+          <Image
+            src="/assets/bee-characters/icons/dollar.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+        text: 'Exploration fee:',
+        value: '20 PAMBII',
+      },
+      {
+        Icon: (
+          <Image
+            src="/assets/bee-characters/icons/archive.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+        text: 'Maximum win amount:',
+        value: '35 PAMBII',
+      },
+      {
+        Icon: (
+          <Image
+            src="/assets/bee-characters/icons/crown.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+        text: 'Maximum win rate:',
+        value: '70%',
+      },
+    ],
+    [
+      {
+        Icon: (
+          <Image
+            src="/assets/bee-characters/icons/dollar.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+        text: 'Exploration fee:',
+        value: '20 PAMBII',
+      },
+      {
+        Icon: (
+          <Image
+            src="/assets/bee-characters/icons/archive.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+        text: 'Maximum win amount:',
+        value: '35 PAMBII',
+      },
+      {
+        Icon: (
+          <Image
+            src="/assets/bee-characters/icons/crown.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+        text: 'Maximum win rate:',
+        value: '70%',
+      },
+    ],
+  ];
   const [cardType, setCardType] = useState<string>(slideData[0].type ?? '');
   const [abilitiesData, setAbilitiesData] = useState<any>(
     slideData[0].abilitiesData ?? [],

@@ -10,5 +10,15 @@
   },
   "Loading": {
     "loader": "Loading.."
+  },
+  "EXPLORE": {
+    "EXPLORATION": "EXPLORATION",
+    "TYPE_ROCK": "Rock",
+    "TYPE_FIRE": "Fire",
+    "TYPE_WATER": "Water",
+    "TYPE_GHOST": "Ghost",
+    "POWER_HARD": "HARD",
+    "POWER_EASY": "EASY",
+    "POWER_MIDDLE": "MIDDLE"
   }
 }

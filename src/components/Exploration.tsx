@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useTranslations } from 'next-intl';
 interface Badge {
   Icon?: JSX.Element;
   text?: string;
@@ -11,9 +11,10 @@ interface ExplorationInfoProps {
 }
 
 const ExplorationInfo: React.FC<ExplorationInfoProps> = ({ badges }) => {
+  const t = useTranslations('EXPLORE');
   return (
     <div className="explorationContainer">
-      <div className="explorationText">Exploration info:</div>
+      <div className="explorationText">{t('Explorationinfo')}:</div>
       <div className="explorationContainer1">
         <div className="explorationAbilities">
           {badges.map((badge, index) => (

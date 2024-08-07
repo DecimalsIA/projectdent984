@@ -13,6 +13,8 @@
   },
   "EXPLORE": {
     "EXPLORATION": "EXPLORACIÓN",
+    "EXPLORE": "EXPLORAR",
+    "Explorationinfo": "Información de exploración",
     "TYPE_ROCK": "Rock",
     "TYPE_FIRE": "Fire",
     "TYPE_WATER": "Water",

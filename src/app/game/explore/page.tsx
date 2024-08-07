@@ -12,7 +12,7 @@ const ExplorePage: React.FC = () => {
   const slideData = [
     {
       image: '/assets/bee-characters/arena/easy.png',
-      title: 'EXPLORATION',
+      title: t('EXPLORATION'),
       type: 'easy',
       subtittle: '2 Pooled PAMBII',
       powers: [
@@ -33,7 +33,7 @@ const ExplorePage: React.FC = () => {
     },
     {
       image: '/assets/bee-characters/arena/middle.png',
-      title: 'EXPLORATION',
+      title: t('EXPLORATION'),
       type: 'middle',
       subtittle: '1 Pooled PAMBII',
       powers: [
@@ -54,7 +54,7 @@ const ExplorePage: React.FC = () => {
     },
     {
       image: '/assets/bee-characters/arena/hard.png',
-      title: 'EXPLORATION',
+      title: t('EXPLORATION'),
       type: 'hard',
       subtittle: '3 Pooled PAMBII',
       powers: [

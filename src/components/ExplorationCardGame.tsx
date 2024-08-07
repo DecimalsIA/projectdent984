@@ -1,8 +1,19 @@
 import Image from 'next/image';
 import styles from './ExplorationCard.module.css';
-interface ExplorationCardGameProps {}
+import Countdown from './Countdown';
+interface ExplorationCardGameProps {
+  dificultad: string;
+  bee: string;
+  payout: number;
+  multiplier: string;
+}
 
-const ExplorationCardGame: React.FC<ExplorationCardGameProps> = () => {
+const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
+  dificultad,
+  bee,
+  payout,
+  multiplier,
+}) => {
   return (
     <div className={styles.explorationcard}>
       <div className={styles.nameParent}>
@@ -11,7 +22,7 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = () => {
       </div>
       <div className={styles.selectbeecontainer}>
         <Image
-          src="/panal_animado.gif"
+          src={'/assets/bee-characters/arena/' + dificultad + '.png'}
           width={120}
           height={120}
           alt="Picture of the author"
@@ -21,18 +32,18 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = () => {
       </div>
       <div className={styles.badge}>
         <Image
-          src="/panal_animado.gif"
+          src={'/assets/bee-characters/icons/' + dificultad + '.svg'}
           width={120}
           height={120}
           alt="Picture of the author"
           className={styles.boldFacesEmotionsSticke}
           unoptimized
         />
-        <div className={styles.badgetext}>HARD</div>
+        <div className={styles.badgetext}>{dificultad}</div>
       </div>
       <div className={styles.fuego1Parent}>
         <Image
-          src="/panal_animado.gif"
+          src={'/assets/bee-characters/' + bee + '.png'}
           width={120}
           height={120}
           alt="Picture of the author"
@@ -46,7 +57,7 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = () => {
         </div>
         <div className={styles.badgeMinibuttonTooltip}>
           <Image
-            src="/panal_animado.gif"
+            src={'/assets/bee-characters/icons/' + dificultad + '.svg'}
             width={120}
             height={120}
             alt="Picture of the author"
@@ -54,7 +65,16 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = () => {
             unoptimized
           />
 
-          <div className={styles.name4}>The exploration ends at: 3:23:54</div>
+          {multiplier && (
+            <div className={styles.name4}>
+              Exploration Reward: {payout} PAMBII
+            </div>
+          )}
+          {!multiplier && (
+            <div className={styles.name4}>
+              EXPLORING... <Countdown stopCounting={false} />
+            </div>
+          )}
           <div className={styles.boldFacesEmotionsSticke1} />
         </div>
       </div>

@@ -1,14 +1,16 @@
 'use client';
 
 import ExplorationInfo from '@/components/Exploration';
+import ExplorationCardGame from '@/components/ExplorationCardGame';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ButtonPambii, CardPambii, SlidePambii } from 'pambii-devtrader-front';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import axios from 'axios';
 const slideData = [
   {
-    image: '/assets/bee-characters/fuego.png',
+    image: '/assets/bee-characters/fire.png',
     title: 'Abejitachula',
     type: 'fire',
     powers: [
@@ -478,15 +480,60 @@ const ExplorePage: React.FC = () => {
   const [abilitiesData, setAbilitiesData] = useState<any>(
     slideData[0].abilitiesData ?? [],
   );
+  const [explore, setExplorer] = useState<boolean>(true);
+  const [slideType, setSlideType] = useState<string>('');
+  const [dificultad, setdificultad] = useState<any>('');
+  const [exploration, setExploration] = useState<any>(null);
+
+  const { bee } = useParams();
 
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const router = useRouter();
   const notify = () => {
     toast.success('Hello, this is a success notification!');
   };
-  const handleSelectArena = () => {
-    notify();
-    router.push('/game/explore/bee/run');
+  const handleSelectArena = async (slide: any) => {
+    console.log('slide', slide, bee);
+    setSlideType(slide.type);
+    setdificultad(bee);
+    setExplorer(false);
+    try {
+      const data = await validExplorer(bee);
+      console.log(data);
+      setExploration(data);
+      notify();
+    } catch (error) {
+      console.error('Error fetching explorer data:', error);
+    }
+
+    //router.push('/game/explore/bee/run');
+  };
+
+  const validExplorer = async (bee: any) => {
+    let data = JSON.stringify({
+      userId: 'pZzrHeGsqrGOhwI4CpYh',
+      mapNumber: bee === 'easy' ? 1 : bee === 'middle' ? 2 : 3,
+      valuePambii: bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35,
+      signature: '',
+    });
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: '/api/gexplore',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: data,
+    };
+
+    try {
+      const response = await axios.request(config);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error; // Optional: re-throw the error if you want to handle it later
+    }
   };
 
   const handlePrevSlide = () => {
@@ -509,38 +556,63 @@ const ExplorePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
-      <CardPambii
-        type={cardType}
-        className="bg-gray-200 w-full card-pambii-b  text-black flex items-center justify-center"
-      >
-        <div className="w-full flex flex-row justify-center flex-wrap gap-1">
-          <SlidePambii
-            slides={slideData}
-            className="w-full max-w-md mx-auto"
-            onPrevSlide={handlePrevSlide}
-            onNextSlide={handleNextSlide}
-          />
-        </div>
-        {badgesData && <ExplorationInfo badges={badgesData} />}
+    <>
+      {explore ? (
+        <>
+          <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+            <CardPambii
+              type={cardType}
+              className="bg-gray-200 w-full card-pambii-b  text-black flex items-center justify-center"
+            >
+              <div className="w-full flex flex-row justify-center flex-wrap gap-1">
+                <SlidePambii
+                  slides={slideData}
+                  className="w-full max-w-md mx-auto"
+                  onPrevSlide={handlePrevSlide}
+                  onNextSlide={handleNextSlide}
+                />
+              </div>
+              {badgesData && <ExplorationInfo badges={badgesData} />}
 
-        <ButtonPambii
-          color="white"
-          className="mb-2"
-          onClick={handleSelectArena}
-          icon={
-            <Image
-              src="/assets/bee-characters/icons/explore-icon.svg"
-              alt="Select arena"
-              width={24}
-              height={24}
-            />
-          }
-        >
-          Select bee to explore
-        </ButtonPambii>
-      </CardPambii>
-    </div>
+              <ButtonPambii
+                color="white"
+                className="mb-2"
+                onClick={() => handleSelectArena(slideData[currentSlide])}
+                icon={
+                  <Image
+                    src="/assets/bee-characters/icons/explore-icon.svg"
+                    alt="Select arena"
+                    width={24}
+                    height={24}
+                  />
+                }
+              >
+                Select bee to explore
+              </ButtonPambii>
+            </CardPambii>
+          </div>
+        </>
+      ) : (
+        <>
+          {' '}
+          <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+            <CardPambii
+              type={dificultad}
+              className="bg-gray-200 w-full card-pambii-b  text-black flex items-center justify-center"
+            >
+              <div className="w-full flex flex-row justify-center flex-wrap gap-1">
+                <ExplorationCardGame
+                  bee={slideType}
+                  dificultad={dificultad}
+                  payout={exploration?.payout}
+                  multiplier={exploration?.multiplier}
+                />
+              </div>
+            </CardPambii>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 

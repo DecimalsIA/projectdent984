@@ -199,8 +199,8 @@ const ExplorePage: React.FC = () => {
 
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const router = useRouter();
-  const handleSelectArena = () => {
-    router.push('/game/explore/bee');
+  const handleSelectArena = (type: any) => {
+    router.push('/game/explore/' + type.type);
   };
 
   const handlePrevSlide = () => {
@@ -242,7 +242,7 @@ const ExplorePage: React.FC = () => {
         <ButtonPambii
           color="white"
           className="mb-2"
-          onClick={handleSelectArena}
+          onClick={() => handleSelectArena(slideData[currentSlide])}
           icon={
             <Image
               src="/assets/bee-characters/icons/IconMap.svg"
@@ -252,7 +252,7 @@ const ExplorePage: React.FC = () => {
             />
           }
         >
-          Explore
+          {t('EXPLORE')}
         </ButtonPambii>
       </CardPambii>
     </div>

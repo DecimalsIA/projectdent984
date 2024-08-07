@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 const slideData = [
   {
-    image: '/assets/bee-characters/fuego.png',
+    image: '/assets/bee-characters/fire.png',
     title: 'Abejitachula',
     type: 'fire',
     powers: [

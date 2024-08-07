@@ -87,8 +87,8 @@ const ExplorePage: React.FC = () => {
             height={18}
           />
         ),
-        text: 'Explorationw fee:',
-        value: '20 PAMBII',
+        text: 'Exploration fee:',
+        value: '10 PAMBII',
       },
       {
         Icon: (
@@ -100,7 +100,7 @@ const ExplorePage: React.FC = () => {
           />
         ),
         text: 'Maximum wine amount:',
-        value: '35 PAMBII',
+        value: '20 PAMBII',
       },
       {
         Icon: (
@@ -112,7 +112,7 @@ const ExplorePage: React.FC = () => {
           />
         ),
         text: 'Maximum win rate:',
-        value: '70%',
+        value: '60%',
       },
     ],
     [
@@ -150,7 +150,7 @@ const ExplorePage: React.FC = () => {
           />
         ),
         text: 'Maximum win rate:',
-        value: '70%',
+        value: '50%',
       },
     ],
     [
@@ -164,7 +164,7 @@ const ExplorePage: React.FC = () => {
           />
         ),
         text: 'Exploration fee:',
-        value: '20 PAMBII',
+        value: '35 PAMBII',
       },
       {
         Icon: (
@@ -176,7 +176,19 @@ const ExplorePage: React.FC = () => {
           />
         ),
         text: 'Maximum win amount:',
-        value: '35 PAMBII',
+        value: '50 PAMBII',
+      },
+      {
+        Icon: (
+          <Image
+            src="/assets/bee-characters/icons/archive.svg"
+            alt="fire"
+            width={18}
+            height={18}
+          />
+        ),
+        text: 'Win a Shiny part rate:',
+        value: '5%',
       },
       {
         Icon: (
@@ -188,7 +200,7 @@ const ExplorePage: React.FC = () => {
           />
         ),
         text: 'Maximum win rate:',
-        value: '70%',
+        value: '40%',
       },
     ],
   ];

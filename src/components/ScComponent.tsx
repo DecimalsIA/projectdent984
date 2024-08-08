@@ -1,13 +1,17 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { usePhantomWalletSC } from '../hooks/usePhantomWalletSC';
-import { PublicKey, Transaction } from '@solana/web3.js';
+import { PublicKey, Transaction, SystemProgram } from '@solana/web3.js';
 import BN from 'bn.js';
 import { useWallet } from '@solana/wallet-adapter-react';
 
+const TOKEN_PROGRAM_ID = new PublicKey(
+  'HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ',
+); // Reemplaza con el ID del programa del token
+
 const ScComponent: React.FC = () => {
   const program = usePhantomWalletSC();
-  const { publicKey } = useWallet();
+  const { publicKey, signTransaction, sendTransaction } = useWallet();
   const [result, setResult] = useState<string | null>(null);
 
   useEffect(() => {
@@ -17,19 +21,36 @@ const ScComponent: React.FC = () => {
         return;
       }
 
-      if (program && publicKey) {
+      if (program && publicKey && signTransaction && sendTransaction) {
         try {
           // Construir la transacción
+          const tokenAccount = new PublicKey(
+            'HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ',
+          ); // Token de pago
+          const amount = new BN(100); // Ajusta el monto según sea necesario
+
+          // Llama a la función del contrato inteligente
           const tx = await program.methods
-            .buyCode(new BN(100)) // Ajusta el monto según sea necesario
+            .buyCode(amount)
             .accounts({
               user: publicKey,
+              tokenAccount: tokenAccount,
+              tokenProgram: TOKEN_PROGRAM_ID, // ID del programa del token
               // Otros parámetros de cuentas aquí
             })
             .transaction();
 
+          // Firmar la transacción
+          const signedTransaction = await signTransaction(tx);
+
+          // Enviar la transacción
+          const txid = await sendTransaction(
+            signedTransaction,
+            program.provider.connection,
+          );
+
           // Codificar la transacción en base64
-          const serializedTx = tx.serialize();
+          const serializedTx = signedTransaction.serialize();
           const base64Tx = Buffer.from(serializedTx).toString('base64');
 
           // Crear el enlace deep link para Phantom
@@ -40,6 +61,8 @@ const ScComponent: React.FC = () => {
 
           // Marcar como redirigido en localStorage
           localStorage.setItem('redirectedToPhantom', 'true');
+
+          setResult(`Transaction initiated: ${txid}`);
         } catch (err) {
           setResult(`Error: ${(err as Error)?.message}`);
         }
@@ -47,7 +70,7 @@ const ScComponent: React.FC = () => {
     };
 
     redirectToPhantom();
-  }, [program, publicKey]);
+  }, [program, publicKey, signTransaction, sendTransaction]);
 
   return <div>{result && <p>{result}</p>}</div>;
 };

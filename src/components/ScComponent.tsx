@@ -1,84 +1,69 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { usePhantomWalletSC } from '../hooks/usePhantomWalletSC';
-import { PublicKey, Transaction, SystemProgram } from '@solana/web3.js';
+import { PublicKey, Transaction } from '@solana/web3.js';
 import BN from 'bn.js';
 import { useWallet } from '@solana/wallet-adapter-react';
-
-const TOKEN_PROGRAM_ID = new PublicKey(
-  'HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ',
-); // Reemplaza con el ID del programa del token
 
 const ScComponent: React.FC = () => {
   const program = usePhantomWalletSC();
   const { publicKey, signTransaction, sendTransaction } = useWallet();
   const [result, setResult] = useState<string | null>(null);
 
-  useEffect(() => {
-    const redirectToPhantom = async () => {
-      // Verifica si la redirección ya se realizó
-      if (localStorage.getItem('redirectedToPhantom')) {
+  const handleBuyCode = async (amount: number) => {
+    try {
+      if (!program || !publicKey || !signTransaction || !sendTransaction) {
+        setResult('Program or wallet is not initialized');
         return;
-      } else {
-        // Crear el enlace deep link para Phantom
-        const phantomUrl = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/game/explore/buy?ref=https://pambii-front.vercel.app`;
-
-        // Redirigir a la aplicación Phantom
-        window.location.href = phantomUrl;
       }
 
-      if (program && publicKey && signTransaction && sendTransaction) {
-        try {
-          // Construir la transacción
-          const tokenAccount = new PublicKey(
-            'HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ',
-          ); // Token de pago
-          const amount = new BN(100); // Ajusta el monto según sea necesario
+      // Construir la transacción
+      const tx = await program.methods
+        .buyCode(new BN(amount))
+        .accounts({
+          user: publicKey,
+          // Otros parámetros de cuentas aquí
+        })
+        .transaction();
 
-          // Llama a la función del contrato inteligente
-          const tx = await program.methods
-            .buyCode(amount)
-            .accounts({
-              user: publicKey,
-              tokenAccount: tokenAccount,
-              tokenProgram: TOKEN_PROGRAM_ID, // ID del programa del token
-              // Otros parámetros de cuentas aquí
-            })
-            .transaction();
+      // Firmar la transacción
+      const signedTransaction = await signTransaction(tx);
 
-          // Firmar la transacción
-          const signedTransaction = await signTransaction(tx);
+      // Codificar la transacción en base64
+      const serializedTx = signedTransaction.serialize();
+      const base64Tx = Buffer.from(serializedTx).toString('base64');
 
-          // Enviar la transacción
-          const txid = await sendTransaction(
-            signedTransaction,
-            program.provider.connection,
-          );
+      // Crear el enlace deep link para Phantom
+      const phantomUrl = `https://phantom.app/ul/browse/?uri=solana://transaction?tx=${base64Tx}&redirect_uri=${encodeURIComponent(
+        window.location.href,
+      )}`;
 
-          // Codificar la transacción en base64
-          const serializedTx = signedTransaction.serialize();
-          const base64Tx = Buffer.from(serializedTx).toString('base64');
+      // Redirigir a la aplicación Phantom
+      window.location.href = phantomUrl;
 
-          // Crear el enlace deep link para Phantom
-          const phantomUrl = `https://phantom.app/ul/browse/?uri=solana://transaction?tx=${base64Tx}`;
+      setResult('Redirecting to Phantom wallet...');
+    } catch (err) {
+      setResult(`Error: ${(err as Error)?.message}`);
+    }
+  };
 
-          // Redirigir a la aplicación Phantom
-          window.location.href = phantomUrl;
+  useEffect(() => {
+    // Verifica si se ha regresado desde Phantom Wallet
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('transaction_status')) {
+      const status = urlParams.get('transaction_status');
+      setResult(`Transaction status: ${status}`);
+    }
+  }, []);
 
-          // Marcar como redirigido en localStorage
-          localStorage.setItem('redirectedToPhantom', 'true');
-
-          setResult(`Transaction initiated: ${txid}`);
-        } catch (err) {
-          setResult(`Error: ${(err as Error)?.message}`);
-        }
-      }
-    };
-
-    redirectToPhantom();
-  }, [program, publicKey, signTransaction, sendTransaction]);
-
-  return <div>{result && <p>{result}</p>}</div>;
+  return (
+    <div>
+      <button className="btn" onClick={() => handleBuyCode(100)}>
+        Buy Code
+      </button>
+      {result && <p>{result}</p>}
+    </div>
+  );
 };
 
 export default ScComponent;

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
-import { db } from '@/firebase/config'; // Asegúrate de que esta ruta sea correcta
-import { collection, addDoc, getDoc, doc } from 'firebase/firestore';
+import { db } from '@/firebase/config';
+import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 
-const usePhantomConnect = () => {
+const usePhantomConnect = (userId: string, walletAddress: string) => {
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -13,11 +13,8 @@ const usePhantomConnect = () => {
       try {
         let dappKeyPair;
 
-        // Obtener o crear un par de claves
-        const keyPairDocRef = doc(
-          collection(db, 'dappKeyPairs'),
-          'defaultKeyPair',
-        );
+        // Obtener o crear un par de claves para el usuario
+        const keyPairDocRef = doc(db, 'dappKeyPairs', userId);
         const docSnap = await getDoc(keyPairDocRef);
 
         if (docSnap.exists()) {
@@ -29,15 +26,14 @@ const usePhantomConnect = () => {
         } else {
           // Generar un nuevo par de claves y guardarlo en Firestore
           dappKeyPair = nacl.box.keyPair();
-          await addDoc(collection(db, 'dappKeyPairs'), {
+          await setDoc(keyPairDocRef, {
             publicKey: bs58.encode(dappKeyPair.publicKey),
             secretKey: bs58.encode(dappKeyPair.secretKey),
           });
         }
 
         const appUrl = 'https://pambii-front.vercel.app'; // URL de tu aplicación
-        const redirectLink =
-          'https://pambii-front.vercel.app/api/phantom-redirect'; // URL de tu redirección en Next.js
+        const redirectLink = `https://pambii-front.vercel.app/api/phantom-redirect?walletAddress=${walletAddress}`; // Añadir la dirección de la billetera a la URL de redirección
         const cluster = 'mainnet-beta'; // o 'testnet', 'devnet'
 
         const publicKey = bs58.encode(dappKeyPair.publicKey);
@@ -59,7 +55,7 @@ const usePhantomConnect = () => {
     };
 
     generatePhantomConnectUrl();
-  }, []);
+  }, [userId, walletAddress]);
 
   return { url, error };
 };

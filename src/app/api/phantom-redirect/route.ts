@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { collection, getDoc, doc, addDoc } from 'firebase/firestore';
-import { db } from '@/firebase/config'; // Asegúrate de que esta ruta sea correcta
+import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
+import { db } from '@/firebase/config';
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
 
@@ -18,19 +18,20 @@ function decryptPayload(data: string, nonce: string, sharedSecret: Uint8Array) {
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const session = searchParams.get('session');
-  const publicKey = searchParams.get('public_key');
+
   const phantomEncryptionPublicKey = searchParams.get('phantom_encryption_public_key');
   const data = searchParams.get('data');
   const nonce = searchParams.get('nonce');
+  const userId = searchParams.get('userId');
+  const walletAddress = searchParams.get('walletAddress'); // Capturar la dirección de la billetera
 
-  if (!session || !publicKey || !phantomEncryptionPublicKey || !data || !nonce) {
+  if (!phantomEncryptionPublicKey || !data || !nonce || !userId || !walletAddress) {
     return NextResponse.json({ message: 'Invalid parameters' }, { status: 400 });
   }
 
   try {
-    // Recuperar dappKeyPair desde Firestore
-    const keyPairDocRef = doc(collection(db, 'dappKeyPairs'), 'defaultKeyPair');
+    // Recuperar dappKeyPair del usuario desde Firestore
+    const keyPairDocRef = doc(db, 'dappKeyPairs', userId);
     const docSnap = await getDoc(keyPairDocRef);
 
     if (!docSnap.exists()) {
@@ -50,11 +51,13 @@ export async function GET(request: NextRequest) {
 
     const connectData = decryptPayload(data, nonce, sharedSecretDapp);
 
-    // Guarda la información en Firestore
+    // Guardar la información de conexión en la colección 'phantomConnections'
     await addDoc(collection(db, 'phantomConnections'), {
       session: connectData.session,
       publicKey: connectData.public_key,
-      createdAt: new Date().toISOString()
+      walletAddress: walletAddress, // Guardar la dirección de la billetera conectada
+      createdAt: new Date().toISOString(),
+      userId, // Asociar la conexión al usuario
     });
 
     return NextResponse.json({ message: 'Connection to Phantom Wallet successful!', session: connectData.session, publicKey: connectData.public_key });

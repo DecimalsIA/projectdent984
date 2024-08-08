@@ -19,9 +19,13 @@ const Game: React.FC = () => {
         <p>Contenido del perfil</p>
       </div>
       <ScComponent />
-      <Link href="https://phantom.app/ul/browse/https://pambii-front.vercel.app/game/buy/?ref=https://pambii-front.vercel.app">
-        <ButtonPambii>BACK</ButtonPambii>{' '}
-      </Link>
+      <a
+        href="https://phantom.app/ul/browse/https://pambii-front.vercel.app/game/buy/?ref=https://pambii-front.vercel.app"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <ButtonPambii>BACK</ButtonPambii>
+      </a>
     </div>
   );
 };

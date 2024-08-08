@@ -1,9 +1,14 @@
 'use client';
 import React from 'react';
 import usePhantomSignTransaction from '@/hooks/usePhantomSignTransaction';
+import { useTelegram } from '@/context/TelegramContext';
 
 const SignTransactionPage: React.FC = () => {
-  const userId = 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3'; // Reemplazar con el ID real del usuario
+  const { user: tgUser } = useTelegram();
+
+  // Verificar si tgUser está definido y tiene un id antes de continuar
+
+  const userId = tgUser?.id?.toString(); // Reemplazar con el ID real del usuario
   const programId = 'AceRYkKX6mWc8TtkaCevPhDpjjMBEode75Kn59XtTdVX'; // Reemplazar con el ID del programa
   const baseAccount = '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y'; // Reemplazar con la cuenta base
   const user = 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3'; // Reemplazar con la clave pública del usuario

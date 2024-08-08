@@ -20,7 +20,7 @@ const Game: React.FC = () => {
       </div>
       <ScComponent />
       <a
-        href="https://phantom.app/ul/browse/https://pambii-front.vercel.app/game/buy/?ref=https://pambii-front.vercel.app"
+        href="https://phantom.app/ul/browse/https://pambii-front.vercel.app/game/explore/buy?ref=https://pambii-front.vercel.app"
         target="_blank"
         rel="noopener noreferrer"
       >

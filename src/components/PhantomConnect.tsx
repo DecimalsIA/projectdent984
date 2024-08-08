@@ -19,7 +19,8 @@ const PhantomConnect: React.FC = () => {
 
       const url = `https://phantom.app/ul/v1/connect?app_url=${appUrl}&dapp_encryption_public_key=${dappEncryptionPublicKey}&redirect_link=${redirectLink}&cluster=${cluster}`;
 
-      window.location.href = url;
+      //window.location.href = url;
+      window.open(url, '_blank');
     };
 
     connectToPhantom();

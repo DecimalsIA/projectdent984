@@ -1,40 +1,47 @@
 'use client';
 import { useState } from 'react';
-import { createDeeplink } from '../../../../utils/solana';
+import axios from 'axios';
+import { ButtonPambii } from 'pambii-devtrader-front';
 
 const Home = () => {
   const [deeplink, setDeeplink] = useState('');
 
   const handleGenerateDeeplink = async () => {
-    const programId = 'AceRYkKX6mWc8TtkaCevPhDpjjMBEode75Kn59XtTdVX';
-    const baseAccount = '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y';
-    const user = 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3';
-    const newValue = 42; // Valor a establecer
-    const dappPublicKey = user;
-    const appUrl = 'https://pambii-front.vercel.app/game/explore/buy';
-    const redirectUrl = 'https://pambii-front.vercel.app/game/explore/buy';
+    try {
+      const response = await axios.get('/api/generate-transaction', {
+        params: {
+          programId: 'AceRYkKX6mWc8TtkaCevPhDpjjMBEode75Kn59XtTdVX',
+          baseAccount: '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y', // Obtén esto después de inicializar la cuenta en Anchor
+          user: 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3', // Obtén esto cuando el usuario conecte su billetera
+          newValue: 42, // Valor a establecer
+        },
+      });
 
-    const link = await createDeeplink(
-      programId,
-      baseAccount,
-      user,
-      newValue,
-      dappPublicKey,
-      appUrl,
-      redirectUrl,
-    );
-    setDeeplink(link);
+      const transaction = response.data.transaction;
+
+      const appUrl = 'https://pambii-front.vercel.app/game/explore/buy';
+      const redirectUrl = 'https://pambii-front.vercel.app/game/explore/buy';
+      const dappPublicKey = 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3'; // Puede ser la misma que la del usuario
+
+      const deeplink = `https://phantom.app/ul/v1/transaction?dapp_encryption_public_key=${dappPublicKey}&cluster=devnet&app_url=${appUrl}&redirect_url=${redirectUrl}&transaction=${transaction}`;
+      console.log('deeplink', deeplink);
+      setDeeplink(deeplink);
+    } catch (error) {
+      console.error('Error generating deeplink:', error);
+    }
   };
 
   return (
     <div>
       <h1>Generar Deeplink para Solana</h1>
-      <button onClick={handleGenerateDeeplink}>Generar Deeplink</button>
+      <ButtonPambii onClick={handleGenerateDeeplink}>
+        Generar Deeplink
+      </ButtonPambii>
       {deeplink && (
         <div>
           <p>Deeplink generado:</p>
           <a href={deeplink} target="_blank" rel="noopener noreferrer">
-            {deeplink}
+            <ButtonPambii> Firmar en Phamton </ButtonPambii>
           </a>
         </div>
       )}

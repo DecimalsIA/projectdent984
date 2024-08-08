@@ -1,16 +1,13 @@
-import { PublicKey, Transaction, TransactionInstruction, Connection, clusterApiUrl } from '@solana/web3.js';
+import { Connection, PublicKey, Transaction, TransactionInstruction, clusterApiUrl } from '@solana/web3.js';
 import BN from 'bn.js';
 
 const connection = new Connection(clusterApiUrl('devnet'));
 
-export const createDeeplink = async (
+export const createTransaction = async (
   programId: string,
   baseAccount: string,
   user: string,
-  newValue: number,
-  dappPublicKey: string,
-  appUrl: string,
-  redirectUrl: string
+  newValue: number
 ): Promise<string> => {
   const programPublicKey = new PublicKey(programId);
   const baseAccountPublicKey = new PublicKey(baseAccount);
@@ -29,10 +26,8 @@ export const createDeeplink = async (
   transaction.feePayer = userPublicKey;
   transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
 
-  const serializedTransaction = transaction.serialize();
-  const base64Transaction = serializedTransaction.toString('base64');
-
-  const deeplink = `https://phantom.app/ul/v1/transaction?dapp_encryption_public_key=${dappPublicKey}&cluster=devnet&app_url=${appUrl}&redirect_url=${redirectUrl}&transaction=${base64Transaction}`;
-
-  return deeplink;
+  return transaction.serialize({
+    requireAllSignatures: false,
+    verifySignatures: false,
+  }).toString('base64');
 };

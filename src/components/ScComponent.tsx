@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePhantomWalletSC } from '../hooks/usePhantomWalletSC';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import BN from 'bn.js';
@@ -10,51 +10,46 @@ const ScComponent: React.FC = () => {
   const { publicKey } = useWallet();
   const [result, setResult] = useState<string | null>(null);
 
-  const constructDeepLink = async (transaction: Transaction) => {
-    // Codifica la transacción en formato base64
-    const serializedTx = transaction.serialize();
-    const base64Tx = Buffer.from(serializedTx).toString('base64');
-
-    // Crea el deep link para Phantom
-    const phantomUrl = `solana://send?tx=${base64Tx}`;
-
-    return phantomUrl;
-  };
-
-  const handleBuyCode = async (amount: number) => {
-    try {
-      if (!program || !publicKey) {
-        setResult('Program or wallet is not initialized');
+  useEffect(() => {
+    const redirectToPhantom = async () => {
+      // Verifica si la redirección ya se realizó
+      if (localStorage.getItem('redirectedToPhantom')) {
         return;
       }
 
-      // Construye la transacción
-      const tx = await program.methods
-        .buyCode(new BN(amount))
-        .accounts({
-          user: publicKey,
-          // Otros parámetros de cuentas aquí
-        })
-        .transaction();
+      if (program && publicKey) {
+        try {
+          // Construir la transacción
+          const tx = await program.methods
+            .buyCode(new BN(100)) // Ajusta el monto según sea necesario
+            .accounts({
+              user: publicKey,
+              // Otros parámetros de cuentas aquí
+            })
+            .transaction();
 
-      // Codifica la transacción y construye el deep link
-      const phantomUrl = await constructDeepLink(tx);
+          // Codificar la transacción en base64
+          const serializedTx = tx.serialize();
+          const base64Tx = Buffer.from(serializedTx).toString('base64');
 
-      // Redirige al usuario a la billetera Phantom
-      window.location.href = phantomUrl;
+          // Crear el enlace deep link para Phantom
+          const phantomUrl = `https://phantom.app/ul/browse/?uri=solana://transaction?tx=${base64Tx}`;
 
-      setResult('Redirecting to Phantom wallet...');
-    } catch (err) {
-      setResult(`Error: ${(err as Error)?.message}`);
-    }
-  };
+          // Redirigir a la aplicación Phantom
+          window.location.href = phantomUrl;
 
-  return (
-    <div>
-      <button onClick={() => handleBuyCode(100)}>Buy Code</button>
-      {result && <p>{result}</p>}
-    </div>
-  );
+          // Marcar como redirigido en localStorage
+          localStorage.setItem('redirectedToPhantom', 'true');
+        } catch (err) {
+          setResult(`Error: ${(err as Error)?.message}`);
+        }
+      }
+    };
+
+    redirectToPhantom();
+  }, [program, publicKey]);
+
+  return <div>{result && <p>{result}</p>}</div>;
 };
 
 export default ScComponent;

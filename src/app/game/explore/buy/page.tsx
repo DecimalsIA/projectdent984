@@ -35,7 +35,7 @@ const Home = () => {
     <div>
       <h1>Generar Deeplink para Solana</h1>
       <ButtonPambii onClick={handleGenerateDeeplink}>
-        Generar Deeplink
+        Generar Deeplinks
       </ButtonPambii>
       {deeplink && (
         <div>

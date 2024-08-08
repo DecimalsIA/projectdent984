@@ -3,10 +3,6 @@
 'use client';
 
 import React, { useEffect, useCallback, useState } from 'react';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { useRouter } from 'next/navigation';
-
-import { PhantomWalletName } from '@solana/wallet-adapter-wallets';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import SolanaIcon from './icons/SolanaIcon';
 import { useTelegram } from '@/context/TelegramContext';
@@ -23,7 +19,7 @@ interface User {
 }
 const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   const { user: tgUser } = useTelegram();
-  const { url } = usePhantomConnect(idUserTelegram.toString());
+  const { url } = usePhantomConnect(idUserTelegram);
   const [user, setUser] = useState<User | null>(null);
   console.log(idUserTelegram);
   console.log('url', url);

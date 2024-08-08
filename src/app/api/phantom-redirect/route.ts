@@ -22,10 +22,9 @@ export async function GET(request: NextRequest) {
   const phantomEncryptionPublicKey = searchParams.get('phantom_encryption_public_key');
   const data = searchParams.get('data');
   const nonce = searchParams.get('nonce');
-  const userId = searchParams.get('userId');
-  const walletAddress = searchParams.get('walletAddress'); // Capturar la dirección de la billetera
+  const userId = searchParams.get('userId'); // Capturar la dirección de la billetera
 
-  if (!phantomEncryptionPublicKey || !data || !nonce || !userId || !walletAddress) {
+  if (!phantomEncryptionPublicKey || !data || !nonce || !userId) {
     return NextResponse.json({ message: 'Invalid parameters' }, { status: 400 });
   }
 
@@ -62,7 +61,6 @@ export async function GET(request: NextRequest) {
       await updateDoc(connectionDoc.ref, {
         session: connectData.session,
         updateAt: new Date().toISOString(),
-        walletAddress: walletAddress, // Actualizar la dirección de la billetera conectada si es necesario
 
       });
 
@@ -72,7 +70,6 @@ export async function GET(request: NextRequest) {
       await addDoc(collection(db, 'phantomConnections'), {
         session: connectData.session,
         publicKey: connectData.public_key,
-        walletAddress: walletAddress, // Guardar la dirección de la billetera conectada
         createdAt: new Date().toISOString(),
         updateAt: new Date().toISOString(),
         userId, // Asociar la conexión al usuario

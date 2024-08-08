@@ -4,9 +4,9 @@ import { createTransaction } from '../../../utils/solana';
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
-  const programId = searchParams.get('programId') || 'YOUR_PROGRAM_ID';
-  const baseAccount = searchParams.get('baseAccount') || 'BASE_ACCOUNT_PUBLIC_KEY';
-  const user = searchParams.get('user') || 'USER_PUBLIC_KEY';
+  const programId = searchParams.get('programId') || 'AceRYkKX6mWc8TtkaCevPhDpjjMBEode75Kn59XtTdVX';
+  const baseAccount = searchParams.get('baseAccount') || '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y';
+  const user = searchParams.get('user') || 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3';
   const newValue = parseInt(searchParams.get('newValue') || '42', 10);
 
   try {

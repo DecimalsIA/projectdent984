@@ -1,4 +1,5 @@
 import { Connection, PublicKey, Transaction, TransactionInstruction, clusterApiUrl } from '@solana/web3.js';
+import bs58 from 'bs58';
 import BN from 'bn.js';
 
 const connection = new Connection(clusterApiUrl('devnet'));
@@ -26,8 +27,8 @@ export const createTransaction = async (
   transaction.feePayer = userPublicKey;
   transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
 
-  return transaction.serialize({
+  return bs58.encode(transaction.serialize({
     requireAllSignatures: false,
     verifySignatures: false,
-  }).toString('base64');
+  }));
 };

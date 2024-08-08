@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { ButtonPambii } from 'pambii-devtrader-front';
+import PhantomConnect from '@/components/PhantomConnect';
 
 const Home = () => {
   const [deeplink, setDeeplink] = useState('');
@@ -23,7 +24,7 @@ const Home = () => {
       const redirectUrl = 'https://pambii-front.vercel.app/game/explore/buy';
       const dappPublicKey = 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3'; // Puede ser la misma que la del usuario
 
-      const deeplink = `https://phantom.app/ul/v1/transaction?dapp_encryption_public_key=${dappPublicKey}&cluster=devnet&app_url=${appUrl}&redirect_url=${redirectUrl}&transaction=${transaction}`;
+      const deeplink = `https://phantom.app/ul/v1/signTransaction?dapp_encryption_public_key=${dappPublicKey}&cluster=devnet&app_url=${appUrl}&redirect_url=${redirectUrl}&transaction=${transaction}`;
       console.log('deeplink', deeplink);
       setDeeplink(deeplink);
     } catch (error) {
@@ -43,6 +44,11 @@ const Home = () => {
           <a href={deeplink} target="_blank" rel="noopener noreferrer">
             <ButtonPambii> Firmar en Phamton </ButtonPambii>
           </a>
+          <br />
+          <div>
+            <h1>Connect to Phantom Wallet</h1>
+            <PhantomConnect />
+          </div>
         </div>
       )}
     </div>

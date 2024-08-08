@@ -1,18 +1,42 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useTelegram } from '@/context/TelegramContext';
-import { ButtonPambii } from 'pambii-devtrader-front';
-import TelegramGameApp from '@/components/TelegramGameApp';
-import ScComponent from '@/components/ScComponent';
+import { useEffect, useState } from 'react';
+import {
+  Connection,
+  PublicKey,
+  Transaction,
+  SystemProgram,
+} from '@solana/web3.js';
 import { useSearchParams, useRouter } from 'next/navigation';
-const PHANTOM_DEEPLINK_URL = 'https://phantom.app/ul/v1/';
 
-const Game: React.FC = () => {
-  const [publicKey] = useState('EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3');
-  const [deeplink, setDeeplink] = useState('');
+const PHANTOM_DEEPLINK_URL = 'https://phantom.app/ul/v1/';
+const SOLANA_NETWORK = 'https://api.devnet.solana.com';
+const connection = new Connection(SOLANA_NETWORK);
+
+const Home: React.FC = () => {
+  const [publicKey, setPublicKey] = useState<string>(
+    'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3',
+  );
+  const [deeplink, setDeeplink] = useState<string>('');
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  const createTransaction = async (
+    publicKeyStr: string,
+  ): Promise<Transaction> => {
+    const publicKey = new PublicKey(publicKeyStr);
+    const transaction = new Transaction().add(
+      SystemProgram.transfer({
+        fromPubkey: publicKey,
+        toPubkey: new PublicKey('9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y'), // Reemplaza con la dirección de destinatario
+        lamports: 1000, // Cantidad en lamports (1 SOL = 1,000,000,000 lamports)
+      }),
+    );
+
+    transaction.feePayer = publicKey;
+    const { blockhash } = await connection.getRecentBlockhash();
+    transaction.recentBlockhash = blockhash;
+
+    return transaction;
+  };
 
   useEffect(() => {
     const generateDeeplink = async () => {
@@ -22,18 +46,15 @@ const Game: React.FC = () => {
       }
 
       try {
-        const response = await fetch(`/api/transaction?publicKey=${publicKey}`);
-        const data = await response.json();
+        const transaction = await createTransaction(publicKey);
+        const serializedTransaction = transaction
+          .serialize({ requireAllSignatures: false })
+          .toString('base64');
 
-        if (data.error) {
-          console.error(data.error);
-          return;
-        }
-
-        const returnUrl = `${window.location.origin}/?signedTransaction=`;
+        const returnUrl = `https://t.me/@PambiiGameBot?signedTransaction=`;
         const deeplinkUrl = `${PHANTOM_DEEPLINK_URL}signTransaction?app_url=${encodeURIComponent(
           returnUrl,
-        )}&transaction=${encodeURIComponent(data.transaction)}`;
+        )}&transaction=${encodeURIComponent(serializedTransaction)}`;
 
         setDeeplink(deeplinkUrl);
       } catch (error) {
@@ -45,24 +66,16 @@ const Game: React.FC = () => {
   }, [publicKey]);
 
   useEffect(() => {
-    const sendSignedTransaction = async (signedTransaction: any) => {
+    const sendSignedTransaction = async (signedTransaction: string) => {
       try {
-        const response = await fetch('/api/send-transaction', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ transaction: signedTransaction }),
-        });
+        const deserializedTransaction = Transaction.from(
+          Buffer.from(signedTransaction, 'base64'),
+        );
+        const signature = await connection.sendRawTransaction(
+          deserializedTransaction.serialize(),
+        );
 
-        const data = await response.json();
-
-        if (data.error) {
-          console.error(data.error);
-          return;
-        }
-
-        console.log('Transaction sent with signature:', data.signature);
+        console.log('Transaction sent with signature:', signature);
       } catch (error) {
         console.error('Error sending transaction', error);
       }
@@ -74,17 +87,16 @@ const Game: React.FC = () => {
       router.replace('/');
     }
   }, [searchParams, router]);
+
   return (
     <div>
-      <div>
-        {deeplink && (
-          <a href={deeplink} target="_blank" rel="noopener noreferrer">
-            <ButtonPambii>Sign Transaction</ButtonPambii>
-          </a>
-        )}
-      </div>
+      {deeplink && (
+        <a href={deeplink} target="_blank" rel="noopener noreferrer">
+          <button>Sign Transaction</button>
+        </a>
+      )}
     </div>
   );
 };
 
-export default Game;
+export default Home;

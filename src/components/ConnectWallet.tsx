@@ -15,28 +15,24 @@ import usePhantomConnect from '@/hooks/usePhantomConnect';
 interface PageProps {
   idUserTelegram?: any;
 }
-
+interface User {
+  idUser?: string;
+  nomTlram?: string;
+  userName?: string;
+  language_code?: string;
+}
 const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   const { user: tgUser } = useTelegram();
   const { url } = usePhantomConnect(idUserTelegram.toString());
-
+  const [user, setUser] = useState<User | null>(null);
   console.log(idUserTelegram);
   console.log('url', url);
-
-  interface User {
-    idUser?: string;
-    nomTlram?: string;
-    userName?: string;
-    language_code?: string;
-  }
-
-  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     if (tgUser) {
       const userTel = {
         idUser: tgUser.id.toString(),
-        userId: tgUser.id.toString(),
+        userId: idUserTelegram.toString(),
         nomTlram: `${tgUser.first_name} ${tgUser.last_name}`,
         userName: tgUser.username,
         language_code: tgUser.language_code,

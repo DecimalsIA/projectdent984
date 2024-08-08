@@ -4,14 +4,14 @@ import usePhantomSignTransaction from '@/hooks/usePhantomSignTransaction';
 import { useTelegram } from '@/context/TelegramContext';
 
 const SignTransactionPage: React.FC = () => {
-  const { user: tgUser } = useTelegram();
+  const { user } = useTelegram();
 
   // Verificar si tgUser está definido y tiene un id antes de continuar
 
-  const userId = tgUser?.id?.toString(); // Reemplazar con el ID real del usuario
+  const userId = user?.id?.toString() ?? ''; // Reemplazar con el ID real del usuario
   const programId = 'AceRYkKX6mWc8TtkaCevPhDpjjMBEode75Kn59XtTdVX'; // Reemplazar con el ID del programa
   const baseAccount = '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y'; // Reemplazar con la cuenta base
-  const user = 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3'; // Reemplazar con la clave pública del usuario
+  const userSC = 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3'; // Reemplazar con la clave pública del usuario
   const newValue = 42; // Valor a enviar en lamports
   const redirectLink = 'https://pambii-front.vercel.app/api/phantom-redirect'; // URL de redirección después de la firma de la transacción
 
@@ -19,7 +19,7 @@ const SignTransactionPage: React.FC = () => {
     userId,
     programId,
     baseAccount,
-    user,
+    userSC,
     newValue,
     redirectLink,
   );

@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
   const newValue = parseInt(searchParams.get('newValue') || '42', 10);
 
   try {
+    // Crear la transacción y obtenerla codificada en base58
     const transaction = await createTransaction(programId, baseAccount, user, newValue);
     return NextResponse.json({ transaction });
   } catch (error: any) {

@@ -8,7 +8,7 @@ import ScComponent from '@/components/ScComponent';
 const PHANTOM_DEEPLINK_URL = 'https://phantom.app/ul/v1/';
 
 const Game: React.FC = () => {
-  const [publicKey] = useState('PublicKeyFromDatabaseHere');
+  const [publicKey] = useState('EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3');
   const [deeplink, setDeeplink] = useState('');
 
   useEffect(() => {

@@ -19,6 +19,12 @@ const ScComponent: React.FC = () => {
       // Verifica si la redirección ya se realizó
       if (localStorage.getItem('redirectedToPhantom')) {
         return;
+      } else {
+        // Crear el enlace deep link para Phantom
+        const phantomUrl = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/game/explore/buy?ref=https://pambii-front.vercel.app`;
+
+        // Redirigir a la aplicación Phantom
+        window.location.href = phantomUrl;
       }
 
       if (program && publicKey && signTransaction && sendTransaction) {

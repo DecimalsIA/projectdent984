@@ -3,31 +3,24 @@
 'use client';
 
 import React, { useEffect, useCallback, useState } from 'react';
-import {
-  useWallet,
-  WalletNotSelectedError,
-} from '@solana/wallet-adapter-react';
+import { useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from 'next/navigation';
-import { Keypair } from '@solana/web3.js';
+
 import { PhantomWalletName } from '@solana/wallet-adapter-wallets';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import SolanaIcon from './icons/SolanaIcon';
 import { useTelegram } from '@/context/TelegramContext';
-import useBase64 from '@/hooks/useBase64';
+import usePhantomConnect from '@/hooks/usePhantomConnect';
 
 interface PageProps {
   idUserTelegram?: any;
 }
 
 const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
-  const { publicKey, wallet, connect, select } = useWallet();
   const { user: tgUser } = useTelegram();
   const router = useRouter();
-  const [isPhantomApp, setIsPhantomApp] = useState(false);
-  const [dappKeypair] = useState(Keypair.generate());
-
+  const { url } = usePhantomConnect(idUserTelegram);
   const [input, setInput] = useState<string>('');
-  const { base64, encodeToBase64, decodeFromBase64 } = useBase64();
 
   interface User {
     idUser?: string;
@@ -39,13 +32,6 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if (
-      typeof window !== 'undefined' &&
-      window.solana &&
-      window.solana.isPhantom
-    ) {
-      setIsPhantomApp(true);
-    }
     if (tgUser) {
       const userTel = {
         idUser: tgUser.id.toString(),
@@ -57,14 +43,6 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
       registerUser(userTel);
     }
   }, [tgUser]);
-  const handleEncode = () => {
-    try {
-      const inputJson = JSON.parse(input);
-      encodeToBase64(inputJson);
-    } catch {
-      encodeToBase64(input);
-    }
-  };
 
   const registerUser = useCallback(
     async (obj: User) => {
@@ -84,7 +62,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
     },
     [user],
   );
-
+  /*
   const registerConnection = useCallback(
     async (publicKeyWallet: string) => {
       if (idUserTelegram) {
@@ -102,80 +80,27 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
           const data = await response.json();
           console.log(data);
           setInput(data);
-          handleEncode();
-          // base64
-          if (response.ok && data.idWallet) {
-            // router.push('/game/home');c
-            // router.push('/game/home');  https://t.me/PambiiGameBot/pambii?startapp=test&startApp=test
-            window.location.href =
-              'https://t.me/PambiiGameBot/pambii?startApp=' + base64;
-            console.log(
-              'web',
-              'https://t.me/PambiiGameBot/pambii?startApp=' + base64,
-            );
-          } else {
-            console.error('Failed to register connection:', data);
-          }
         } catch (error) {
           console.error('Error registering connection:', error);
         }
       }
     },
     [idUserTelegram, router, publicKey],
-  );
-
-  const handleConnect = useCallback(async () => {
-    console.log('1');
-    if (!wallet) {
-      select(PhantomWalletName);
-    }
-
-    if (isPhantomApp) {
-      await connect();
-      if (publicKey?.toBase58()) {
-        if (user) {
-          await registerUser(user);
-        }
-
-        await registerConnection(publicKey.toBase58());
-      }
-    } else {
-      const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${idUserTelegram}?ref=https://pambii-front.vercel.app`;
-      window.location.href = deeplink;
-    }
-  }, [
-    connect,
-    isPhantomApp,
-    publicKey,
-    select,
-    wallet,
-    registerUser,
-    registerConnection,
-  ]);
-
-  useEffect(() => {
-    const userAgent = navigator.userAgent || navigator.vendor;
-    if (userAgent.includes('Phantom')) {
-      setIsPhantomApp(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isPhantomApp) {
-      handleConnect();
-    }
-  }, [isPhantomApp, handleConnect]);
+  ); */
 
   return (
-    <ButtonPambii
-      className="mb-4"
-      w="317px"
-      color="white"
-      icon={<SolanaIcon width="24px" height="24px" />}
-      onClick={handleConnect}
-    >
-      Connect your SOL wallet -- {base64}
-    </ButtonPambii>
+    url && (
+      <a href={url} target="_blank" rel="noopener noreferrer">
+        <ButtonPambii
+          className="mb-4"
+          w="317px"
+          color="white"
+          icon={<SolanaIcon width="24px" height="24px" />}
+        >
+          Connect your SOL wallet
+        </ButtonPambii>{' '}
+      </a>
+    )
   );
 };
 

@@ -6,10 +6,7 @@ import usePhantomConnect from '@/hooks/usePhantomConnect';
 
 const Home = () => {
   const [deeplink, setDeeplink] = useState('');
-  const { url, error } = usePhantomConnect(
-    'pZzrHeGsqrGOhwI4CpYh',
-    'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3',
-  );
+  const { url, error } = usePhantomConnect('pZzrHeGsqrGOhwI4CpYh');
 
   const handleGenerateDeeplink = async () => {
     try {

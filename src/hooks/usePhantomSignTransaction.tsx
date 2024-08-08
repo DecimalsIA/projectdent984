@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';

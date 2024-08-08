@@ -47,17 +47,10 @@ const Game: React.FC = () => {
       <div>
         {deeplink && (
           <a href={deeplink} target="_blank" rel="noopener noreferrer">
-            <button>Sign Transaction</button>
+            <ButtonPambii>Sign Transaction</ButtonPambii>
           </a>
         )}
       </div>
-      <a
-        href="https://phantom.app/ul/browse/https://pambii-front.vercel.app/game/explore/buy?ref=https://pambii-front.vercel.app"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <ButtonPambii>BACK</ButtonPambii>
-      </a>
     </div>
   );
 };

@@ -1,100 +1,41 @@
-'use client';
-import { useEffect, useState } from 'react';
-import {
-  Connection,
-  PublicKey,
-  Transaction,
-  SystemProgram,
-} from '@solana/web3.js';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { createDeeplink } from '../../../../utils/solana';
 
-const PHANTOM_DEEPLINK_URL = 'https://phantom.app/ul/v1/';
-const SOLANA_NETWORK = 'https://api.devnet.solana.com';
-const connection = new Connection(SOLANA_NETWORK);
+const Home = () => {
+  const [deeplink, setDeeplink] = useState('');
 
-const Home: React.FC = () => {
-  const [publicKey, setPublicKey] = useState<string>(
-    'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3',
-  );
-  const [deeplink, setDeeplink] = useState<string>('');
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const handleGenerateDeeplink = async () => {
+    const programId = 'AceRYkKX6mWc8TtkaCevPhDpjjMBEode75Kn59XtTdVX';
+    const baseAccount = '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y';
+    const user = 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3';
+    const newValue = 42; // Valor a establecer
+    const dappPublicKey = user;
+    const appUrl = 'https://pambii-front.vercel.app/game/explore/buy';
+    const redirectUrl = 'https://pambii-front.vercel.app/game/explore/buy';
 
-  const createTransaction = async (
-    publicKeyStr: string,
-  ): Promise<Transaction> => {
-    const publicKey = new PublicKey(publicKeyStr);
-    const transaction = new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: publicKey,
-        toPubkey: new PublicKey('9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y'), // Reemplaza con la dirección de destinatario
-        lamports: 1000, // Cantidad en lamports (1 SOL = 1,000,000,000 lamports)
-      }),
+    const link = await createDeeplink(
+      programId,
+      baseAccount,
+      user,
+      newValue,
+      dappPublicKey,
+      appUrl,
+      redirectUrl,
     );
-
-    transaction.feePayer = publicKey;
-    const { blockhash } = await connection.getRecentBlockhash();
-    transaction.recentBlockhash = blockhash;
-
-    return transaction;
+    setDeeplink(link);
   };
-
-  useEffect(() => {
-    const generateDeeplink = async () => {
-      if (!publicKey) {
-        console.error('Public key is not available');
-        return;
-      }
-
-      try {
-        const transaction = await createTransaction(publicKey);
-        const serializedTransaction = transaction
-          .serialize({ requireAllSignatures: false })
-          .toString('base64');
-
-        const returnUrl = `https://t.me/@PambiiGameBot?signedTransaction=`;
-        const deeplinkUrl = `${PHANTOM_DEEPLINK_URL}signTransaction?app_url=${encodeURIComponent(
-          returnUrl,
-        )}&transaction=${encodeURIComponent(serializedTransaction)}`;
-
-        setDeeplink(deeplinkUrl);
-      } catch (error) {
-        console.error('Error generating deeplink', error);
-      }
-    };
-
-    generateDeeplink();
-  }, [publicKey]);
-
-  useEffect(() => {
-    const sendSignedTransaction = async (signedTransaction: string) => {
-      try {
-        const deserializedTransaction = Transaction.from(
-          Buffer.from(signedTransaction, 'base64'),
-        );
-        const signature = await connection.sendRawTransaction(
-          deserializedTransaction.serialize(),
-        );
-
-        console.log('Transaction sent with signature:', signature);
-      } catch (error) {
-        console.error('Error sending transaction', error);
-      }
-    };
-
-    const signedTransaction = searchParams.get('signedTransaction');
-    if (signedTransaction) {
-      sendSignedTransaction(signedTransaction);
-      router.replace('/');
-    }
-  }, [searchParams, router]);
 
   return (
     <div>
+      <h1>Generar Deeplink para Solana</h1>
+      <button onClick={handleGenerateDeeplink}>Generar Deeplink</button>
       {deeplink && (
-        <a href={deeplink} target="_blank" rel="noopener noreferrer">
-          <button>Sign Transaction</button>
-        </a>
+        <div>
+          <p>Deeplink generado:</p>
+          <a href={deeplink} target="_blank" rel="noopener noreferrer">
+            {deeplink}
+          </a>
+        </div>
       )}
     </div>
   );

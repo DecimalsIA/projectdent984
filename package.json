@@ -24,6 +24,7 @@
     "accept-language": "^3.0.18",
     "axios": "^1.7.2",
     "bn.js": "^5.2.1",
+    "bs58": "^6.0.0",
     "crypto": "^1.0.1",
     "eruda": "^3.2.1",
     "firebase": "^10.12.4",
@@ -41,6 +42,8 @@
     "react-i18next": "^15.0.0",
     "react-icons": "^5.2.1",
     "react-qrcode-logo": "^3.0.0",
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

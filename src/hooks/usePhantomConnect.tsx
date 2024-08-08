@@ -13,7 +13,7 @@ const usePhantomConnect = () => {
         const appUrl = 'https://pambii-front.vercel.app'; // URL de tu aplicación
         const redirectLink =
           'https://pambii-front.vercel.app/api/phantom-redirect'; // URL de tu redirección en Next.js
-        const cluster = 'mainnet-beta'; // o 'testnet', 'devnet'
+        const cluster = 'devnet'; // o 'testnet', 'devnet'
 
         const publicKey = bs58.encode(dappKeyPair.publicKey);
 

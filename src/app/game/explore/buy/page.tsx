@@ -19,7 +19,7 @@ const Game: React.FC = () => {
         <p>Contenido del perfil</p>
       </div>
       <ScComponent />
-      <Link href="/">
+      <Link href="phantom://v1/transaction?tx=${base64Tx}">
         <ButtonPambii>BACK</ButtonPambii>{' '}
       </Link>
     </div>

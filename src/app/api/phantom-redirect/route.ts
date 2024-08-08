@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
@@ -51,16 +51,35 @@ export async function GET(request: NextRequest) {
 
     const connectData = decryptPayload(data, nonce, sharedSecretDapp);
 
-    // Guardar la información de conexión en la colección 'phantomConnections'
-    await addDoc(collection(db, 'phantomConnections'), {
-      session: connectData.session,
-      publicKey: connectData.public_key,
-      walletAddress: walletAddress, // Guardar la dirección de la billetera conectada
-      createdAt: new Date().toISOString(),
-      userId, // Asociar la conexión al usuario
-    });
+    // Verificar si el userId ya existe en la colección 'phantomConnections'
+    const connectionsQuery = query(collection(db, 'phantomConnections'), where('userId', '==', userId));
+    const querySnapshot = await getDocs(connectionsQuery);
+    console.log('querySnapshot.docs', querySnapshot.docs)
 
-    return NextResponse.json({ message: 'Connection to Phantom Wallet successful!', session: connectData.session, publicKey: connectData.public_key });
+    if (!querySnapshot.empty) {
+      // Si el userId ya existe, actualizar el documento
+      const connectionDoc = querySnapshot.docs[0]; // Asumiendo que solo habrá un documento por userId
+      await updateDoc(connectionDoc.ref, {
+        session: connectData.session,
+        updateAt: new Date().toISOString(),
+        walletAddress: walletAddress, // Actualizar la dirección de la billetera conectada si es necesario
+
+      });
+
+      return NextResponse.json({ message: 'Connection to Phantom Wallet updated successfully!', session: connectData.session, publicKey: connectData.public_key });
+    } else {
+      // Si el userId no existe, crear un nuevo documento
+      await addDoc(collection(db, 'phantomConnections'), {
+        session: connectData.session,
+        publicKey: connectData.public_key,
+        walletAddress: walletAddress, // Guardar la dirección de la billetera conectada
+        createdAt: new Date().toISOString(),
+        updateAt: new Date().toISOString(),
+        userId, // Asociar la conexión al usuario
+      });
+
+      return NextResponse.json({ message: 'Connection to Phantom Wallet successful!', session: connectData.session, publicKey: connectData.public_key });
+    }
   } catch (error: any) {
     return NextResponse.json({ message: 'Failed to save data', error: error.message }, { status: 500 });
   }

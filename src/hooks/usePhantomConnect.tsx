@@ -1,33 +1,42 @@
 import { useState, useEffect } from 'react';
 import nacl from 'tweetnacl';
-import { encodeBase64 } from 'tweetnacl-util';
+import bs58 from 'bs58';
 
 const usePhantomConnect = () => {
-  const [urlDeepLink, setUrl] = useState<string | null>(null);
+  const [url, setUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [dappKeyPair] = useState(() => nacl.box.keyPair());
 
   useEffect(() => {
     const generatePhantomConnectUrl = async () => {
-      const appUrl = encodeURIComponent('https://pambii-front.vercel.app'); // Reemplaza con la URL de tu aplicación
-      const redirectLink = encodeURIComponent(
-        'https://pambii-front.vercel.app/api/phantom-redirect',
-      ); // Reemplaza con la URL de tu redirección en Next.js
-      const cluster = 'devnet'; // o 'testnet', 'devnet'
+      try {
+        const appUrl = 'https://pambii-front.vercel.app'; // URL de tu aplicación
+        const redirectLink =
+          'https://pambii-front.vercel.app/api/phantom-redirect'; // URL de tu redirección en Next.js
+        const cluster = 'mainnet-beta'; // o 'testnet', 'devnet'
 
-      // Generar un nuevo par de claves
-      const keyPair = nacl.box.keyPair();
-      const publicKey = encodeBase64(keyPair.publicKey);
+        const publicKey = bs58.encode(dappKeyPair.publicKey);
 
-      const dappEncryptionPublicKey = encodeURIComponent(publicKey);
+        const params = new URLSearchParams({
+          app_url: appUrl,
+          dapp_encryption_public_key: publicKey,
+          redirect_link: redirectLink,
+          cluster,
+        });
 
-      const phantomUrl = `https://phantom.app/ul/v1/connect?app_url=${appUrl}&dapp_encryption_public_key=${dappEncryptionPublicKey}&redirect_link=${redirectLink}&cluster=${cluster}`;
+        const phantomUrl = `https://phantom.app/ul/v1/connect?${params.toString()}`;
 
-      setUrl(phantomUrl);
+        setUrl(phantomUrl);
+      } catch (err) {
+        setError('Failed to generate Phantom connect URL');
+        console.error(err);
+      }
     };
 
     generatePhantomConnectUrl();
-  }, []);
+  }, [dappKeyPair]);
 
-  return urlDeepLink;
+  return { url, error };
 };
 
 export default usePhantomConnect;

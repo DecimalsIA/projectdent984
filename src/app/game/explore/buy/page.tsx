@@ -6,7 +6,7 @@ import usePhantomConnect from '@/hooks/usePhantomConnect';
 
 const Home = () => {
   const [deeplink, setDeeplink] = useState('');
-  const phantomUrl = usePhantomConnect();
+  const { url, error } = usePhantomConnect();
 
   const handleGenerateDeeplink = async () => {
     try {
@@ -39,10 +39,10 @@ const Home = () => {
       <ButtonPambii onClick={handleGenerateDeeplink}>
         Generar Deeplinks
       </ButtonPambii>
-      {phantomUrl && (
+      {url && (
         <div>
           <p>Deeplink generado:</p>
-          <a href={phantomUrl} target="_blank" rel="noopener noreferrer">
+          <a href={url} target="_blank" rel="noopener noreferrer">
             <ButtonPambii> Firmar en Phamton </ButtonPambii>
           </a>
           <br />

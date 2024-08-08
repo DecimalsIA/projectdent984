@@ -21,6 +21,7 @@ const Game: React.FC = () => {
       try {
         const response = await fetch(`/api/transaction?publicKey=${publicKey}`);
         const data = await response.json();
+        console.log('data', data);
 
         if (data.error) {
           console.error(data.error);

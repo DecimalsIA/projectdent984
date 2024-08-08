@@ -19,8 +19,9 @@ interface PageProps {
 const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   const { user: tgUser } = useTelegram();
   const router = useRouter();
-  const { url } = usePhantomConnect(idUserTelegram);
+  const { url } = usePhantomConnect(idUserTelegram.toString());
   const [input, setInput] = useState<string>('');
+  console.log(idUserTelegram);
 
   interface User {
     idUser?: string;
@@ -35,6 +36,7 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
     if (tgUser) {
       const userTel = {
         idUser: tgUser.id.toString(),
+        userId: tgUser.id.toString(),
         nomTlram: `${tgUser.first_name} ${tgUser.last_name}`,
         userName: tgUser.username,
         language_code: tgUser.language_code,

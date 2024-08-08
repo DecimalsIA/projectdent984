@@ -212,7 +212,8 @@ const ExplorePage: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const router = useRouter();
   const handleSelectArena = (type: any) => {
-    router.push('/game/explore/' + type.type);
+    //router.push('/game/explore/' + type.type);
+    router.push('/game/explore/buy');
   };
 
   const handlePrevSlide = () => {

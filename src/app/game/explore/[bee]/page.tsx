@@ -505,8 +505,6 @@ const ExplorePage: React.FC = () => {
     } catch (error) {
       console.error('Error fetching explorer data:', error);
     }
-
-    //router.push('/game/explore/bee/run');
   };
 
   const validExplorer = async (bee: any) => {

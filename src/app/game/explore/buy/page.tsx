@@ -2,10 +2,11 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { ButtonPambii } from 'pambii-devtrader-front';
-import PhantomConnect from '@/components/PhantomConnect';
+import usePhantomConnect from '@/hooks/usePhantomConnect';
 
 const Home = () => {
   const [deeplink, setDeeplink] = useState('');
+  const phantomUrl = usePhantomConnect();
 
   const handleGenerateDeeplink = async () => {
     try {
@@ -38,17 +39,13 @@ const Home = () => {
       <ButtonPambii onClick={handleGenerateDeeplink}>
         Generar Deeplinks
       </ButtonPambii>
-      {deeplink && (
+      {phantomUrl && (
         <div>
           <p>Deeplink generado:</p>
-          <a href={deeplink} target="_blank" rel="noopener noreferrer">
+          <a href={phantomUrl} target="_blank" rel="noopener noreferrer">
             <ButtonPambii> Firmar en Phamton </ButtonPambii>
           </a>
           <br />
-          <div>
-            <h1>Connect to Phantom Wallet</h1>
-            <PhantomConnect />
-          </div>
         </div>
       )}
     </div>

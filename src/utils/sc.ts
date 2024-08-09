@@ -30,7 +30,6 @@ export async function buildTransaction(
     case 'buyId':
       instruction = await buildBuyIdInstruction(
         userPublicKey,
-        params.userAccount,
         params.amount
       );
       break;

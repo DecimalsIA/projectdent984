@@ -24,7 +24,6 @@ const usePhantomSignTransaction = (
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!userId) return;
     const generatePhantomSignTransactionUrl = async () => {
       try {
         // 1. Recuperar dappKeyPair desde Firebase
@@ -41,7 +40,7 @@ const usePhantomSignTransaction = (
           secretKey: bs58.decode(storedKeyPair.secretKey),
         };
 
-        // 2. Recuperar la sesión desde Firebase
+        // 2. Recuperar la sesión desde Firebase, incluyendo la dapp_encryption_public_key original
         const sessionQuery = query(
           collection(db, 'phantomConnections'),
           where('userId', '==', userId),
@@ -55,6 +54,11 @@ const usePhantomSignTransaction = (
         const sessionDoc = sessionDocs.docs[0];
         const sessionData = sessionDoc.data();
         const session = sessionData.session;
+        const dappEncryptionPublicKey = sessionData.dapp_encryption_public_key;
+
+        if (!dappEncryptionPublicKey) {
+          throw new Error('dapp_encryption_public_key not found in session');
+        }
 
         // 3. Generar la transacción codificada en base58
         const response = await fetch(
@@ -80,7 +84,7 @@ const usePhantomSignTransaction = (
 
         // 5. Cifrar el payload usando `nacl.box.after` y el `sharedSecret`
         const sharedSecret = nacl.box.before(
-          dappKeyPair.publicKey,
+          bs58.decode(dappEncryptionPublicKey),
           dappKeyPair.secretKey,
         );
         const encryptedPayload = nacl.box.after(
@@ -92,7 +96,7 @@ const usePhantomSignTransaction = (
 
         // 6. Construir la URL de Phantom
         const params = new URLSearchParams({
-          dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
+          dapp_encryption_public_key: dappEncryptionPublicKey, // Usa la clave pública original de la sesión Connect
           nonce: nonceBase58,
           redirect_link: redirectLink,
           payload: encryptedPayloadBase58,

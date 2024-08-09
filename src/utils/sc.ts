@@ -31,10 +31,8 @@ export async function buildTransaction(
       instruction = await buildBuyIdInstruction(
         userPublicKey,
         params.userAccount,
-        params.userToken,
         params.splToken,
         params.contract,
-        params.tokenProgram,
         params.amount
       );
       break;

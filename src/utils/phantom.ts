@@ -27,11 +27,6 @@ export async function generatePhantomDeeplink(
     publicKey: bs58.decode(dappKeyPairDocument.publicKey),
   };
 
-  const userTokenAccount = await getAssociatedTokenAddress(splToken, publicKey);
-
-  if (!userTokenAccount) {
-    throw new Error('User token account not found');
-  }
 
   /* 
   
@@ -43,15 +38,13 @@ export async function generatePhantomDeeplink(
   tokenProgram: PublicKey,
   amount: number
   
-  
+   params.contract,
   */
   const accounts = {
     userAccount: new PublicKey(publicKeyString), // Ajusta según tus necesidades
-    userToken: userTokenAccount, // Ajusta según tus necesidades
     splToken: splToken, // Ajusta según tus necesidades
     contract: new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe'), // Ajusta según tus necesidades
-    tokenProgram: new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'), // Ajusta según tus necesidades
-    systemProgram: new PublicKey('11111111111111111111111111111111'),
+
     amount: 100,// Ajusta según tus necesidades
 
   };

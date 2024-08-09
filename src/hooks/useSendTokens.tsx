@@ -170,7 +170,6 @@ export const useSendTokens = ({
   return { sendTokens, isSending, error };
 };
 
-// Función encryptPayload
 const encryptPayload = (payload: any, sharedSecret?: Uint8Array) => {
   if (!sharedSecret) throw new Error('missing shared secret');
 

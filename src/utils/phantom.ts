@@ -51,12 +51,11 @@ export async function generatePhantomDeeplink(
     amount: 100,   // Cantidad ajustada según las necesidades
   };
 
+
+
   // Construir la transacción sin firmarla
   const transaction = await buildTransaction(publicKey, type, accounts);
-  transaction.feePayer = publicKey;
-  transaction.recentBlockhash = (
-    await connection.getLatestBlockhash()
-  ).blockhash;
+
   // Serializar la transacción
   const serializedTransaction = transaction.serialize({
     requireAllSignatures: false,

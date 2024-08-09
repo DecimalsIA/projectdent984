@@ -76,7 +76,7 @@ export async function buildTransaction(
     default:
       throw new Error('Tipo de instrucción inválido');
   }
-
+  console.log('userPublicKey', userPublicKey.toBase58())
   // Agrega la instrucción a la transacción
   transaction.add(instruction);
   transaction.feePayer = userPublicKey;

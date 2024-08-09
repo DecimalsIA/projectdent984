@@ -16,6 +16,13 @@ function decryptPayload(data: string, nonce: string, sharedSecret: Uint8Array) {
   return JSON.parse(new TextDecoder().decode(decrypted));
 }
 
+function uint8ArrayToBase64(uint8Array: Uint8Array): string {
+  const byteArray = Array.from(uint8Array);
+  const binaryString = String.fromCharCode(...byteArray);
+  return btoa(binaryString);
+}
+
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
@@ -50,6 +57,9 @@ export async function GET(request: NextRequest) {
 
     const connectData = decryptPayload(data, nonce, sharedSecretDapp);
 
+    // Convertir sharedSecretDapp a Base64
+    const sharedSecretDappBase64 = uint8ArrayToBase64(sharedSecretDapp);
+
     // Verificar si el userId ya existe en la colección 'phantomConnections'
     const connectionsQuery = query(collection(db, 'phantomConnections'), where('userId', '==', userId));
     const querySnapshot = await getDocs(connectionsQuery);
@@ -72,7 +82,7 @@ export async function GET(request: NextRequest) {
         createdAt: new Date().toISOString(),
         updateAt: new Date().toISOString(),
         userId, // Asociar la conexión al usuario
-        sharedSecretDapp
+        sharedSecretDapp: sharedSecretDappBase64 // Almacenar en Base64
       });
 
       return NextResponse.json({ message: 'Connection to Phantom Wallet successful!', session: connectData.session, publicKey: connectData.public_key });

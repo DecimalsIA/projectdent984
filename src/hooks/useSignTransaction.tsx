@@ -92,10 +92,11 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
       );
       const {
         session,
-        sharedSecret,
+        sharedSecretDapp,
         publicKey: publicKeyString,
       } = phantomConnections;
       const publicKey = new PublicKey(publicKeyString);
+      const sharedSecret = base64ToUint8Array(sharedSecretDapp);
 
       // Obtén dappKeyPair desde otro documento
       const dappKeyPairDocument = await getDappKeyPair();
@@ -153,6 +154,16 @@ const encryptPayload = (payload: any, sharedSecret?: Uint8Array) => {
   );
 
   return [nonce, encryptedPayload];
+};
+
+const base64ToUint8Array = (base64String: string): Uint8Array => {
+  const binaryString = atob(base64String);
+  const length = binaryString.length;
+  const bytes = new Uint8Array(length);
+  for (let i = 0; i < length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes;
 };
 
 // Función buildUrl actualizada

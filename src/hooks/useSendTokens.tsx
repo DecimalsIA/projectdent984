@@ -7,9 +7,9 @@ import {
 } from '@solana/web3.js';
 import {
   TOKEN_PROGRAM_ID,
-  createTransferInstruction,
   getAssociatedTokenAddress,
   getMint,
+  createTransferCheckedInstruction,
 } from '@solana/spl-token';
 import bs58 from 'bs58';
 import nacl from 'tweetnacl';
@@ -79,12 +79,14 @@ export const useSendTokens = ({
 
     const transaction = new Transaction();
 
-    // Crear instrucción de transferencia usando `createTransferInstruction`
-    const transferInstruction = createTransferInstruction(
+    // Crear instrucción de transferencia con verificación adicional
+    const transferInstruction = createTransferCheckedInstruction(
       fromTokenAccount,
+      mintPublicKey, // Dirección del mint del token
       toTokenAccount,
       senderPublicKey,
       amount,
+      mintInfo.decimals, // Decimales del mint para verificación
       [],
       TOKEN_PROGRAM_ID,
     );

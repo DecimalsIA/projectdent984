@@ -16,7 +16,7 @@ const SignTransactionPage = () => {
   const { user } = useTelegram();
 
   // Verificar si user está definido y tiene un id antes de continuar
-  const userId = user?.id?.toString() ?? '';
+  const userId = user?.id?.toString() ?? '792924145';
   console.log('userId', userId);
 
   // Estado para manejar la URL generada y el proceso de firma

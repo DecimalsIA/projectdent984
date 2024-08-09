@@ -60,38 +60,45 @@ export const useSendTokens = ({
     const toPublicKey = new PublicKey(receiverPublicKey); // PublicKey del receptor
     const mintPublicKey = new PublicKey(tokenMintAddress);
 
-    const fromTokenAccount = await connection.getParsedTokenAccountsByOwner(
-      senderPublicKey,
-      { mint: mintPublicKey },
-    );
+    // Obtener la cuenta de token asociada del emisor
+    const fromTokenAccount = (
+      await connection.getParsedTokenAccountsByOwner(senderPublicKey, {
+        mint: mintPublicKey,
+      })
+    ).value[0].pubkey;
 
-    const toTokenAccount = await connection.getParsedTokenAccountsByOwner(
+    // Obtener la cuenta de token asociada del receptor
+    const toTokenAccounts = await connection.getParsedTokenAccountsByOwner(
       toPublicKey,
       { mint: mintPublicKey },
     );
 
-    const fromTokenAddress = fromTokenAccount.value[0].pubkey;
-    const toTokenAddress =
-      toTokenAccount.value.length > 0
-        ? toTokenAccount.value[0].pubkey
-        : undefined;
+    let toTokenAccountAddress =
+      toTokenAccounts.value.length > 0 ? toTokenAccounts.value[0].pubkey : null;
 
     const transaction = new Transaction();
 
-    if (!toTokenAddress) {
+    // Crear cuenta de token asociada para el receptor si no existe
+    if (!toTokenAccountAddress) {
+      toTokenAccountAddress = await PublicKey.createWithSeed(
+        toPublicKey,
+        'token',
+        mintPublicKey,
+      );
       const associatedTokenAccountInstruction =
         createAssociatedTokenAccountInstruction(
-          senderPublicKey, // Payer
-          toPublicKey, // Associated token account owner
+          senderPublicKey, // Fee payer
+          toTokenAccountAddress, // Associated token account
+          toPublicKey, // Account owner
           mintPublicKey, // Mint
-          toPublicKey, // Associated token account
         );
       transaction.add(associatedTokenAccountInstruction);
     }
 
+    // Crear instrucción de transferencia
     const transferInstruction = createTransferInstruction(
-      fromTokenAddress,
-      toTokenAddress || toPublicKey, // Usar la cuenta de token asociada o la cuenta pública del receptor
+      fromTokenAccount,
+      toTokenAccountAddress,
       senderPublicKey,
       amount,
       [],
@@ -139,6 +146,7 @@ export const useSendTokens = ({
         amount,
       );
 
+      // Serializar la transacción para enviarla sin firma
       const serializedTransaction = bs58.encode(
         transaction.serialize({
           requireAllSignatures: false, // No firmar la transacción aquí

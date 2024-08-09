@@ -137,7 +137,7 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
       });
 
       console.log('Signing transaction...');
-      const url = buildUrl('signTransaction', params);
+      const url = buildUrl('signAndSendTransaction', params);
 
       // Retorna la URL generada
       return url;

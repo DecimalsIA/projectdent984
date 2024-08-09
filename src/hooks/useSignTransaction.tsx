@@ -10,6 +10,8 @@ import bs58 from 'bs58';
 import nacl from 'tweetnacl';
 import { db } from '@/firebase/config';
 import { query, where, collection, getDocs } from 'firebase/firestore';
+import { encryptPayload } from '@/utils/encryptPayload';
+import { buildUrl } from '@/utils/buildUrl';
 
 interface UseSignTransactionProps {
   userId: string; // userId como prop
@@ -149,22 +151,3 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
 
   return { signTransaction, isSigning, error };
 };
-
-// Función encryptPayload ya proporcionada
-const encryptPayload = (payload: any, sharedSecret?: Uint8Array) => {
-  if (!sharedSecret) throw new Error('missing shared secret');
-
-  const nonce = nacl.randomBytes(24);
-
-  const encryptedPayload = nacl.box.after(
-    Buffer.from(JSON.stringify(payload)),
-    nonce,
-    sharedSecret,
-  );
-
-  return [nonce, encryptedPayload];
-};
-
-// Función buildUrl actualizada
-const buildUrl = (path: string, params: URLSearchParams) =>
-  `https://phantom.app/ul/v1/${path}?${params.toString()}`;

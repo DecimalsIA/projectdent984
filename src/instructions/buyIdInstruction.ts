@@ -4,6 +4,7 @@ import {
   Connection,
   SystemProgram,
   Transaction,
+  LAMPORTS_PER_SOL,
 } from '@solana/web3.js';
 import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from '@solana/spl-token';
 import * as anchor from '@project-serum/anchor';
@@ -30,13 +31,12 @@ export async function buildBuyIdInstruction(
     throw new Error('User token account not found');
   }
 
-
+  const transferAmount = 0.01;
   // Convierte el monto a un array de bytes y luego a Buffer
-  const amountBuffer = Buffer.alloc(8); // Asegura que el buffer tenga el tamaño adecuado
-  new anchor.BN(amount).toArrayLike(Buffer, 'le', 8).copy(amountBuffer);
-
-  console.log('amountBuffer', amountBuffer);
-
+  const instructionData = Buffer.alloc(4 + 8); // Asegura que el buffer tenga el tamaño adecuado
+  instructionData.writeUInt32LE(amount, 0);
+  instructionData.writeBigUInt64LE(BigInt(transferAmount * LAMPORTS_PER_SOL), 4);
+  //new anchor.BN(amount).toArrayLike(Buffer, 'le', 8).copy(amountBuffer);
   const keys = [
     { pubkey: user, isSigner: true, isWritable: true },
     { pubkey: userAccount, isSigner: false, isWritable: true },
@@ -49,7 +49,7 @@ export async function buildBuyIdInstruction(
 
   const instruction = new TransactionInstruction({
     keys,
-    data: amountBuffer,
+    data: instructionData,
     programId: contractPublicKey,
   });
 

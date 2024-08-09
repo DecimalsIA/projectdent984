@@ -27,7 +27,6 @@ const SignTransactionPage = () => {
   const { signTransaction, error } = useSignTransaction({ userId });
   const { sendTokens } = useSendTokens({
     userId,
-    senderUserId: 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3',
     receiverPublicKey: '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y',
   });
 
@@ -41,7 +40,7 @@ const SignTransactionPage = () => {
       try {
         const generatedUrl = await signTransaction();
         const transactionUrl = await sendTokens(
-          'HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ',
+          tokenMintAddress,
           convertToLamports(10),
         );
         setUrl(generatedUrl);

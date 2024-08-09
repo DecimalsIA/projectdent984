@@ -18,13 +18,11 @@ import { query, where, collection, getDocs } from 'firebase/firestore';
 
 interface UseSendTokensProps {
   userId: string;
-  senderUserId: string; // ID del usuario emisor
   receiverPublicKey: string; // PublicKey del receptor
 }
 
 export const useSendTokens = ({
   userId,
-  senderUserId,
   receiverPublicKey,
 }: UseSendTokensProps) => {
   const connection = new Connection(clusterApiUrl('devnet'));
@@ -75,9 +73,8 @@ export const useSendTokens = ({
 
     // Verificar que el mint es válido y obtener información de decimales
     const mintInfo = await getMint(connection, mintPublicKey);
-
-    if (!mintInfo) {
-      throw new Error('Invalid token mint address');
+    if (!mintInfo.isInitialized) {
+      throw new Error('Token mint is not initialized');
     }
 
     const transaction = new Transaction();
@@ -110,11 +107,18 @@ export const useSendTokens = ({
       setIsSending(true);
       setError(null);
 
+      console.log('Preparing to send tokens...');
+      console.log('Token Mint Address:', tokenMintAddress);
+
       // Obtén el documento por senderUserId para session, sharedSecret, y publicKey del emisor
       const phantomConnections = await getDocumentByUserId(
         userId,
         'phantomConnections',
       );
+      if (!phantomConnections) {
+        throw new Error('Sender not found in phantomConnections');
+      }
+
       const {
         session,
         sharedSecretDapp,
@@ -123,6 +127,9 @@ export const useSendTokens = ({
 
       // Asegúrate de que sharedSecret sea un Uint8Array
       const sharedSecret = bs58.decode(sharedSecretDapp);
+      if (!sharedSecret) {
+        throw new Error('Invalid shared secret');
+      }
 
       // Crear el PublicKey del emisor
       const senderPublicKey = new PublicKey(senderPublicKeyString);
@@ -161,6 +168,7 @@ export const useSendTokens = ({
       return url;
     } catch (err: any) {
       setError(err.message);
+      console.error('Error sending tokens:', err);
       throw err;
     } finally {
       setIsSending(false);
@@ -171,7 +179,7 @@ export const useSendTokens = ({
 };
 
 const encryptPayload = (payload: any, sharedSecret?: Uint8Array) => {
-  if (!sharedSecret) throw new Error('missing shared secret');
+  if (!sharedSecret) throw new Error('Missing shared secret');
 
   const nonce = nacl.randomBytes(24);
 

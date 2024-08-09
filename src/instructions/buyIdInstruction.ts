@@ -20,12 +20,17 @@ const connection = new Connection('https://api.mainnet-beta.solana.com', 'confir
 
 // Construye la instrucción para el método `buyId` en tu contrato
 export async function buildBuyIdInstruction(
-  userPublicKey: PublicKey, // Usamos PublicKey aquí
-  amount: number // Usamos `anchor.BN` para el tipo `u64` en el IDL
+  user: PublicKey,
+  userAccount: PublicKey,
+  userToken: PublicKey,
+  splToken: PublicKey,
+  contract: PublicKey,
+  tokenProgram: PublicKey,
+  amount: number// Usamos `anchor.BN` para el tipo `u64` en el IDL
 ): Promise<any> {
 
   // Obtén la cuenta de token SPL asociada del usuario
-  const userTokenAccount = await getAssociatedTokenAddress(tokenAddress, userPublicKey);
+  const userTokenAccount = await getAssociatedTokenAddress(tokenAddress, user);
 
   if (!userTokenAccount) {
     throw new Error('User token account not found');
@@ -41,12 +46,12 @@ export async function buildBuyIdInstruction(
 
 
     const keys = [
-      { pubkey: userPublicKey, isSigner: true, isWritable: true },
-      { pubkey: userTokenAccount, isSigner: false, isWritable: true },
-      { pubkey: contractTokenAccount, isSigner: false, isWritable: true },
-      { pubkey: tokenAddress, isSigner: false, isWritable: false },
-      { pubkey: tokenProgramId, isSigner: false, isWritable: false },
-      { pubkey: contractPublicKey, isSigner: false, isWritable: false },
+      { pubkey: user, isSigner: true, isWritable: true },
+      { pubkey: userAccount, isSigner: false, isWritable: true },
+      { pubkey: userToken, isSigner: false, isWritable: true },
+      { pubkey: splToken, isSigner: false, isWritable: true },
+      { pubkey: contract, isSigner: false, isWritable: true },
+      { pubkey: tokenProgram, isSigner: false, isWritable: false },
     ];
 
 

@@ -1,0 +1,95 @@
+import { Connection, PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js';
+import { Program, Idl } from '@project-serum/anchor';
+import idl from './pambii_explorer.json';
+
+// Define la red y la conexión
+const network = 'https://api.devnet.solana.com';
+const connection = new Connection(network);
+
+export const createTransactionByIdle = async (
+  method: string,
+  args: any[], // [amount] for methods that require it
+  userPublicKey: PublicKey,
+  accounts: {
+    userAccount?: PublicKey;
+    userToken?: PublicKey;
+    splToken?: PublicKey;
+    contract?: PublicKey;
+    tokenProgram?: PublicKey;
+    systemProgram?: PublicKey;
+    ownerToken?: PublicKey;
+  }
+): Promise<Transaction> => {
+  const transaction = new Transaction();
+  const programId = new PublicKey(idl.metadata.address);
+  const idlProgram = new Program(idl as Idl, programId);
+
+  let instruction: TransactionInstruction;
+
+  switch (method) {
+    case 'buyId':
+      if (args.length < 1) {
+        throw new Error('Amount is required for buyId');
+      }
+      const [amountId] = args;
+      instruction = await idlProgram.methods.buyId(amountId).accounts({
+        user: userPublicKey,
+        userAccount: accounts.userAccount!,
+        userToken: accounts.userToken!,
+        splToken: accounts.splToken!,
+        contract: accounts.contract!,
+        tokenProgram: accounts.tokenProgram!,
+        systemProgram: accounts.systemProgram!,
+      }).instruction();
+      break;
+    case 'buy':
+      if (args.length < 1) {
+        throw new Error('Amount is required for buy');
+      }
+      const [amountBuy] = args;
+      instruction = await idlProgram.methods.buy(amountBuy).accounts({
+        user: userPublicKey,
+        userAccount: accounts.userAccount!,
+        userToken: accounts.userToken!,
+        splToken: accounts.splToken!,
+        contract: accounts.contract!,
+        tokenProgram: accounts.tokenProgram!,
+      }).instruction();
+      break;
+    case 'cobrar':
+      if (args.length < 1) {
+        throw new Error('Amount is required for cobrar');
+      }
+      const [amountCobrar] = args;
+      instruction = await idlProgram.methods.cobrar(amountCobrar).accounts({
+        user: userPublicKey,
+        userAccount: accounts.userAccount!,
+        splToken: accounts.splToken!,
+        contract: accounts.contract!,
+        tokenProgram: accounts.tokenProgram!,
+      }).instruction();
+      break;
+    case 'withdrawAll':
+      instruction = await idlProgram.methods.withdrawAll().accounts({
+        owner: userPublicKey,
+        ownerToken: accounts.ownerToken!,
+        splToken: accounts.splToken!,
+        contract: accounts.contract!,
+        tokenProgram: accounts.tokenProgram!,
+      }).instruction();
+      break;
+    default:
+      throw new Error('Method not supported');
+  }
+
+  transaction.add(instruction);
+
+  // Establece el pagador de tarifas
+  transaction.feePayer = userPublicKey;
+
+  // Agrega el blockhash reciente
+  const { blockhash } = await connection.getLatestBlockhash();
+  transaction.recentBlockhash = blockhash;
+
+  return transaction;
+};

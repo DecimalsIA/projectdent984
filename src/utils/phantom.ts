@@ -4,6 +4,7 @@ import { buildTransaction } from './sc';
 import { getDappKeyPair, getDocumentByUserId } from './getDocumentByUserId';
 import { encryptPayload } from './encryptPayload';
 import { buildUrl } from './buildUrl';
+import { getAssociatedTokenAddress } from '@solana/spl-token';
 
 
 export async function generatePhantomDeeplink(
@@ -20,18 +21,44 @@ export async function generatePhantomDeeplink(
   const publicKey = new PublicKey(publicKeyString);
   const sharedSecret = bs58.decode(sharedSecretDapp);
   console.log('sharedSecret', sharedSecret);
-
+  const splToken = new PublicKey('HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ')
   const dappKeyPairDocument = await getDappKeyPair(userId);
   const dappKeyPair = {
     publicKey: bs58.decode(dappKeyPairDocument.publicKey),
   };
 
+  const userTokenAccount = await getAssociatedTokenAddress(splToken, publicKey);
+
+  if (!userTokenAccount) {
+    throw new Error('User token account not found');
+  }
+
+  /* 
+  
+    user: PublicKey,
+  userAccount: PublicKey,
+  userToken: PublicKey,
+  splToken: PublicKey,
+  contract: PublicKey,
+  tokenProgram: PublicKey,
+  amount: number
+  
+  
+  */
+  const accounts = {
+    userAccount: new PublicKey(publicKeyString), // Ajusta según tus necesidades
+    userToken: userTokenAccount, // Ajusta según tus necesidades
+    splToken: splToken, // Ajusta según tus necesidades
+    contract: new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe'), // Ajusta según tus necesidades
+    tokenProgram: new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'), // Ajusta según tus necesidades
+    systemProgram: new PublicKey('11111111111111111111111111111111'),
+    amount: 100,// Ajusta según tus necesidades
+
+  };
+
 
   // Cambiado a buildTransaction para no firmar la transacción
-  const transaction = await buildTransaction(publicKey, 'buyId', {
-    userAccount: null, // O los parámetros necesarios para construir la instrucción
-    amount: 100, // Ajusta según tus necesidades
-  });
+  const transaction = await buildTransaction(publicKey, 'buyId', accounts);
 
   const serializedTransaction = bs58.encode(
     transaction.serialize({

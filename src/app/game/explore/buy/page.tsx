@@ -6,10 +6,6 @@ import { useSendTokens } from '@/hooks/useSendTokens';
 import { useTelegram } from '@/context/TelegramContext';
 import { useSC } from '@/hooks/useSC';
 
-const convertToLamports = (amount: number, decimals: number = 9): number => {
-  return Math.floor(amount * Math.pow(10, decimals));
-};
-
 const SignTransactionPage = () => {
   const { user } = useTelegram();
   const { getPhantomUrl } = useSC();
@@ -33,7 +29,9 @@ const SignTransactionPage = () => {
   useEffect(() => {
     const generateUrl = async () => {
       const url = await getPhantomUrl(userId);
+
       setPhantomUrl(url);
+
       console.log('Transaction getPhantomUrl:', url);
     };
 
@@ -80,6 +78,7 @@ const SignTransactionPage = () => {
           <a href={phantomUrl} target="_blank" rel="noopener noreferrer">
             Send firm
           </a>
+          <br />
         </>
       ) : (
         <p>Generating transaction signing URL...</p>

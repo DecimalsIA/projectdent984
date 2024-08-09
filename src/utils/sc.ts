@@ -30,6 +30,11 @@ export async function buildTransaction(
     case 'buyId':
       instruction = await buildBuyIdInstruction(
         userPublicKey,
+        params.userAccount,
+        params.userToken,
+        params.splToken,
+        params.contract,
+        params.tokenProgram,
         params.amount
       );
       break;
@@ -40,7 +45,7 @@ export async function buildTransaction(
         params.userToken,
         params.splToken,
         params.contract,
-        TOKEN_PROGRAM_ID,
+        params.tokenProgram,
         params.amount
       );
       break;
@@ -50,7 +55,7 @@ export async function buildTransaction(
         params.userAccount,
         params.splToken,
         params.contract,
-        TOKEN_PROGRAM_ID,
+        params.tokenProgram,
         params.amount
       );
       break;
@@ -60,7 +65,7 @@ export async function buildTransaction(
         params.ownerToken,
         params.splToken,
         params.contract,
-        TOKEN_PROGRAM_ID
+        params.tokenProgram,
       );
       break;
     default:

@@ -17,3 +17,4 @@ export const useSC = () => {
     getPhantomUrl,
   };
 };
+// generatePhantomDeeplink

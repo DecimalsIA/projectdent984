@@ -7,7 +7,7 @@ import {
 } from '@solana/web3.js';
 import {
   TOKEN_PROGRAM_ID,
-  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddress,
   createTransferInstruction,
 } from '@solana/spl-token';
 import bs58 from 'bs58';
@@ -61,44 +61,23 @@ export const useSendTokens = ({
     const mintPublicKey = new PublicKey(tokenMintAddress);
 
     // Obtener la cuenta de token asociada del emisor
-    const fromTokenAccount = (
-      await connection.getParsedTokenAccountsByOwner(senderPublicKey, {
-        mint: mintPublicKey,
-      })
-    ).value[0].pubkey;
-
-    // Obtener la cuenta de token asociada del receptor
-    const toTokenAccounts = await connection.getParsedTokenAccountsByOwner(
-      toPublicKey,
-      { mint: mintPublicKey },
+    const fromTokenAccount = await getAssociatedTokenAddress(
+      mintPublicKey,
+      senderPublicKey,
     );
 
-    let toTokenAccountAddress =
-      toTokenAccounts.value.length > 0 ? toTokenAccounts.value[0].pubkey : null;
+    // Obtener la cuenta de token asociada del receptor
+    const toTokenAccount = await getAssociatedTokenAddress(
+      mintPublicKey,
+      toPublicKey,
+    );
 
     const transaction = new Transaction();
-
-    // Crear cuenta de token asociada para el receptor si no existe
-    if (!toTokenAccountAddress) {
-      toTokenAccountAddress = await PublicKey.createWithSeed(
-        toPublicKey,
-        'token',
-        mintPublicKey,
-      );
-      const associatedTokenAccountInstruction =
-        createAssociatedTokenAccountInstruction(
-          senderPublicKey, // Fee payer
-          toTokenAccountAddress, // Associated token account
-          toPublicKey, // Account owner
-          mintPublicKey, // Mint
-        );
-      transaction.add(associatedTokenAccountInstruction);
-    }
 
     // Crear instrucción de transferencia
     const transferInstruction = createTransferInstruction(
       fromTokenAccount,
-      toTokenAccountAddress,
+      toTokenAccount,
       senderPublicKey,
       amount,
       [],
@@ -123,7 +102,7 @@ export const useSendTokens = ({
       setIsSending(true);
       setError(null);
 
-      // Obtén el documento por senderUserId para session, sharedSecret, y publicKey
+      // Obtén el documento por userId para session, sharedSecret, y publicKey
       const phantomConnections = await getDocumentByUserId(
         userId,
         'phantomConnections',
@@ -163,7 +142,7 @@ export const useSendTokens = ({
       const params = new URLSearchParams({
         dapp_encryption_public_key: senderPublicKeyString,
         nonce: bs58.encode(nonce),
-        redirect_link: `https://pambii-front.vercel.app/api/phantom-redirect-sign?userId=${senderUserId}`,
+        redirect_link: `https://pambii-front.vercel.app/api/phantom-redirect-sign?userId=${userId}`,
         payload: bs58.encode(encryptedPayload),
       });
 

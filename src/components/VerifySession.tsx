@@ -44,9 +44,7 @@ const VerifySession = () => {
       if (response.ok && data.active) {
         if (!data.idWallet) {
           setAuthenticated(false);
-          const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-
-          router.push(deeplink);
+          router.push('/login');
         } else {
           setAuthenticated(true);
           router.push('/game/home');

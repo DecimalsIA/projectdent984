@@ -9,6 +9,7 @@ import {
   TOKEN_PROGRAM_ID,
   getAssociatedTokenAddress,
   createTransferInstruction,
+  getMint,
 } from '@solana/spl-token';
 import bs58 from 'bs58';
 import nacl from 'tweetnacl';
@@ -57,8 +58,8 @@ export const useSendTokens = ({
     tokenMintAddress: string,
     amount: number,
   ) => {
-    const toPublicKey = new PublicKey(receiverPublicKey); // PublicKey del receptor
     const mintPublicKey = new PublicKey(tokenMintAddress);
+    const toPublicKey = new PublicKey(receiverPublicKey); // PublicKey del receptor
 
     // Obtener la cuenta de token asociada del emisor
     const fromTokenAccount = await getAssociatedTokenAddress(
@@ -71,6 +72,13 @@ export const useSendTokens = ({
       mintPublicKey,
       toPublicKey,
     );
+
+    // Verificar que el mint es válido y obtener información de decimales
+    const mintInfo = await getMint(connection, mintPublicKey);
+
+    if (!mintInfo) {
+      throw new Error('Invalid token mint address');
+    }
 
     const transaction = new Transaction();
 
@@ -102,9 +110,9 @@ export const useSendTokens = ({
       setIsSending(true);
       setError(null);
 
-      // Obtén el documento por userId para session, sharedSecret, y publicKey
+      // Obtén el documento por senderUserId para session, sharedSecret, y publicKey del emisor
       const phantomConnections = await getDocumentByUserId(
-        userId,
+        senderUserId,
         'phantomConnections',
       );
       const {

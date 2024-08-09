@@ -7,7 +7,7 @@ import { buildUrl } from './buildUrl';
 import { createTransactionByIdle } from './idlsc';
 import { getAssociatedTokenAddress } from '@solana/spl-token';
 
-export async function generatePhantomDeeplink(
+export async function generatePhantomDeeplinkIdle(
   userId: string,
   type: string,
 ): Promise<string> {

@@ -55,9 +55,8 @@ const VerifySession = () => {
           console.log('data.firstTime', data.firstTime);
           router.push('/login');
         } else {
-          const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
-
-          router.push(deeplink);
+          //const deeplink = `https://phantom.app/ul/browse/https://pambii-front.vercel.app/login/${tgUser?.id}?ref=https://pambii-front.vercel.app`;
+          router.push('/login');
         }
       }
     };

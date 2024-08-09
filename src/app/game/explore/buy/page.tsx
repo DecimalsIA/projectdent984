@@ -4,9 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSignTransaction } from '@/hooks/useSignTransaction';
 import { useSendTokens } from '@/hooks/useSendTokens';
 import { useTelegram } from '@/context/TelegramContext';
-
-const tokenMintAddress = 'HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ';
-const amount = 10_000_000_000;
+import { useSC } from '@/hooks/useSC';
 
 const convertToLamports = (amount: number, decimals: number = 9): number => {
   return Math.floor(amount * Math.pow(10, decimals));
@@ -14,14 +12,16 @@ const convertToLamports = (amount: number, decimals: number = 9): number => {
 
 const SignTransactionPage = () => {
   const { user } = useTelegram();
+  const { getPhantomUrl } = useSC();
 
   // Verificar si user está definido y tiene un id antes de continuar
   const userId = user?.id?.toString() ?? '792924145';
+
   console.log('userId', userId);
 
   // Estado para manejar la URL generada y el proceso de firma
   const [url, setUrl] = useState<string | null>(null);
-  const [urlToken, setUrlToken] = useState<string | null>(null);
+  const [phantomUrl, setPhantomUrl] = useState<string>('');
 
   // Solo ejecuta el hook si userId está disponible
   const { signTransaction, error } = useSignTransaction({ userId });
@@ -29,6 +29,16 @@ const SignTransactionPage = () => {
     userId,
     receiverPublicKey: '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y',
   });
+
+  useEffect(() => {
+    const generateUrl = async () => {
+      const url = await getPhantomUrl(userId);
+      setPhantomUrl(url);
+      console.log('Transaction getPhantomUrl:', url);
+    };
+
+    generateUrl();
+  }, [userId, getPhantomUrl]);
 
   useEffect(() => {
     if (!userId) {
@@ -39,12 +49,9 @@ const SignTransactionPage = () => {
     const initiateTransaction = async () => {
       try {
         const generatedUrl = await signTransaction();
-        const transactionUrl = await sendTokens(
-          tokenMintAddress,
-          convertToLamports(10),
-        );
+
         setUrl(generatedUrl);
-        setUrlToken(transactionUrl);
+
         console.log('Transaction URL:', generatedUrl);
       } catch (err) {
         console.error('Error signing transaction:', err);
@@ -62,7 +69,7 @@ const SignTransactionPage = () => {
         <p>Error: User ID is not available</p>
       ) : error ? (
         <p>Error: {error}</p>
-      ) : url && urlToken ? (
+      ) : url && phantomUrl ? (
         <>
           <a href={url} target="_blank" rel="noopener noreferrer">
             Sign Transaction with Phantom
@@ -70,8 +77,8 @@ const SignTransactionPage = () => {
 
           <br />
 
-          <a href={urlToken} target="_blank" rel="noopener noreferrer">
-            Sign Token PAMBII
+          <a href={phantomUrl} target="_blank" rel="noopener noreferrer">
+            Send firm
           </a>
         </>
       ) : (

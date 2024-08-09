@@ -44,7 +44,6 @@ export async function buildBuyIdInstruction(
     { pubkey: splToken, isSigner: false, isWritable: true },
     { pubkey: contract, isSigner: false, isWritable: true },
     { pubkey: tokenProgramId, isSigner: false, isWritable: false },
-    { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
   ];
 
   const instruction = new TransactionInstruction({

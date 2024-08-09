@@ -13,7 +13,8 @@ const SignTransactionPage: React.FC = () => {
   const baseAccount = '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y'; // Reemplazar con la cuenta base
   const userSC = 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3'; // Reemplazar con la clave pública del usuario
   const newValue = 42; // Valor a enviar en lamports
-  const redirectLink = 'https://pambii-front.vercel.app/api/phantom-redirect'; // URL de redirección después de la firma de la transacción
+  const redirectLink =
+    'https://pambii-front.vercel.app/api/phantom-redirect-sing'; // URL de redirección después de la firma de la transacción
 
   const { url, error } = usePhantomSignTransaction(
     userId,

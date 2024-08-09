@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
@@ -7,9 +5,9 @@ import { db } from '@/firebase/config';
 import {
   doc,
   getDoc,
-  collection,
   query,
   where,
+  collection,
   getDocs,
 } from 'firebase/firestore';
 
@@ -25,10 +23,9 @@ const usePhantomSignTransaction = (
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!userId) return;
     const generatePhantomSignTransactionUrl = async () => {
       try {
-        // Recuperar dappKeyPair desde Firebase
+        // 1. Recuperar dappKeyPair desde Firebase
         const keyPairDocRef = doc(db, 'dappKeyPairs', userId);
         const docSnap = await getDoc(keyPairDocRef);
 
@@ -42,7 +39,7 @@ const usePhantomSignTransaction = (
           secretKey: bs58.decode(storedKeyPair.secretKey),
         };
 
-        // Recuperar la sesión desde Firebase
+        // 2. Recuperar la sesión desde Firebase
         const sessionQuery = query(
           collection(db, 'phantomConnections'),
           where('userId', '==', userId),
@@ -53,12 +50,11 @@ const usePhantomSignTransaction = (
           throw new Error('No session found for this user');
         }
 
-        // Suponiendo que solo hay una sesión activa por usuario, tomamos la primera
         const sessionDoc = sessionDocs.docs[0];
         const sessionData = sessionDoc.data();
         const session = sessionData.session;
 
-        // Hacer una solicitud a tu API para generar la transacción codificada en base58
+        // 3. Generar la transacción codificada en base58
         const response = await fetch(
           `/api/generate-transaction?programId=${programId}&baseAccount=${baseAccount}&user=${user}&newValue=${newValue}`,
         );
@@ -70,18 +66,17 @@ const usePhantomSignTransaction = (
 
         const transaction = data.transaction; // Transacción codificada en base58
 
-        // Generar un nonce
+        // 4. Generar un nonce y cifrar el payload
         const nonce = nacl.randomBytes(nacl.box.nonceLength);
         const nonceBase58 = bs58.encode(nonce);
 
-        // Crear el payload
         const payload = {
           transaction: transaction,
           session: session,
         };
         const payloadString = JSON.stringify(payload);
 
-        // Cifrar el payload
+        // 5. Cifrar el payload usando `nacl.box.after` y el `sharedSecret`
         const sharedSecret = nacl.box.before(
           dappKeyPair.publicKey,
           dappKeyPair.secretKey,
@@ -93,7 +88,7 @@ const usePhantomSignTransaction = (
         );
         const encryptedPayloadBase58 = bs58.encode(encryptedPayload);
 
-        // Construir la URL para firmar la transacción en Phantom
+        // 6. Construir la URL de Phantom
         const params = new URLSearchParams({
           dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
           nonce: nonceBase58,

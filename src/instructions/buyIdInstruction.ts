@@ -58,8 +58,9 @@ export async function buildBuyIdInstruction(
 
     const instruction = new TransactionInstruction({
       keys,
-      programId: contractPublicKey,
       data,
+      programId: contractPublicKey,
+
     });
 
     return instruction

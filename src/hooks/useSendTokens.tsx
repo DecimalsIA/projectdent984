@@ -154,13 +154,19 @@ export const useSendTokens = ({
         session,
       };
 
+      // Encriptar el payload usando nacl
       const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
+
+      // Construir el payload final con `cipherText` y `nonce`
+      const finalPayload = {
+        cipherText: bs58.encode(encryptedPayload),
+        nonce: bs58.encode(nonce),
+      };
 
       const params = new URLSearchParams({
         dapp_encryption_public_key: senderPublicKeyString,
-        nonce: bs58.encode(nonce),
+        ...finalPayload,
         redirect_link: `https://pambii-front.vercel.app/api/phantom-redirect-sign?userId=${userId}`,
-        payload: bs58.encode(encryptedPayload),
       });
 
       console.log('Sending tokens...');

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   Connection,
+  Keypair,
   PublicKey,
   Transaction,
   clusterApiUrl,
@@ -9,7 +10,7 @@ import bs58 from 'bs58';
 import nacl from 'tweetnacl';
 import { db } from '@/firebase/config';
 import { query, where, collection, getDocs } from 'firebase/firestore';
-import { Idl, Program, AnchorProvider } from '@project-serum/anchor';
+import { Idl, Program, AnchorProvider, Wallet } from '@project-serum/anchor';
 
 interface UseExecuteContractProps {
   userId: string;
@@ -94,9 +95,17 @@ export const useExecuteContract = ({ userId }: UseExecuteContractProps) => {
         publicKey: bs58.decode(dappKeyPairDocument.publicKey),
       };
 
+      // Crear un objeto Wallet falso para cumplir con la interfaz de AnchorProvider
+      const dummyWallet: Wallet = {
+        publicKey: userPublicKey,
+        signTransaction: async (tx: Transaction) => tx,
+        signAllTransactions: async (txs: Transaction[]) => txs,
+        payer: new Keypair(),
+      };
+
       const provider = new AnchorProvider(
         connection,
-        { publicKey: userPublicKey },
+        dummyWallet,
         AnchorProvider.defaultOptions(),
       );
       const program = new Program(idl, programId, provider);

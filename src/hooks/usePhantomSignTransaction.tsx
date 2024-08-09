@@ -25,6 +25,7 @@ const usePhantomSignTransaction = (
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!userId) return;
     const generatePhantomSignTransactionUrl = async () => {
       try {
         // Recuperar dappKeyPair desde Firebase

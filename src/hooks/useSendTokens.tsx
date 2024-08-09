@@ -7,8 +7,8 @@ import {
 } from '@solana/web3.js';
 import {
   TOKEN_PROGRAM_ID,
-  getOrCreateAssociatedTokenAccount,
-  transfer,
+  createAssociatedTokenAccountInstruction,
+  createTransferInstruction,
 } from '@solana/spl-token';
 import bs58 from 'bs58';
 import nacl from 'tweetnacl';
@@ -16,10 +16,16 @@ import { db } from '@/firebase/config';
 import { query, where, collection, getDocs } from 'firebase/firestore';
 
 interface UseSendTokensProps {
-  userId: string; // userId como prop
+  userId: string;
+  senderUserId: string; // ID del usuario emisor
+  receiverPublicKey: string; // PublicKey del receptor
 }
 
-export const useSendTokens = ({ userId }: UseSendTokensProps) => {
+export const useSendTokens = ({
+  userId,
+  senderUserId,
+  receiverPublicKey,
+}: UseSendTokensProps) => {
   const connection = new Connection(clusterApiUrl('devnet'));
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,69 +52,56 @@ export const useSendTokens = ({ userId }: UseSendTokensProps) => {
     }
   };
 
-  const getDappKeyPair = async () => {
-    try {
-      const q = query(
-        collection(db, 'dappKeyPairs'),
-        where('userId', '==', userId),
-      );
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        return querySnapshot.docs[0].data(); // Retorna el primer documento que coincide con el filtro
-      } else {
-        throw new Error('No dappKeyPair found for the given userId');
-      }
-    } catch (error) {
-      console.error('Error getting dappKeyPair: ', error);
-      throw error;
-    }
-  };
-
-  const createTransferTransaction = async (
-    publicKey: PublicKey,
+  const createUnsignedTransferTransaction = async (
+    senderPublicKey: PublicKey, // PublicKey del emisor
     tokenMintAddress: string,
     amount: number,
   ) => {
-    const toPublicKey = new PublicKey(
-      '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y',
-    );
+    const toPublicKey = new PublicKey(receiverPublicKey); // PublicKey del receptor
     const mintPublicKey = new PublicKey(tokenMintAddress);
 
-    // Obtener la cuenta asociada del token del receptor
-    const toTokenAccount = await getOrCreateAssociatedTokenAccount(
-      connection,
-      publicKey, // Fee payer
-      mintPublicKey, // Token Mint
-      toPublicKey, // Recipient
+    const fromTokenAccount = await connection.getParsedTokenAccountsByOwner(
+      senderPublicKey,
+      { mint: mintPublicKey },
     );
 
-    // Obtener la cuenta asociada del token del emisor
-    const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
-      connection,
-      publicKey, // Fee payer and owner
-      mintPublicKey, // Token Mint
-      publicKey, // Owner (sender)
+    const toTokenAccount = await connection.getParsedTokenAccountsByOwner(
+      toPublicKey,
+      { mint: mintPublicKey },
     );
 
-    // Crear la instrucción de transferencia de tokens SPL
-    const transaction = new Transaction().add(
-      transfer(
-        fromTokenAccount.address, // Desde la cuenta del emisor
-        toTokenAccount.address, // Hacia la cuenta del receptor
-        publicKey, // El propietario de la cuenta desde la que se transfieren los tokens
-        amount, // Cantidad de tokens a transferir
-        [], // Multisig (si aplica, normalmente se deja vacío)
-        TOKEN_PROGRAM_ID, // ID del programa de tokens SPL
-      ),
+    const fromTokenAddress = fromTokenAccount.value[0].pubkey;
+    const toTokenAddress =
+      toTokenAccount.value.length > 0
+        ? toTokenAccount.value[0].pubkey
+        : undefined;
+
+    const transaction = new Transaction();
+
+    if (!toTokenAddress) {
+      const associatedTokenAccountInstruction =
+        createAssociatedTokenAccountInstruction(
+          senderPublicKey, // Payer
+          toPublicKey, // Associated token account owner
+          mintPublicKey, // Mint
+          toPublicKey, // Associated token account
+        );
+      transaction.add(associatedTokenAccountInstruction);
+    }
+
+    const transferInstruction = createTransferInstruction(
+      fromTokenAddress,
+      toTokenAddress || toPublicKey, // Usar la cuenta de token asociada o la cuenta pública del receptor
+      senderPublicKey,
+      amount,
+      [],
+      TOKEN_PROGRAM_ID,
     );
 
-    // Asignar el fee payer
-    transaction.feePayer = publicKey;
+    transaction.add(transferInstruction);
 
-    console.log('Getting recent blockhash');
-    const anyTransaction: any = transaction;
-    anyTransaction.recentBlockhash = (
+    transaction.feePayer = senderPublicKey;
+    transaction.recentBlockhash = (
       await connection.getLatestBlockhash()
     ).blockhash;
 
@@ -123,38 +116,32 @@ export const useSendTokens = ({ userId }: UseSendTokensProps) => {
       setIsSending(true);
       setError(null);
 
-      // Obtén el documento por userId para session, sharedSecret, y publicKey
+      // Obtén el documento por senderUserId para session, sharedSecret, y publicKey
       const phantomConnections = await getDocumentByUserId(
-        userId,
+        senderUserId,
         'phantomConnections',
       );
       const {
         session,
         sharedSecretDapp,
-        publicKey: publicKeyString,
+        publicKey: senderPublicKeyString,
       } = phantomConnections;
-      const publicKey = new PublicKey(publicKeyString);
-      console.log('sharedSecretDapp', sharedSecretDapp);
 
       // Asegúrate de que sharedSecret sea un Uint8Array
       const sharedSecret = bs58.decode(sharedSecretDapp);
-      console.log('sharedSecret', sharedSecret);
 
-      // Obtén dappKeyPair desde otro documento y asegúrate de que la clave pública esté en Uint8Array
-      const dappKeyPairDocument = await getDappKeyPair();
-      const dappKeyPair = {
-        publicKey: bs58.decode(dappKeyPairDocument.publicKey),
-      };
+      // Crear el PublicKey del emisor
+      const senderPublicKey = new PublicKey(senderPublicKeyString);
 
-      const transaction = await createTransferTransaction(
-        publicKey,
+      const transaction = await createUnsignedTransferTransaction(
+        senderPublicKey,
         tokenMintAddress,
         amount,
       );
 
       const serializedTransaction = bs58.encode(
         transaction.serialize({
-          requireAllSignatures: false,
+          requireAllSignatures: false, // No firmar la transacción aquí
         }),
       );
 
@@ -166,9 +153,9 @@ export const useSendTokens = ({ userId }: UseSendTokensProps) => {
       const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
 
       const params = new URLSearchParams({
-        dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
+        dapp_encryption_public_key: senderPublicKeyString,
         nonce: bs58.encode(nonce),
-        redirect_link: `https://pambii-front.vercel.app/api/phantom-redirect-sing?userId=${userId}`,
+        redirect_link: `https://pambii-front.vercel.app/api/phantom-redirect-sign?userId=${senderUserId}`,
         payload: bs58.encode(encryptedPayload),
       });
 
@@ -188,7 +175,7 @@ export const useSendTokens = ({ userId }: UseSendTokensProps) => {
   return { sendTokens, isSending, error };
 };
 
-// Función encryptPayload ya proporcionada
+// Función encryptPayload
 const encryptPayload = (payload: any, sharedSecret?: Uint8Array) => {
   if (!sharedSecret) throw new Error('missing shared secret');
 
@@ -203,6 +190,6 @@ const encryptPayload = (payload: any, sharedSecret?: Uint8Array) => {
   return [nonce, encryptedPayload];
 };
 
-// Función buildUrl actualizada
+// Función buildUrl
 const buildUrl = (path: string, params: URLSearchParams) =>
   `https://phantom.app/ul/v1/${path}?${params.toString()}`;

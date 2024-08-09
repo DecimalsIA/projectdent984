@@ -24,7 +24,11 @@ const SignTransactionPage = () => {
 
   // Solo ejecuta el hook si userId está disponible
   const { signTransaction, error } = useSignTransaction({ userId });
-  const { sendTokens } = useSendTokens({ userId });
+  const { sendTokens } = useSendTokens({
+    userId,
+    senderUserId: 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3',
+    receiverPublicKey: '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y',
+  });
 
   useEffect(() => {
     if (!userId) {

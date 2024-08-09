@@ -1,34 +1,47 @@
 'use client';
-import React from 'react';
-import usePhantomSignTransaction from '@/hooks/usePhantomSignTransaction';
+
+import React, { useEffect, useState } from 'react';
+import { useSignTransaction } from '@/hooks/useSignTransaction';
 import { useTelegram } from '@/context/TelegramContext';
 
-const SignTransactionPage: React.FC = () => {
+const SignTransactionPage = () => {
   const { user } = useTelegram();
 
-  // Verificar si tgUser está definido y tiene un id antes de continuar
+  // Verificar si user está definido y tiene un id antes de continuar
+  const userId = user?.id?.toString() ?? '';
 
-  const userId = user?.id?.toString() ?? ''; // Reemplazar con el ID real del usuario
-  const programId = 'AceRYkKX6mWc8TtkaCevPhDpjjMBEode75Kn59XtTdVX'; // Reemplazar con el ID del programa
-  const baseAccount = '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y'; // Reemplazar con la cuenta base
-  const userSC = 'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3'; // Reemplazar con la clave pública del usuario
-  const newValue = 42; // Valor a enviar en lamports
-  const redirectLink =
-    'https://pambii-front.vercel.app/api/phantom-redirect-sing'; // URL de redirección después de la firma de la transacción
+  // Estado para manejar la URL generada y el proceso de firma
+  const [url, setUrl] = useState<string | null>(null);
 
-  const { url, error } = usePhantomSignTransaction(
-    userId,
-    programId,
-    baseAccount,
-    userSC,
-    newValue,
-    redirectLink,
-  );
+  // Solo ejecuta el hook si userId está disponible
+  const { signTransaction, error } = useSignTransaction({ userId });
+
+  useEffect(() => {
+    if (!userId) {
+      console.error('User ID is not available');
+      return;
+    }
+
+    const initiateTransaction = async () => {
+      try {
+        const generatedUrl = await signTransaction();
+        setUrl(generatedUrl);
+        console.log('Transaction URL:', generatedUrl);
+        window.location.href = generatedUrl; // Redirige automáticamente a la URL generada
+      } catch (err) {
+        console.error('Error signing transaction:', err);
+      }
+    };
+
+    initiateTransaction();
+  }, [userId, signTransaction]);
 
   return (
     <div>
       <h1>Sign Transaction with Phantom Wallet</h1>
-      {error ? (
+      {!userId ? (
+        <p>Error: User ID is not available</p>
+      ) : error ? (
         <p>Error: {error}</p>
       ) : url ? (
         <a href={url} target="_blank" rel="noopener noreferrer">

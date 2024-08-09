@@ -61,7 +61,6 @@ export async function GET(request: NextRequest) {
       await updateDoc(connectionDoc.ref, {
         session: connectData.session,
         updateAt: new Date().toISOString(),
-
       });
 
       return NextResponse.json({ message: 'Connection to Phantom Wallet updated successfully!', session: connectData.session, publicKey: connectData.public_key });
@@ -73,6 +72,7 @@ export async function GET(request: NextRequest) {
         createdAt: new Date().toISOString(),
         updateAt: new Date().toISOString(),
         userId, // Asociar la conexión al usuario
+        sharedSecretDapp
       });
 
       return NextResponse.json({ message: 'Connection to Phantom Wallet successful!', session: connectData.session, publicKey: connectData.public_key });

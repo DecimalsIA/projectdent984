@@ -97,12 +97,16 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
       } = phantomConnections;
       const publicKey = new PublicKey(publicKeyString);
       console.log('sharedSecretDapp', sharedSecretDapp);
+
+      // Asegúrate de que sharedSecret sea un Uint8Array
       const sharedSecret = bs58.decode(sharedSecretDapp);
       console.log('sharedSecret', sharedSecret);
 
-      // Obtén dappKeyPair desde otro documento
+      // Obtén dappKeyPair desde otro documento y asegúrate de que la clave pública esté en Uint8Array
       const dappKeyPairDocument = await getDappKeyPair();
-      const dappKeyPair = { publicKey: dappKeyPairDocument.publicKey };
+      const dappKeyPair = {
+        publicKey: bs58.decode(dappKeyPairDocument.publicKey),
+      };
 
       const transaction = await createTransferTransaction(publicKey);
 
@@ -123,7 +127,7 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
         dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
         nonce: bs58.encode(nonce),
         redirect_link:
-          'hhttps://pambii-front.vercel.app/api/phantom-redirect-sing', // Ajusta según corresponda
+          'https://pambii-front.vercel.app/api/phantom-redirect-sing', // Ajusta según corresponda
         payload: bs58.encode(encryptedPayload),
       });
 

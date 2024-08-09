@@ -8,7 +8,7 @@ const SignTransactionPage = () => {
   const { user } = useTelegram();
 
   // Verificar si user está definido y tiene un id antes de continuar
-  const userId = user?.id?.toString() ?? '';
+  const userId = user?.id?.toString() ?? '792924145';
 
   // Estado para manejar la URL generada y el proceso de firma
   const [url, setUrl] = useState<string | null>(null);
@@ -27,7 +27,7 @@ const SignTransactionPage = () => {
         const generatedUrl = await signTransaction();
         setUrl(generatedUrl);
         console.log('Transaction URL:', generatedUrl);
-        window.location.href = generatedUrl; // Redirige automáticamente a la URL generada
+        // window.location.href = generatedUrl; // Redirige automáticamente a la URL generada
       } catch (err) {
         console.error('Error signing transaction:', err);
       }

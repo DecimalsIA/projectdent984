@@ -4,6 +4,7 @@ import {
   SystemProgram,
   PublicKey,
   Connection,
+  clusterApiUrl,
 } from '@solana/web3.js';
 import bs58 from 'bs58';
 import nacl from 'tweetnacl';
@@ -15,7 +16,7 @@ interface UseSignTransactionProps {
 }
 
 export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
-  const connection = new Connection('https://api.devnet.solana.com'); // Corrige la URL de conexión
+  const connection = new Connection(clusterApiUrl('devnet'));
   const [isSigning, setIsSigning] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -130,7 +131,8 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
         dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
         nonce: bs58.encode(nonce),
         redirect_link:
-          'https://pambii-front.vercel.app/api/phantom-redirect-sing', // Ajusta según corresponda
+          'https://pambii-front.vercel.app/api/phantom-redirect-sing?userId' +
+          userId, // Ajusta según corresponda
         payload: bs58.encode(encryptedPayload),
       });
 

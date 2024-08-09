@@ -1,4 +1,4 @@
-import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js';
+import { PublicKey } from '@solana/web3.js';
 import bs58 from 'bs58';
 import { buildTransaction } from './sc';
 import { getDappKeyPair, getDocumentByUserId } from './getDocumentByUserId';
@@ -12,7 +12,7 @@ export async function generatePhantomDeeplink(
 ): Promise<string> {
   // Obtener los datos necesarios desde Firestore u otro origen de datos
   const { session, sharedSecretDapp, publicKey: publicKeyString } = await getDocumentByUserId(userId);
-  const connection = new Connection(clusterApiUrl("devnet"));
+
 
 
   if (!session || !sharedSecretDapp || !publicKeyString) {
@@ -51,8 +51,6 @@ export async function generatePhantomDeeplink(
     amount: 100,   // Cantidad ajustada según las necesidades
   };
 
-
-
   // Construir la transacción sin firmarla
   const transaction = await buildTransaction(publicKey, type, accounts);
 
@@ -64,16 +62,17 @@ export async function generatePhantomDeeplink(
 
   // Crear el payload para Phantom
   const payload = {
-    session,
     transaction: bs58.encode(serializedTransaction),
+    session,
   };
 
   // Encriptar el payload
   const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
-
+  console.log('dappKeyPair.publicKey', dappKeyPair.publicKey)
+  const publicKeys = bs58.encode(dappKeyPair.publicKey);
   // Configurar los parámetros para el deeplink
   const params = new URLSearchParams({
-    dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
+    dapp_encryption_public_key: publicKeys,
     nonce: bs58.encode(nonce),
     redirect_link: `https://pambii-front.vercel.app/api/phantom-redirect-sing?userId=${userId}`,
     payload: bs58.encode(encryptedPayload),

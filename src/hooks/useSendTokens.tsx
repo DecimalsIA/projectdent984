@@ -112,7 +112,7 @@ export const useSendTokens = ({
 
       // Obtén el documento por senderUserId para session, sharedSecret, y publicKey del emisor
       const phantomConnections = await getDocumentByUserId(
-        senderUserId,
+        userId,
         'phantomConnections',
       );
       const {

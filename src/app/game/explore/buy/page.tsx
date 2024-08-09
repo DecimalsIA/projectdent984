@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSignTransaction } from '@/hooks/useSignTransaction';
+import { useSendTokens } from '@/hooks/useSendTokens';
 import { useTelegram } from '@/context/TelegramContext';
 
 const tokenMintAddress = 'HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ';
@@ -57,7 +58,7 @@ const SignTransactionPage = () => {
         <p>Error: User ID is not available</p>
       ) : error ? (
         <p>Error: {error}</p>
-      ) : url ? (
+      ) : url && urlToken ? (
         <>
           <a href={url} target="_blank" rel="noopener noreferrer">
             Sign Transaction with Phantom

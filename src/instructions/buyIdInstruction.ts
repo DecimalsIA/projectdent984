@@ -72,9 +72,11 @@ export async function buildBuyIdInstruction(
     { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
   ];
 
-  return new TransactionInstruction({
+  const instruction = new TransactionInstruction({
     keys,
     programId: PROGRAM_ID,
     data: instructionData,
   });
+
+  return instruction
 }

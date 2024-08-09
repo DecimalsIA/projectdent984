@@ -78,17 +78,7 @@ export async function buildTransaction(
 
   transaction.add(instruction);
 
-  const { blockhash } = await connection.getRecentBlockhash();
-  transaction.recentBlockhash = blockhash;
-  transaction.feePayer = userPublicKey;
 
   return transaction;
 }
 
-// Función para convertir la transacción a formato base58 para uso en el deeplink
-export function serializeTransaction(transaction: Transaction): string {
-  // Serializa la transacción sin firmar
-  const serializedTransaction = transaction.serializeMessage();
-  // Codifica la transacción en base58
-  return bs58.encode(serializedTransaction);
-}

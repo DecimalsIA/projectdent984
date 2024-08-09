@@ -1,6 +1,8 @@
 // src/instructions/buyInstruction.ts
 import { TransactionInstruction, PublicKey, SystemProgram } from '@solana/web3.js';
 import { BN } from 'bn.js';
+import { Buffer } from 'buffer';
+
 import { programId } from './constants';
 
 export async function buildBuyInstruction(

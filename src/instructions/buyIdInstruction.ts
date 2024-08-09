@@ -3,12 +3,11 @@ import {
   TransactionInstruction,
   SYSVAR_RENT_PUBKEY,
   Connection,
-  SystemProgram,
-  Transaction,
 } from '@solana/web3.js';
-import bs58 from 'bs58';
 import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from '@solana/spl-token';
 import * as anchor from '@project-serum/anchor';
+
+
 
 // Reemplaza con los valores proporcionados
 const PROGRAM_ID = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe'); // Contract Program ID
@@ -47,8 +46,9 @@ async function getUserTokenAccount(
 export async function buildBuyIdInstruction(
   userPublicKey: PublicKey, // Usamos PublicKey aquí
   userAccount: PublicKey | null, // Puede ser null si se necesita crear
-  amount: anchor.BN // Usamos `anchor.BN` para el tipo `u64` en el IDL
-): Promise<TransactionInstruction> {
+  amount: number // Usamos `anchor.BN` para el tipo `u64` en el IDL
+): Promise<any> {
+
   // Obtén la cuenta de token SPL asociada del usuario
   const userToken = await getUserTokenAccount(userPublicKey);
 
@@ -56,27 +56,31 @@ export async function buildBuyIdInstruction(
     throw new Error('User token account not found');
   }
 
-  // Serializa los datos de la instrucción
-  const instructionData = Buffer.concat([
-    Buffer.from([0]), // Opcional: índice del método `buyId` (a menudo no necesario, depende del IDL)
-    amount.toArrayLike(Buffer, 'le', 8) // `amount` como `u64`
-  ]);
+  const dataa = new anchor.BN(amount);
+  try {
+    // Convierte BN a un array de bytes y luego a Buffer
+    const data = Buffer.from(dataa.toArrayLike(Buffer, 'le', 8));
+    console.log('amountBuffer', data);
 
-  const keys = [
-    { pubkey: userPublicKey, isSigner: true, isWritable: true },
-    { pubkey: userAccount ?? PublicKey.default, isSigner: false, isWritable: true },
-    { pubkey: userToken, isSigner: false, isWritable: true },
-    { pubkey: SPL_TOKEN_ID, isSigner: false, isWritable: false },
-    { pubkey: PROGRAM_ID, isSigner: false, isWritable: false },
-    { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
-    { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
-  ];
+    const keys = [
+      { pubkey: userPublicKey, isSigner: true, isWritable: true },
+      { pubkey: userAccount ?? PublicKey.default, isSigner: false, isWritable: true },
+      { pubkey: userToken, isSigner: false, isWritable: true },
+      { pubkey: SPL_TOKEN_ID, isSigner: false, isWritable: false },
+      { pubkey: PROGRAM_ID, isSigner: false, isWritable: false },
+      { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+      { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
+    ];
 
-  const instruction = new TransactionInstruction({
-    keys,
-    programId: PROGRAM_ID,
-    data: instructionData,
-  });
+    const instruction = new TransactionInstruction({
+      keys,
+      programId: PROGRAM_ID,
+      data,
+    });
 
-  return instruction
+    return instruction
+  } catch (error) {
+    console.log('Error al convertir el amount a buffer:', error);
+  }
+
 }

@@ -1,5 +1,4 @@
 import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js';
-import nacl from 'tweetnacl';
 import bs58 from 'bs58';
 import { buildTransaction } from './sc';
 import { getDappKeyPair, getDocumentByUserId } from './getDocumentByUserId';
@@ -17,37 +16,42 @@ export async function generatePhantomDeeplink(
     sharedSecretDapp,
     publicKey: publicKeyString,
   } = await getDocumentByUserId(userId);
-  const connection = new Connection(clusterApiUrl("devnet"));
-
 
   const publicKey = new PublicKey(publicKeyString);
-
-  // Cambiado a buildTransaction para no firmar la transacción
-  const transaction = await buildTransaction(publicKey, 'buyId', {
-    userAccount: null, // O los parámetros necesarios para construir la instrucción
-    amount: 1, // Ajusta según tus necesidades
-  });
-
-  transaction.feePayer = publicKeyString;
-  transaction.recentBlockhash = (
-    await connection.getLatestBlockhash()
-  ).blockhash;
-
-  const serializedTransaction = transaction.serialize({
-    requireAllSignatures: false,
-  });
-  const payload = {
-    session,
-    transaction: serializedTransaction,
-  };
   const sharedSecret = bs58.decode(sharedSecretDapp);
-  const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
-
+  console.log('sharedSecret', sharedSecret);
 
   const dappKeyPairDocument = await getDappKeyPair(userId);
   const dappKeyPair = {
     publicKey: bs58.decode(dappKeyPairDocument.publicKey),
   };
+
+
+
+
+  // Cambiado a buildTransaction para no firmar la transacción
+  const transaction = await buildTransaction(publicKey, 'buyId', {
+    userAccount: null, // O los parámetros necesarios para construir la instrucción
+    amount: 100, // Ajusta según tus necesidades
+  });
+
+  const serializedTransaction = bs58.encode(
+    transaction.serialize({
+      requireAllSignatures: false,
+    }),
+  );
+
+
+  const payload = {
+    session,
+    transaction: serializedTransaction,
+  };
+
+
+  const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
+
+
+
 
   const params = new URLSearchParams({
     dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
@@ -58,4 +62,5 @@ export async function generatePhantomDeeplink(
 
 
   return buildUrl('signAndSendTransaction', params);
+
 }

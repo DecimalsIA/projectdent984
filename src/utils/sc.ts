@@ -1,11 +1,10 @@
+
 import {
   Connection,
   PublicKey,
   Transaction,
   TransactionInstruction,
 } from '@solana/web3.js';
-import bs58 from 'bs58';
-import BN from 'bn.js';
 // Ruta a las funciones de instrucciones
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { buildBuyIdInstruction } from '@/instructions/buyIdInstruction';
@@ -24,13 +23,6 @@ export async function buildTransaction(
   params?: any // Los parámetros necesarios para la instrucción, como 'amount' y las otras cuentas
 ): Promise<Transaction> {
   const transaction = new Transaction();
-  const decimals = 9; // Número de decimales del token SPL
-  // Convertir el amount a unidades más pequeñas usando BN
-  const amountInTokens = params.amount; // Esta es la cantidad en tokens, por ejemplo, 1.5
-  const amountInSmallestUnits = new BN(
-    (amountInTokens * Math.pow(10, decimals)).toFixed(0) // Convertir a string entero sin decimales
-  );
-
 
   // Construir la instrucción en función del tipo de operación
   let instruction: TransactionInstruction;
@@ -39,7 +31,7 @@ export async function buildTransaction(
       instruction = await buildBuyIdInstruction(
         userPublicKey,
         params.userAccount,
-        amountInSmallestUnits
+        params.amount
       );
       break;
     case 'buy':
@@ -77,6 +69,12 @@ export async function buildTransaction(
   }
 
   transaction.add(instruction);
+  transaction.feePayer = userPublicKey;
+  const anyTransaction: any = transaction;
+
+  anyTransaction.recentBlockhash = (
+    await connection.getLatestBlockhash()
+  ).blockhash;
 
 
   return transaction;

@@ -34,7 +34,7 @@ const SignTransactionPage = () => {
     };
 
     initiateTransaction();
-  }, [userId, signTransaction]);
+  }, []);
 
   return (
     <div>

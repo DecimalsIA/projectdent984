@@ -13,7 +13,7 @@ function decryptPayload(data: string, nonce: string, sharedSecret: Uint8Array) {
   if (!decrypted) {
     throw new Error('Failed to decrypt payload');
   }
-
+  // return JSON.parse(new TextDecoder().decode(decrypted));
   return JSON.parse(new TextDecoder().decode(decrypted));
 }
 
@@ -55,9 +55,9 @@ export async function GET(request: NextRequest) {
     const decodedPayload = decryptPayload(payload, nonce, sharedSecret);
 
     // 3. Extraer y decodificar el campo 'transaction'
-    const decodedTransaction = Transaction.from(bs58.decode(decodedPayload.transaction));
+    // const decodedTransaction = Transaction.from(bs58.decode(decodedPayload.transaction));
 
-    return NextResponse.json({ message: 'Success', data: decodedTransaction });
+    return NextResponse.json({ message: 'Success', data: decodedPayload });
 
   } catch (error: any) {
     console.error('Error decrypting payload:', error);

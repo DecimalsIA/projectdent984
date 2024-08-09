@@ -1,23 +1,27 @@
 import { useState } from 'react';
 import {
   Transaction,
-  SystemProgram,
   PublicKey,
   Connection,
   clusterApiUrl,
 } from '@solana/web3.js';
+import {
+  TOKEN_PROGRAM_ID,
+  getOrCreateAssociatedTokenAccount,
+  transfer,
+} from '@solana/spl-token';
 import bs58 from 'bs58';
 import nacl from 'tweetnacl';
 import { db } from '@/firebase/config';
 import { query, where, collection, getDocs } from 'firebase/firestore';
 
-interface UseSignTransactionProps {
+interface UseSendTokensProps {
   userId: string; // userId como prop
 }
 
-export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
+export const useSendTokens = ({ userId }: UseSendTokensProps) => {
   const connection = new Connection(clusterApiUrl('devnet'));
-  const [isSigning, setIsSigning] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const getDocumentByUserId = async (
@@ -61,18 +65,45 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
     }
   };
 
-  const createTransferTransaction = async (publicKey: PublicKey) => {
+  const createTransferTransaction = async (
+    publicKey: PublicKey,
+    tokenMintAddress: string,
+    amount: number,
+  ) => {
     const toPublicKey = new PublicKey(
       '9nJwpxx1A7yZeVFp5qBHwg5eDSfMjMDyam3ZDFVxmd4Y',
     );
-    const transaction = new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: publicKey,
-        toPubkey: toPublicKey,
-        lamports: 1000000, // Ajusta la cantidad de lamports según sea necesario  (1 SOL = 1,000,000,000 lamports)
-      }),
+    const mintPublicKey = new PublicKey(tokenMintAddress);
+
+    // Obtener la cuenta asociada del token del receptor
+    const toTokenAccount = await getOrCreateAssociatedTokenAccount(
+      connection,
+      publicKey, // Fee payer
+      mintPublicKey, // Token Mint
+      toPublicKey, // Recipient
     );
 
+    // Obtener la cuenta asociada del token del emisor
+    const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
+      connection,
+      publicKey, // Fee payer and owner
+      mintPublicKey, // Token Mint
+      publicKey, // Owner (sender)
+    );
+
+    // Crear la instrucción de transferencia de tokens SPL
+    const transaction = new Transaction().add(
+      transfer(
+        fromTokenAccount.address, // Desde la cuenta del emisor
+        toTokenAccount.address, // Hacia la cuenta del receptor
+        publicKey, // El propietario de la cuenta desde la que se transfieren los tokens
+        amount, // Cantidad de tokens a transferir
+        [], // Multisig (si aplica, normalmente se deja vacío)
+        TOKEN_PROGRAM_ID, // ID del programa de tokens SPL
+      ),
+    );
+
+    // Asignar el fee payer
     transaction.feePayer = publicKey;
 
     console.log('Getting recent blockhash');
@@ -84,9 +115,12 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
     return transaction;
   };
 
-  const signTransaction = async (): Promise<string> => {
+  const sendTokens = async (
+    tokenMintAddress: string,
+    amount: number,
+  ): Promise<string> => {
     try {
-      setIsSigning(true);
+      setIsSending(true);
       setError(null);
 
       // Obtén el documento por userId para session, sharedSecret, y publicKey
@@ -112,7 +146,11 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
         publicKey: bs58.decode(dappKeyPairDocument.publicKey),
       };
 
-      const transaction = await createTransferTransaction(publicKey);
+      const transaction = await createTransferTransaction(
+        publicKey,
+        tokenMintAddress,
+        amount,
+      );
 
       const serializedTransaction = bs58.encode(
         transaction.serialize({
@@ -134,7 +172,7 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
         payload: bs58.encode(encryptedPayload),
       });
 
-      console.log('Signing transaction...');
+      console.log('Sending tokens...');
       const url = buildUrl('signAndSendTransaction', params);
 
       // Retorna la URL generada
@@ -143,11 +181,11 @@ export const useSignTransaction = ({ userId }: UseSignTransactionProps) => {
       setError(err.message);
       throw err;
     } finally {
-      setIsSigning(false);
+      setIsSending(false);
     }
   };
 
-  return { signTransaction, isSigning, error };
+  return { sendTokens, isSending, error };
 };
 
 // Función encryptPayload ya proporcionada

@@ -16,7 +16,8 @@ const SignTransactionPage = () => {
   const { user } = useTelegram();
 
   // Verificar si user está definido y tiene un id antes de continuar
-  const userId = user?.id?.toString() ?? '';
+  const userId = user?.id?.toString() ?? '792924145';
+  console.log('userId', userId);
 
   // Estado para manejar la URL generada y el proceso de firma
   const [url, setUrl] = useState<string | null>(null);
@@ -40,7 +41,7 @@ const SignTransactionPage = () => {
       try {
         const generatedUrl = await signTransaction();
         const transactionUrl = await sendTokens(
-          tokenMintAddress,
+          'HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ',
           convertToLamports(10),
         );
         setUrl(generatedUrl);

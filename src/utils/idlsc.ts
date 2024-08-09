@@ -1,0 +1,102 @@
+import { Connection, PublicKey, Transaction } from '@solana/web3.js';
+import { Program, AnchorProvider } from '@project-serum/anchor';
+import idl from './pambii_explorer.json';
+
+// Define the network and connection
+const network = 'https://api.devnet.solana.com';
+const connection = new Connection(network);
+
+// Define the provider after the connection
+const provider = AnchorProvider.env();
+const programId = new PublicKey(idl.metadata.address);
+const program = new Program(idl as any, programId, provider);
+
+export const createTransactionByIdle = async (
+  method: string,
+  args: any[], // [amount] for methods that require it
+  userPublicKey: PublicKey,
+  accounts: {
+    userAccount?: PublicKey;
+    userToken?: PublicKey;
+    splToken?: PublicKey;
+    contract?: PublicKey;
+    tokenProgram?: PublicKey;
+    systemProgram?: PublicKey;
+    ownerToken?: PublicKey;
+  }
+): Promise<Transaction> => {
+  const transaction = new Transaction();
+
+  switch (method) {
+    case 'buyId':
+      if (args.length < 1) {
+        throw new Error('Amount is required for buyId');
+      }
+      const [amountId] = args;
+      transaction.add(
+        await program.methods.buyId(amountId).accounts({
+          user: userPublicKey,
+          userAccount: accounts.userAccount!,
+          userToken: accounts.userToken!,
+          splToken: accounts.splToken!,
+          contract: accounts.contract!,
+          tokenProgram: accounts.tokenProgram!,
+          systemProgram: accounts.systemProgram!,
+        }).instruction()
+      );
+      break;
+    case 'buy':
+      if (args.length < 1) {
+        throw new Error('Amount is required for buy');
+      }
+      const [amountBuy] = args;
+      transaction.add(
+        await program.methods.buy(amountBuy).accounts({
+          user: userPublicKey,
+          userAccount: accounts.userAccount!,
+          userToken: accounts.userToken!,
+          splToken: accounts.splToken!,
+          contract: accounts.contract!,
+          tokenProgram: accounts.tokenProgram!,
+        }).instruction()
+      );
+      break;
+    case 'cobrar':
+      if (args.length < 1) {
+        throw new Error('Amount is required for cobrar');
+      }
+      const [amountCobrar] = args;
+      transaction.add(
+        await program.methods.cobrar(amountCobrar).accounts({
+          user: userPublicKey,
+          userAccount: accounts.userAccount!,
+          splToken: accounts.splToken!,
+          contract: accounts.contract!,
+          tokenProgram: accounts.tokenProgram!,
+        }).instruction()
+      );
+      break;
+    case 'withdrawAll':
+      transaction.add(
+        await program.methods.withdrawAll().accounts({
+          owner: userPublicKey,
+          ownerToken: accounts.ownerToken!,
+          splToken: accounts.splToken!,
+          contract: accounts.contract!,
+          tokenProgram: accounts.tokenProgram!,
+        }).instruction()
+      );
+      break;
+    default:
+      throw new Error('Method not supported');
+  }
+
+  // Set the fee payer
+  transaction.feePayer = userPublicKey;
+
+  // Add the recent blockhash
+  const { blockhash } = await connection.getLatestBlockhash();
+  transaction.recentBlockhash = blockhash;
+
+  return transaction;
+};

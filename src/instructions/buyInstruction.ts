@@ -1,42 +1,28 @@
-import {
-  PublicKey,
-  TransactionInstruction,
-  SystemProgram,
-} from '@solana/web3.js';
-import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from '@solana/spl-token';
+import { PublicKey, TransactionInstruction } from '@solana/web3.js';
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import * as anchor from '@project-serum/anchor';
 
-// Reemplaza con los valores proporcionados
-const contractPublicKey = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe'); // Contract Program ID
+const contractPublicKey = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe');
 
-
-// Construye la instrucción para el método `buy` en tu contrato
 export async function buildBuyInstruction(
   user: PublicKey,
-  userTokenAccount: PublicKey, // Esta es la cuenta de tokens SPL del usuario
-  contractTokenAccount: PublicKey, // Esta es la cuenta de tokens SPL del contrato
-  amount: number // Usamos `number` para el monto
+  userTokenAccount: PublicKey,
+  contractTokenAccount: PublicKey,
+  amount: number
 ): Promise<TransactionInstruction> {
+  // Convierte el monto a un buffer de 8 bytes
+  const amountToSend = new anchor.BN(amount).toArrayLike(Buffer, 'le', 8);
 
-  // Convierte el monto a un array de bytes y luego a Buffer
-  const amountToSend = BigInt(100) * BigInt(Math.pow(10, 9) as any); //  //  // Asegura que el buffer tenga el tamaño adecuado
-  //new anchor.BN(amount).toArrayLike(Buffer, 'le', 8).copy(Buffer.from(amountToSend.toString()));
-
-  console.log('SystemProgram.programId', SystemProgram.programId.toString())
-  console.log('TOKEN_PROGRAM_ID', TOKEN_PROGRAM_ID.toString())
-  console.log('userTokenAccount', userTokenAccount.toString())
-  console.log('user', user.toString())
-  console.log('contractTokenAccount', contractTokenAccount.toString())
   const keys = [
-    { pubkey: user, isSigner: true, isWritable: true }, // El usuario firmará la transacción
-    { pubkey: userTokenAccount, isSigner: false, isWritable: true }, // Cuenta de tokens SPL del usuario
-    { pubkey: contractTokenAccount, isSigner: false, isWritable: true }, // Cuenta de tokens SPL del contrato
-    { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false }, // Programa de tokens SPL
+    { pubkey: user, isSigner: true, isWritable: true },
+    { pubkey: userTokenAccount, isSigner: false, isWritable: true },
+    { pubkey: contractTokenAccount, isSigner: false, isWritable: true },
+    { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
   ];
 
   const instruction = new TransactionInstruction({
     keys,
-    data: Buffer.from(amountToSend.toString()),
+    data: amountToSend,
     programId: contractPublicKey,
   });
 

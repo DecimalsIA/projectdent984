@@ -4,6 +4,7 @@ import {
   Transaction,
   TransactionInstruction,
 } from '@solana/web3.js';
+
 // Importa las instrucciones según sea necesario
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { buildBuyInstruction } from '@/instructions/buyInstruction';

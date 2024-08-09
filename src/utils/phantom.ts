@@ -20,9 +20,12 @@ export async function generatePhantomDeeplink(
   const publicKey = new PublicKey(publicKeyString);
   const sharedSecret = bs58.decode(sharedSecretDapp);
   console.log('sharedSecret', sharedSecret);
+  console.log('publicKeyString', publicKeyString);
 
   // Dirección del SPL Token específico
   const splToken = new PublicKey('HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ');
+
+  const smc = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe');
 
   // Obtener la clave pública del DApp desde Firestore
   const dappKeyPairDocument = await getDappKeyPair(userId);
@@ -32,7 +35,7 @@ export async function generatePhantomDeeplink(
 
   // Obtener la cuenta asociada del token SPL del usuario
   const userToken = await getAssociatedTokenAddress(splToken, publicKey);
-  const contractToken = await getAssociatedTokenAddress(splToken, new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe'));
+  const contractToken = await getAssociatedTokenAddress(splToken, smc);
 
   // Configurar las cuentas necesarias para la transacción
   const accounts = {

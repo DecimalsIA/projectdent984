@@ -141,8 +141,8 @@ export const useSendTokens = ({
       );
 
       const payload = {
-        session,
         transaction: serializedTransaction,
+        session,
       };
 
       const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);

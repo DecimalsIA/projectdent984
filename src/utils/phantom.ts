@@ -8,27 +8,34 @@ import { getAssociatedTokenAddress } from '@solana/spl-token';
 
 export async function generatePhantomDeeplink(
   userId: string,
-  type?: string,
+  type: 'buy' | 'cobrar' | 'withdrawAll' = 'buy', // Tipo de transacción predeterminado a 'buy'
 ): Promise<string> {
   // Obtener los datos necesarios desde Firestore u otro origen de datos
-  const {
-    session,
-    sharedSecretDapp,
-    publicKey: publicKeyString,
-  } = await getDocumentByUserId(userId);
+  const { session, sharedSecretDapp, publicKey: publicKeyString } = await getDocumentByUserId(userId);
+  const connection = new Connection(clusterApiUrl("devnet"));
+
+
+  if (!session || !sharedSecretDapp || !publicKeyString) {
+    throw new Error('Datos insuficientes para generar el deeplink');
+  }
 
   const publicKey = new PublicKey(publicKeyString);
   const sharedSecret = bs58.decode(sharedSecretDapp);
-  console.log('sharedSecret', sharedSecret);
-  console.log('publicKeyString', publicKeyString);
+
 
   // Dirección del SPL Token específico
   const splToken = new PublicKey('HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ');
 
+  // Dirección del smart contract
   const smc = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe');
 
   // Obtener la clave pública del DApp desde Firestore
   const dappKeyPairDocument = await getDappKeyPair(userId);
+
+  if (!dappKeyPairDocument?.publicKey) {
+    throw new Error('No se pudo obtener la clave pública del DApp');
+  }
+
   const dappKeyPair = {
     publicKey: bs58.decode(dappKeyPairDocument.publicKey),
   };
@@ -39,25 +46,27 @@ export async function generatePhantomDeeplink(
 
   // Configurar las cuentas necesarias para la transacción
   const accounts = {
-    userToken, // Cuenta asociada del token SPL del usuario
-    contractToken, // Dirección del contrato
-    amount: 100, // Ajusta según tus necesidades
+    userToken,     // Cuenta asociada del token SPL del usuario
+    contractToken, // Cuenta del token SPL del contrato
+    amount: 100,   // Cantidad ajustada según las necesidades
   };
 
   // Construir la transacción sin firmarla
-  const transaction = await buildTransaction(publicKey, 'buy', accounts);
-
+  const transaction = await buildTransaction(publicKey, type, accounts);
+  transaction.feePayer = publicKey;
+  transaction.recentBlockhash = (
+    await connection.getLatestBlockhash()
+  ).blockhash;
   // Serializar la transacción
-  const serializedTransaction = bs58.encode(
-    transaction.serialize({
-      requireAllSignatures: false,
-    }),
-  );
+  const serializedTransaction = transaction.serialize({
+    requireAllSignatures: false,
+  });
+
 
   // Crear el payload para Phantom
   const payload = {
     session,
-    transaction: serializedTransaction,
+    transaction: bs58.encode(serializedTransaction),
   };
 
   // Encriptar el payload

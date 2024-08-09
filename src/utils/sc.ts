@@ -4,19 +4,17 @@ import {
   Transaction,
   TransactionInstruction,
 } from '@solana/web3.js';
-
-// Importa las instrucciones según sea necesario
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { buildBuyInstruction } from '@/instructions/buyInstruction';
-// Puedes agregar otras instrucciones como buildCobrarInstruction y buildWithdrawAllInstruction si las tienes implementadas.
 
+// Configuración de la red Solana Devnet
 const network = 'https://api.devnet.solana.com';
 const connection = new Connection(network);
-const programID = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe'); // Tu Program ID
+const programID = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe');
 
 // Función para construir una transacción basada en el tipo de operación
 export async function buildTransaction(
-  userPublicKey: PublicKey, // Usamos PublicKey aquí
+  userPublicKey: PublicKey,
   instructionType: 'buy' | 'cobrar' | 'withdrawAll',
   params: {
     userAccount?: PublicKey,
@@ -30,45 +28,67 @@ export async function buildTransaction(
 ): Promise<Transaction> {
   const transaction = new Transaction();
 
-  // Construir la instrucción en función del tipo de operación
+  // Variable para almacenar la instrucción
   let instruction: TransactionInstruction;
+
+  // Selección de la instrucción según el tipo
   switch (instructionType) {
     case 'buy':
+      // Validación de los parámetros necesarios
+      if (!params.userToken || !params.contractToken || params.amount === undefined) {
+        throw new Error('Faltan parámetros requeridos para la instrucción de compra (buy)');
+      }
+
       instruction = await buildBuyInstruction(
         userPublicKey,
-        params.userToken!,
-        params.contractToken!,
-        params.amount!
+        params.userToken,
+        params.contractToken,
+        params.amount
       );
       break;
-    // Agrega casos adicionales para 'cobrar' y 'withdrawAll' si es necesario
+
+    // Descomenta y agrega otros casos según sea necesario
     // case 'cobrar':
+    //   if (!params.userAccount || !params.splToken || !params.contract || params.amount === undefined) {
+    //     throw new Error('Faltan parámetros requeridos para la instrucción de cobrar');
+    //   }
     //   instruction = await buildCobrarInstruction(
     //     userPublicKey,
-    //     params.userAccount!,
-    //     params.splToken!,
-    //     params.contract!,
-    //     params.amount!
+    //     params.userAccount,
+    //     params.splToken,
+    //     params.contract,
+    //     params.amount
     //   );
     //   break;
+
     // case 'withdrawAll':
+    //   if (!params.ownerToken || !params.splToken || !params.contract) {
+    //     throw new Error('Faltan parámetros requeridos para la instrucción de retirar todo (withdrawAll)');
+    //   }
     //   instruction = await buildWithdrawAllInstruction(
     //     userPublicKey,
-    //     params.ownerToken!,
-    //     params.splToken!,
-    //     params.contract!
+    //     params.ownerToken,
+    //     params.splToken,
+    //     params.contract
     //   );
     //   break;
+
     default:
-      throw new Error('Invalid instruction type');
+      throw new Error('Tipo de instrucción inválido');
   }
 
+  // Agrega la instrucción a la transacción
   transaction.add(instruction);
   transaction.feePayer = userPublicKey;
 
   // Obtén el último blockhash para la transacción
-  const { blockhash } = await connection.getLatestBlockhash();
-  transaction.recentBlockhash = blockhash;
+  try {
+    const { blockhash } = await connection.getLatestBlockhash();
+    transaction.recentBlockhash = blockhash;
+  } catch (error) {
+    console.error('Error al obtener el último blockhash:', error);
+    throw new Error('No se pudo obtener el blockhash más reciente');
+  }
 
   return transaction;
 }

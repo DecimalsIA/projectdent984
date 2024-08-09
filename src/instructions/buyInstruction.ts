@@ -2,8 +2,8 @@ import { LAMPORTS_PER_SOL, PublicKey, TransactionInstruction } from '@solana/web
 import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import * as anchor from '@project-serum/anchor';
 import BN from 'bn.js';
-const contractPublicKey = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe');
 
+const smc = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe');
 const splToken = new PublicKey('HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ');
 
 export async function buildBuyInstruction(
@@ -15,13 +15,13 @@ export async function buildBuyInstruction(
 
   // Obtén la cuenta de token SPL asociada del usuario
   const userToken = await getAssociatedTokenAddress(splToken, user);
-  const contractToken = await getAssociatedTokenAddress(splToken, contractPublicKey);
+  const contractToken = await getAssociatedTokenAddress(splToken, smc);
 
   console.log('user', user.toString())
   console.log('userToken', userToken.toString())
   console.log('contractToken', contractToken.toString())
 
-  if (!userTokenAccount) {
+  if (!userToken) {
     throw new Error('User token account not found');
   }
 
@@ -40,7 +40,7 @@ export async function buildBuyInstruction(
   const instruction = new TransactionInstruction({
     keys,
     data,
-    programId: contractPublicKey,
+    programId: smc,
   });
 
   return instruction;

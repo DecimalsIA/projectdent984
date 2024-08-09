@@ -1,10 +1,10 @@
 import { LAMPORTS_PER_SOL, PublicKey, TransactionInstruction } from '@solana/web3.js';
 import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import * as anchor from '@project-serum/anchor';
-
+import BN from 'bn.js';
 const contractPublicKey = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe');
 
-const splToken = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe');
+const splToken = new PublicKey('HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ');
 
 export async function buildBuyInstruction(
   user: PublicKey,
@@ -17,18 +17,18 @@ export async function buildBuyInstruction(
   const userToken = await getAssociatedTokenAddress(splToken, user);
   const contractToken = await getAssociatedTokenAddress(splToken, contractPublicKey);
 
+  console.log('user', user.toString())
+  console.log('userToken', userToken.toString())
+  console.log('contractToken', contractToken.toString())
+
   if (!userTokenAccount) {
     throw new Error('User token account not found');
   }
-  console.log('buildBuyInstruction')
 
-  // Convierte el monto a un buffer de 8 bytes
-  //const amountToSend = BigInt(amount) * BigInt(Math.pow(10, 9) as any);
-  const transferAmount = 0.01;
-  // Convierte el monto a un array de bytes y luego a Buffer
-  const data = Buffer.alloc(4 + 8); // Asegura que el buffer tenga el tamaño adecuado
-  data.writeUInt32LE(amount, 0);
-  data.writeBigUInt64LE(BigInt(transferAmount * LAMPORTS_PER_SOL), 4);
+
+  const scaledAmount = new BN(amount).mul(new BN(10).pow(new BN(9)));
+  const data = Buffer.alloc(8);
+  scaledAmount.toArrayLike(Buffer, 'le', 8).copy(data);
 
   const keys = [
     { pubkey: user, isSigner: true, isWritable: true },

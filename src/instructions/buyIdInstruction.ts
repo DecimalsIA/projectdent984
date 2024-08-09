@@ -33,7 +33,7 @@ export async function buildBuyIdInstruction(
 
   const transferAmount = 0.01;
   // Convierte el monto a un array de bytes y luego a Buffer
-  const instructionData = Buffer.alloc(4 + 8); // Asegura que el buffer tenga el tamaño adecuado
+  const instructionData = Buffer.alloc(8); // Asegura que el buffer tenga el tamaño adecuado
   instructionData.writeUInt32LE(amount, 0);
   instructionData.writeBigUInt64LE(BigInt(transferAmount * LAMPORTS_PER_SOL), 4);
   //new anchor.BN(amount).toArrayLike(Buffer, 'le', 8).copy(amountBuffer);

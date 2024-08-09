@@ -1,16 +1,13 @@
-
 import {
   Connection,
   PublicKey,
   Transaction,
   TransactionInstruction,
 } from '@solana/web3.js';
-// Ruta a las funciones de instrucciones
+// Importa las instrucciones según sea necesario
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { buildBuyIdInstruction } from '@/instructions/buyIdInstruction';
 import { buildBuyInstruction } from '@/instructions/buyInstruction';
-import { buildCobrarInstruction } from '@/instructions/cobrarInstruction';
-import { buildWithdrawAllInstruction } from '@/instructions/withdrawAllInstruction';
+// Puedes agregar otras instrucciones como buildCobrarInstruction y buildWithdrawAllInstruction si las tienes implementadas.
 
 const network = 'https://api.devnet.solana.com';
 const connection = new Connection(network);
@@ -19,66 +16,58 @@ const programID = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe');
 // Función para construir una transacción basada en el tipo de operación
 export async function buildTransaction(
   userPublicKey: PublicKey, // Usamos PublicKey aquí
-  instructionType: 'buyId' | 'buy' | 'cobrar' | 'withdrawAll',
-  params?: any // Los parámetros necesarios para la instrucción, como 'amount' y las otras cuentas
+  instructionType: 'buy' | 'cobrar' | 'withdrawAll',
+  params: {
+    userAccount?: PublicKey,
+    userToken?: PublicKey,
+    contractToken?: PublicKey,
+    splToken?: PublicKey,
+    contract?: PublicKey,
+    amount?: number,
+    ownerToken?: PublicKey,
+  }
 ): Promise<Transaction> {
   const transaction = new Transaction();
 
   // Construir la instrucción en función del tipo de operación
   let instruction: TransactionInstruction;
   switch (instructionType) {
-    case 'buyId':
-      instruction = await buildBuyIdInstruction(
-        userPublicKey,
-        params.userAccount,
-        params.splToken,
-        params.contract,
-        params.amount
-      );
-      break;
     case 'buy':
       instruction = await buildBuyInstruction(
         userPublicKey,
-        params.userAccount,
-        params.userToken,
-        params.splToken,
-        params.contract,
-        params.tokenProgram,
-        params.amount
+        params.userToken!,
+        params.contractToken!,
+        params.amount!
       );
       break;
-    case 'cobrar':
-      instruction = await buildCobrarInstruction(
-        userPublicKey,
-        params.userAccount,
-        params.splToken,
-        params.contract,
-        params.tokenProgram,
-        params.amount
-      );
-      break;
-    case 'withdrawAll':
-      instruction = await buildWithdrawAllInstruction(
-        userPublicKey,
-        params.ownerToken,
-        params.splToken,
-        params.contract,
-        params.tokenProgram,
-      );
-      break;
+    // Agrega casos adicionales para 'cobrar' y 'withdrawAll' si es necesario
+    // case 'cobrar':
+    //   instruction = await buildCobrarInstruction(
+    //     userPublicKey,
+    //     params.userAccount!,
+    //     params.splToken!,
+    //     params.contract!,
+    //     params.amount!
+    //   );
+    //   break;
+    // case 'withdrawAll':
+    //   instruction = await buildWithdrawAllInstruction(
+    //     userPublicKey,
+    //     params.ownerToken!,
+    //     params.splToken!,
+    //     params.contract!
+    //   );
+    //   break;
     default:
       throw new Error('Invalid instruction type');
   }
 
   transaction.add(instruction);
   transaction.feePayer = userPublicKey;
-  const anyTransaction: any = transaction;
 
-  anyTransaction.recentBlockhash = (
-    await connection.getLatestBlockhash()
-  ).blockhash;
-
+  // Obtén el último blockhash para la transacción
+  const { blockhash } = await connection.getLatestBlockhash();
+  transaction.recentBlockhash = blockhash;
 
   return transaction;
 }
-

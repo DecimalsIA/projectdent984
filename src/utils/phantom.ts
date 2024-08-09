@@ -6,12 +6,11 @@ import { encryptPayload } from './encryptPayload';
 import { buildUrl } from './buildUrl';
 import { getAssociatedTokenAddress } from '@solana/spl-token';
 
-
 export async function generatePhantomDeeplink(
   userId: string,
   type?: string,
 ): Promise<string> {
-
+  // Obtener los datos necesarios desde Firestore u otro origen de datos
   const {
     session,
     sharedSecretDapp,
@@ -21,51 +20,46 @@ export async function generatePhantomDeeplink(
   const publicKey = new PublicKey(publicKeyString);
   const sharedSecret = bs58.decode(sharedSecretDapp);
   console.log('sharedSecret', sharedSecret);
-  const splToken = new PublicKey('HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ')
+
+  // Dirección del SPL Token específico
+  const splToken = new PublicKey('HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ');
+
+  // Obtener la clave pública del DApp desde Firestore
   const dappKeyPairDocument = await getDappKeyPair(userId);
   const dappKeyPair = {
     publicKey: bs58.decode(dappKeyPairDocument.publicKey),
   };
 
+  // Obtener la cuenta asociada del token SPL del usuario
+  const userToken = await getAssociatedTokenAddress(splToken, publicKey);
 
-  /* 
-  
-    user: PublicKey,
-  userAccount: PublicKey,
-  userToken: PublicKey,
-  splToken: PublicKey,
-  contract: PublicKey,
-  tokenProgram: PublicKey,
-  amount: number
-  
-   params.contract,
-  */
+  // Configurar las cuentas necesarias para la transacción
   const accounts = {
-    userAccount: new PublicKey(publicKeyString), // Ajusta según tus necesidades
-    splToken: splToken, // Ajusta según tus necesidades
-    contract: new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe'), // Ajusta según tus necesidades
-
-    amount: 100,// Ajusta según tus necesidades
-
+    userToken, // Cuenta asociada del token SPL del usuario
+    contractToken: new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe'), // Dirección del contrato
+    amount: 100, // Ajusta según tus necesidades
   };
 
+  // Construir la transacción sin firmarla
+  const transaction = await buildTransaction(publicKey, 'buy', accounts);
 
-  // Cambiado a buildTransaction para no firmar la transacción
-  const transaction = await buildTransaction(publicKey, 'buyId', accounts);
-
+  // Serializar la transacción
   const serializedTransaction = bs58.encode(
     transaction.serialize({
       requireAllSignatures: false,
     }),
   );
 
+  // Crear el payload para Phantom
   const payload = {
     session,
     transaction: serializedTransaction,
   };
 
+  // Encriptar el payload
   const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
 
+  // Configurar los parámetros para el deeplink
   const params = new URLSearchParams({
     dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
     nonce: bs58.encode(nonce),
@@ -73,7 +67,6 @@ export async function generatePhantomDeeplink(
     payload: bs58.encode(encryptedPayload),
   });
 
-
+  // Construir y devolver el URL del deeplink para Phantom Wallet
   return buildUrl('signAndSendTransaction', params);
-
 }

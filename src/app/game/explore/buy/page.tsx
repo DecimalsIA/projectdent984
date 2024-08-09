@@ -8,7 +8,7 @@ const SignTransactionPage = () => {
   const { user } = useTelegram();
 
   // Verificar si user está definido y tiene un id antes de continuar
-  const userId = user?.id?.toString() ?? '792924145';
+  const userId = user?.id?.toString() ?? '';
 
   // Estado para manejar la URL generada y el proceso de firma
   const [url, setUrl] = useState<string | null>(null);
@@ -34,6 +34,7 @@ const SignTransactionPage = () => {
     };
 
     initiateTransaction();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

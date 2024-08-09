@@ -27,8 +27,6 @@ export async function generatePhantomDeeplink(
   };
 
 
-
-
   // Cambiado a buildTransaction para no firmar la transacción
   const transaction = await buildTransaction(publicKey, 'buyId', {
     userAccount: null, // O los parámetros necesarios para construir la instrucción
@@ -41,17 +39,12 @@ export async function generatePhantomDeeplink(
     }),
   );
 
-
   const payload = {
     session,
     transaction: serializedTransaction,
   };
 
-
   const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
-
-
-
 
   const params = new URLSearchParams({
     dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),

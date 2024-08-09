@@ -62,7 +62,7 @@ export async function buildBuyIdInstruction(
     const data = Buffer.from(dataa.toArrayLike(Buffer, 'le', 8));
     console.log('amountBuffer', data);
 
-    const keys = [
+    /*const keys = [
       { pubkey: userPublicKey, isSigner: true, isWritable: true },
       { pubkey: userAccount ?? PublicKey.default, isSigner: false, isWritable: true },
       { pubkey: userToken, isSigner: false, isWritable: true },
@@ -70,7 +70,13 @@ export async function buildBuyIdInstruction(
       { pubkey: PROGRAM_ID, isSigner: false, isWritable: false },
       { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
       { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
-    ];
+    ]; */
+
+    const keys = [
+      { pubkey: userPublicKey, isSigner: true, isWritable: true },
+      { pubkey: userPublicKey, isSigner: false, isWritable: true },
+      { pubkey: SPL_TOKEN_ID, isSigner: false, isWritable: true },
+    ]
 
     const instruction = new TransactionInstruction({
       keys,

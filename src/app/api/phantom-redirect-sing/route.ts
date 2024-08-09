@@ -2,48 +2,62 @@ import { NextRequest, NextResponse } from 'next/server';
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
 import { db } from '@/firebase/config';
-import { doc, getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { Transaction } from '@solana/web3.js'; // Asegúrate de que este paquete esté instalado y correctamente importado
+
+function decryptPayload(data: string, nonce: string, sharedSecret: Uint8Array) {
+  const dataBytes = bs58.decode(data);
+  const nonceBytes = bs58.decode(nonce);
+  const decrypted = nacl.box.open.after(dataBytes, nonceBytes, sharedSecret);
+
+  if (!decrypted) {
+    throw new Error('Failed to decrypt payload');
+  }
+
+  return JSON.parse(new TextDecoder().decode(decrypted));
+}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const phantomEncryptionPublicKey = searchParams.get('phantom_encryption_public_key');
   const nonce = searchParams.get('nonce');
-  const payload = searchParams.get('payload');
+  const payload = searchParams.get('data');
   const userId = searchParams.get('userId'); // Suponiendo que pasas el userId en la URL para identificar al usuario
 
-  if (!phantomEncryptionPublicKey || !nonce || !payload || !userId) {
+  if (!nonce || !payload || !userId) {
     return NextResponse.json({ message: 'Invalid parameters' }, { status: 400 });
   }
 
   try {
-    // 1. Recuperar dappKeyPair desde Firebase
-    const keyPairDocRef = doc(db, 'dappKeyPairs', userId);
-    const docSnap = await getDoc(keyPairDocRef);
+    // 1. Crear una consulta para buscar el documento donde userId coincide
+    const phantomConnectionsRef = collection(db, 'phantomConnections');
+    const q = query(phantomConnectionsRef, where('userId', '==', userId));
+    const querySnapshot = await getDocs(q);
 
-    if (!docSnap.exists()) {
-      throw new Error('dappKeyPair not found');
+    if (querySnapshot.empty) {
+      throw new Error('Shared secret not found');
     }
 
-    const storedKeyPair = docSnap.data();
-    const dappKeyPair = {
-      publicKey: bs58.decode(storedKeyPair.publicKey),
-      secretKey: bs58.decode(storedKeyPair.secretKey),
-    };
+    // Suponiendo que solo hay un documento que coincide
+    const sharedKeyDocSnap = querySnapshot.docs[0].data();
 
-    // 2. Descifrar el payload
-    const sharedSecret = nacl.box.before(bs58.decode(phantomEncryptionPublicKey), dappKeyPair.secretKey);
-    const decryptedPayload = nacl.box.open.after(
-      bs58.decode(payload),
-      bs58.decode(nonce),
-      sharedSecret
-    );
+    // Debug: Verificar el contenido del documento
+    console.log('Document data:', sharedKeyDocSnap);
 
-    if (!decryptedPayload) {
-      throw new Error('Failed to decrypt payload');
+    const sharedSecretData = sharedKeyDocSnap.sharedSecretDapp;
+
+    if (!sharedSecretData) {
+      throw new Error('Shared secret field not found');
     }
 
-    const decodedPayload = JSON.parse(new TextDecoder().decode(decryptedPayload));
-    return NextResponse.json({ message: 'Success', data: decodedPayload });
+    const sharedSecret = bs58.decode(sharedSecretData);
+
+    // 2. Usar la función decryptPayload con el sharedSecret existente
+    const decodedPayload = decryptPayload(payload, nonce, sharedSecret);
+
+    // 3. Extraer y decodificar el campo 'transaction'
+    const decodedTransaction = Transaction.from(bs58.decode(decodedPayload.transaction));
+
+    return NextResponse.json({ message: 'Success', data: decodedTransaction });
 
   } catch (error: any) {
     console.error('Error decrypting payload:', error);

@@ -7,8 +7,8 @@ import {
 } from '@solana/web3.js';
 import {
   TOKEN_PROGRAM_ID,
-  getAssociatedTokenAddress,
   createTransferInstruction,
+  getAssociatedTokenAddress,
   getMint,
 } from '@solana/spl-token';
 import bs58 from 'bs58';
@@ -63,16 +63,12 @@ export const useSendTokens = ({
     const fromTokenAccount = await getAssociatedTokenAddress(
       mintPublicKey,
       senderPublicKey,
-      false,
-      TOKEN_PROGRAM_ID,
     );
 
     // Obtener la cuenta de token asociada del receptor
     const toTokenAccount = await getAssociatedTokenAddress(
       mintPublicKey,
       toPublicKey,
-      false,
-      TOKEN_PROGRAM_ID,
     );
 
     // Verificar que el mint es válido y obtener información de decimales
@@ -83,7 +79,7 @@ export const useSendTokens = ({
 
     const transaction = new Transaction();
 
-    // Crear instrucción de transferencia
+    // Crear instrucción de transferencia usando `createTransferInstruction`
     const transferInstruction = createTransferInstruction(
       fromTokenAccount,
       toTokenAccount,

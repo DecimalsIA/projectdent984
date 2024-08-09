@@ -63,12 +63,16 @@ export const useSendTokens = ({
     const fromTokenAccount = await getAssociatedTokenAddress(
       mintPublicKey,
       senderPublicKey,
+      false,
+      TOKEN_PROGRAM_ID,
     );
 
     // Obtener la cuenta de token asociada del receptor
     const toTokenAccount = await getAssociatedTokenAddress(
       mintPublicKey,
       toPublicKey,
+      false,
+      TOKEN_PROGRAM_ID,
     );
 
     // Verificar que el mint es válido y obtener información de decimales

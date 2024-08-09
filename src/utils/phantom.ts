@@ -72,5 +72,5 @@ export async function generatePhantomDeeplink(
   });
 
   // Construir y devolver el URL del deeplink para Phantom Wallet
-  return buildUrl('signAndSendTransaction', params);
+  return buildUrl('signTransaction', params);
 }

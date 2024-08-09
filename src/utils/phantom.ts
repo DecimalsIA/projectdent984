@@ -32,11 +32,12 @@ export async function generatePhantomDeeplink(
 
   // Obtener la cuenta asociada del token SPL del usuario
   const userToken = await getAssociatedTokenAddress(splToken, publicKey);
+  const contractToken = await getAssociatedTokenAddress(splToken, new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe'));
 
   // Configurar las cuentas necesarias para la transacción
   const accounts = {
     userToken, // Cuenta asociada del token SPL del usuario
-    contractToken: new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe'), // Dirección del contrato
+    contractToken, // Dirección del contrato
     amount: 100, // Ajusta según tus necesidades
   };
 

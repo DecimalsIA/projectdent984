@@ -7,9 +7,11 @@ import ConnectWallet from '@/components/ConnectWallet';
 import { useTelegram } from '@/context/TelegramContext';
 import usePhantomConnection from '@/hooks/usePhantomConnection';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 const Page: React.FC = () => {
   const { user: tgUser } = useTelegram();
+  const { setAuthenticated } = useAuth();
   const router = useRouter();
 
   // Verificar si tgUser está definido y tiene un id antes de continuar
@@ -20,9 +22,10 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     if (connectionExists) {
+      setAuthenticated(true);
       router.push('/game/home');
     }
-  }, [connectionExists, router]);
+  }, [connectionExists, router, setAuthenticated]);
 
   // Mientras se verifica la existencia de tgUser y su id, se puede mostrar un indicador de carga
   if (!userId) {

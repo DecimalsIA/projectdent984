@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from 'react';
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
@@ -23,6 +24,7 @@ const usePhantomSignTransaction = (
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!userId) return;
     const generatePhantomSignTransactionUrl = async () => {
       try {
         // 1. Recuperar dappKeyPair desde Firebase

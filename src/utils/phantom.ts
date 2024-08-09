@@ -57,7 +57,7 @@ export async function generatePhantomDeeplink(
   // Crear el payload para Phantom
   const payload = {
     session,
-    transaction: serializedTransaction,
+    transaction: [serializedTransaction],
   };
 
   // Encriptar el payload
@@ -72,5 +72,5 @@ export async function generatePhantomDeeplink(
   });
 
   // Construir y devolver el URL del deeplink para Phantom Wallet
-  return buildUrl('signTransaction', params);
+  return buildUrl('signAllTransactions', params);
 }

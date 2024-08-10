@@ -20,7 +20,6 @@ const buildTransaction = async (
   const contractTokenAccount = await getAssociatedTokenAddress(
     tokenMintAddress,
     contractPublicKey,
-    true
   );
 
   const program = new Program(idl as Idl, programId, new AnchorProvider(connection, {} as any, {}));

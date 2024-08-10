@@ -13,11 +13,13 @@ import Image from 'next/image';
 interface ExplorationCardGameProps {
   spl: number;
   userid: string;
+  textButton?: string;
 }
 
 const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
   spl,
   userid,
+  textButton,
 }) => {
   const { deeplink, generateDeeplink } = usePhantomDeeplink();
   const [transaction, setTransaction] = useState<string | null>(null);
@@ -92,11 +94,11 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
               />
             }
           >
-            Select bee to explore
+            {textButton ? textButton : 'Select bee to explore'}
           </ButtonPambii>{' '}
         </a>
       ) : (
-        <p>Generando deeplink...</p>
+        <p className="center text-cyan-50">Generating...</p>
       )}
     </div>
   );

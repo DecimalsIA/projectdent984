@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import React, { useEffect } from 'react';
 import bgImgeHome from '../../assets/bg-home.png';
@@ -22,10 +22,10 @@ import {
 import UserHome from '@/components/UserHome';
 import { useRouter } from 'next/navigation';
 import { useTelegram } from '@/context/TelegramContext';
+import useVerifyBee from '@/hooks/useVerifyBee';
 
 const Home = () => {
   const router = useRouter();
-
   const { user } = useTelegram();
 
   const slideData = [

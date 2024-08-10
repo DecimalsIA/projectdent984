@@ -1,0 +1,45 @@
+.clickThe {
+  font-weight: 500;
+  font-family: Poppins;
+}
+
+.hive {
+  font-weight: 900;
+  font-family: Poppins;
+}
+
+.toRecieveOne {
+  font-weight: 500;
+}
+
+.bee {
+  font-weight: 900;
+  background: linear-gradient(90.08deg, #ffa338, #ff9981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.clickTheHiveContainer {
+  width: 300px;
+  position: relative;
+  font-size: 24px;
+  letter-spacing: 0.02em;
+  line-height: 100%;
+  text-align: center;
+  display: inline-block;
+  color: #fff;
+  font-family: Poppins;
+}
+
+.clickTheHive {
+  width: 100%;
+  position: relative;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  line-height: 100%;
+  font-weight: 500;
+  font-family: Poppins;
+  color: #898989;
+  text-align: center;
+  display: inline-block;
+}

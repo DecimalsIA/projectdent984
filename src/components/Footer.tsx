@@ -16,10 +16,11 @@ import { FaShoppingBasket } from 'react-icons/fa';
 const Footer: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
+  console.log('pathname', pathname);
+  if (pathname == '/game') return;
   const activeRoute = pathname.split('/game/')[1];
   const activePath = activeRoute.split('/')[0];
   const activePathFt = activeRoute.split('/')[1];
-  console.log('--->', activeRoute);
   const navButtons = [
     {
       text: 'SPECIAL MARKET',

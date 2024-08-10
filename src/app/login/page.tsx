@@ -8,6 +8,7 @@ import { useTelegram } from '@/context/TelegramContext';
 import usePhantomConnection from '@/hooks/usePhantomConnection';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import useVerifyBee from '@/hooks/useVerifyBee';
 
 const Page: React.FC = () => {
   const { user: tgUser } = useTelegram();
@@ -19,13 +20,18 @@ const Page: React.FC = () => {
 
   // Solo llama a usePhantomConnection si userId está disponible
   const connectionExists = usePhantomConnection(userId ?? '');
+  const verifyBee = useVerifyBee(userId ?? '');
 
   useEffect(() => {
     if (connectionExists) {
       setAuthenticated(true);
-      router.push('/game/home');
+      if (verifyBee) {
+        router.push('/game/home');
+      } else {
+        router.push('/bee');
+      }
     }
-  }, [connectionExists, router, setAuthenticated]);
+  }, [connectionExists, router, setAuthenticated, verifyBee]);
 
   // Mientras se verifica la existencia de tgUser y su id, se puede mostrar un indicador de carga
   if (!userId) {

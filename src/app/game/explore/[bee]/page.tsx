@@ -514,7 +514,7 @@ const ExplorePage: React.FC = () => {
 
   const validExplorer = async (bee: any) => {
     let data = JSON.stringify({
-      userId: 'pZzrHeGsqrGOhwI4CpYh',
+      userId: userId,
       mapNumber: bee === 'easy' ? 1 : bee === 'middle' ? 2 : 3,
       valuePambii: bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35,
       signature: '',
@@ -576,7 +576,10 @@ const ExplorePage: React.FC = () => {
                 />
               </div>
               {badgesData && <ExplorationInfo badges={badgesData} />}
-              <TransactionComponent spl={100} userid={userId} />
+              <TransactionComponent
+                spl={bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35}
+                userid={userId}
+              />
 
               <ButtonPambii
                 color="white"

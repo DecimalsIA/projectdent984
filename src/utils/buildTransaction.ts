@@ -24,6 +24,7 @@ const buildTransaction = async (
   );
 
   const program = new Program(idl as Idl, programId, new AnchorProvider(connection, {} as any, {}));
+  console.log('amount', amount)
   const amountToSend = BigInt(amount) * BigInt(Math.pow(10, 9) as any); // Ajusta `6` al número de decimales de tu token
   const amountToSendBN = new anchor.BN(amountToSend.toString());
 

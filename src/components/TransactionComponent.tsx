@@ -77,29 +77,12 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
   }, [transaction, deeplinkGenerated]); // Solo se ejecuta cuando `transaction` cambie y el deeplink no ha sido generado
 
   return (
-    <div>
+    <div className="w-full">
       {deeplink ? (
-        <>
-          <a href={deeplink} target="_blank" rel="noopener noreferrer">
-            <ButtonPambii
-              color="white"
-              className="mb-2"
-              icon={
-                <Image
-                  src="/assets/bee-characters/icons/explore-icon.svg"
-                  alt="Select arena"
-                  width={24}
-                  height={24}
-                />
-              }
-            >
-              Select bee to explore
-            </ButtonPambii>{' '}
-          </a>
+        <a href={deeplink} target="_blank" rel="noopener noreferrer">
           <ButtonPambii
             color="white"
             className="mb-2"
-            href={deeplink}
             icon={
               <Image
                 src="/assets/bee-characters/icons/explore-icon.svg"
@@ -109,9 +92,9 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
               />
             }
           >
-            2 Select bee to explore
-          </ButtonPambii>
-        </>
+            Select bee to explore
+          </ButtonPambii>{' '}
+        </a>
       ) : (
         <p>Generando deeplink...</p>
       )}

@@ -19,6 +19,7 @@ export const useSendSol = () => {
         const transferParams: TransferParams = {
           toPubkey,
           lamports,
+          userId,
         };
 
         // Pasar una función que crea la transacción

@@ -68,7 +68,6 @@ export async function generatePhantomDeeplink(
 
   // Encriptar el payload
   const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
-  console.log('dappKeyPair.publicKey', dappKeyPair.publicKey)
   const publicKeys = bs58.encode(dappKeyPair.publicKey);
   // Configurar los parámetros para el deeplink
   const params = new URLSearchParams({

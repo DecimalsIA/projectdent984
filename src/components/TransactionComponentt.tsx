@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { Connection, PublicKey } from '@solana/web3.js';
+import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js';
 import usePhantomDeeplink from '../hooks/usePhantomDeeplink';
-import { buildTransaction } from '../utils/buildTransaction';
-import bs58 from 'bs58';
+import { buildTransaction } from '../utils/buildTransactiontow';
 
 const TransactionComponent: React.FC = () => {
   const { deeplink, generateDeeplink } = usePhantomDeeplink();
@@ -13,7 +12,7 @@ const TransactionComponent: React.FC = () => {
   // Este useEffect solo se ejecutará una vez cuando el componente se monte
   useEffect(() => {
     const createTransaction = async () => {
-      const connection = new Connection('https://api.devnet.solana.com');
+      const connection = new Connection(clusterApiUrl('devnet'));
 
       const senderPublicKey = new PublicKey(
         'EbyUWNGQ8MJPYR8xBqap5J3G4NVJCgQcTuQgzExYqvL3',
@@ -28,13 +27,13 @@ const TransactionComponent: React.FC = () => {
         '3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe',
       );
       const amount = 100; // Cantidad de tokens SPL (en la mínima unidad)
+      // buildTransaction
       const serializedTransaction = await buildTransaction(
         senderPublicKey,
         tokenMintAddress,
         contractPublicKey,
         amount,
         connection,
-        programId,
       );
 
       setTransaction(serializedTransaction);

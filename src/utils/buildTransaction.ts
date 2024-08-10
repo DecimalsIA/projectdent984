@@ -42,7 +42,9 @@ const buildTransaction = async (
   transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
   transaction.feePayer = senderPublicKey;
 
-  const serializedTransaction = transaction.serialize();
+  const serializedTransaction = transaction.serialize({
+    requireAllSignatures: false
+  });
 
   return bs58.encode(serializedTransaction);
 };

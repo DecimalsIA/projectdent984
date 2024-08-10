@@ -1,4 +1,5 @@
 import {
+  clusterApiUrl,
   Connection,
   PublicKey,
   Transaction,
@@ -9,7 +10,7 @@ import { buildBuyInstruction } from '@/instructions/buyInstruction';
 
 // Configuración de la red Solana Devnet
 const network = 'https://api.devnet.solana.com';
-const connection = new Connection(network);
+const connection = new Connection(clusterApiUrl('devnet'));
 
 
 // Función para construir una transacción basada en el tipo de operación

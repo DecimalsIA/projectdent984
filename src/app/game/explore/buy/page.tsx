@@ -47,14 +47,14 @@ const SignTransactionPage = () => {
         <p> User ID is not available</p>
       ) : sendSolurl && phantomUrl ? (
         <>
-          <a href={sendSolurl} target="_blank" rel="noopener noreferrer">
+          <a href={phantomUrl} target="_blank" rel="noopener noreferrer">
             Sign Transaction with Phantom
           </a>
 
           <br />
 
-          <a href={phantomUrl} target="_blank" rel="noopener noreferrer">
-            Send firm
+          <a href={sendSolurl} target="_blank" rel="noopener noreferrer">
+            sendSolurl
           </a>
           <br />
         </>

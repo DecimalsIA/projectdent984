@@ -50,6 +50,10 @@ const SignTransactionPage = () => {
         <div>
           <h1>Phantom Wallet Transaction</h1>
           <TransactionComponent />
+
+          <a href={phantomUrl} target="_blank" rel="noopener noreferrer">
+            phantomUrldemo demo de
+          </a>
         </div>
       )}
     </div>

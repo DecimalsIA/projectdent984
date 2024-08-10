@@ -4,7 +4,7 @@ import { getDocumentByUserId } from "../getDocumentByUserId";
 const NETWORK = clusterApiUrl("devnet");
 
 interface TransferParams {
-  fromPubkey: PublicKey;
+  fromPubkey?: PublicKey;
   toPubkey: PublicKey;
   lamports: number;
   userId?: string | any

@@ -43,18 +43,26 @@ const SignTransactionPage = () => {
 
   return (
     <div>
+      <hr />
       <h1>Sign Transaction with Phantom Wallet</h1>
+      <hr />
       {!userId ? (
         <p> User ID is not available</p>
       ) : (
-        <div>
-          <h1>Phantom Wallet Transaction</h1>
-          <TransactionComponent />
-
-          <a href={phantomUrl} target="_blank" rel="noopener noreferrer">
-            phantomUrldemo demo de
-          </a>
-        </div>
+        <>
+          {' '}
+          <hr />
+          <div>
+            <TransactionComponent />
+          </div>
+          <hr />
+          <div>
+            <a href={phantomUrl} target="_blank" rel="noopener noreferrer">
+              Firma CON USE
+            </a>
+          </div>{' '}
+          <hr />
+        </>
       )}
     </div>
   );

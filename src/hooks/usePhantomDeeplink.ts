@@ -1,7 +1,7 @@
 import { useState } from 'react';
-
+import bs58 from 'bs58';
 import { buildUrl } from '@/utils/buildUrl';
-import { encryptPayload } from '@/utils/encryptPayload2';
+import { encryptPayload } from '@/utils/encryptPayload';
 
 
 interface DeeplinkParams {
@@ -31,13 +31,15 @@ const usePhantomDeeplink = () => {
 
 
       // Usa la función encryptPayload para cifrar el payload
-      const { nonce, encryptedPayload } = encryptPayload({ payload, sharedSecret });
+      //const { nonce, encryptedPayload } = encryptPayload({ payload, sharedSecret });
+      const sharedSecretkey = bs58.decode(sharedSecret);
+      const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecretkey);
 
       const params = new URLSearchParams({
         dapp_encryption_public_key: dappEncryptionPublicKey,
-        nonce,
+        nonce: bs58.encode(nonce),
         redirect_link: redirectLink,
-        payload: encryptedPayload,
+        payload: bs58.encode(encryptedPayload),
       });
 
       const deeplinkUrl = buildUrl('signAndSendTransaction', params);

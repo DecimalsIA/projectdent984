@@ -51,9 +51,8 @@ const TransactionComponent: React.FC = () => {
         '43WSmevaVx8o4uHt7ZByrtqdJYFHSuB6TY2ZhG8SBDRBBt6p898RXW3uP1i895kiscfFHioQhPzYC3ZMZzy6ojrNRsB1rRfhg2YWA9XceW4qVU5wqmcFuD7MEhuViZdozmRjfirjVUn8ySgA2tzWDgiXbQJ2RPdxZK2kU5ehcUSzRnMJfYh8rcWjrXQU6rcjnPxj3aHwvd3NkM9dwaAWXvwUHvuzHrfyFDcZrWT9Fr';
       const redirectLink =
         'https://pambii-front.vercel.app/api/phantom-redirect';
-      const dappEncryptionPublicKey = bs58.encode(
-        Buffer.from('GrLco62VByQdt4x6xPC2vtBrtgFVpKSQ6zvuAK1r9SWC'),
-      );
+      const dappEncryptionPublicKey =
+        'GrLco62VByQdt4x6xPC2vtBrtgFVpKSQ6zvuAK1r9SWC';
 
       generateDeeplink({
         transaction,

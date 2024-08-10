@@ -10,7 +10,7 @@ import { buildBuyInstruction } from '@/instructions/buyInstruction';
 // Configuración de la red Solana Devnet
 const network = 'https://api.devnet.solana.com';
 const connection = new Connection(network);
-const programID = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe');
+
 
 // Función para construir una transacción basada en el tipo de operación
 export async function buildTransaction(

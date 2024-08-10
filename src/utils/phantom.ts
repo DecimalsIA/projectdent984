@@ -63,7 +63,6 @@ export async function generatePhantomDeeplink(
   // Crear el payload para Phantom
   const payload = {
     transaction: bs58.encode(serializedTransaction),
-    sendOptions: "",
     session,
   };
 

@@ -8,7 +8,6 @@ import { useTelegram } from '@/context/TelegramContext';
 import { useSC } from '@/hooks/useSC';
 import { useSendSol } from '@/hooks/useSendSol';
 import TransactionComponent from '@/components/TransactionComponent';
-import TransactionComponentt from '@/components/TransactionComponentt';
 
 const SignTransactionPage = () => {
   const { user } = useTelegram();
@@ -58,23 +57,6 @@ const SignTransactionPage = () => {
           <div>
             1 : <TransactionComponent />
           </div>
-          <hr />
-          <br />
-          <br />
-          <div>
-            2 : <TransactionComponentt />
-          </div>
-          <hr />
-          <br />
-          <br />
-          <div>
-            <a href={phantomUrl} target="_blank" rel="noopener noreferrer">
-              3 : Firma CON USE
-            </a>
-          </div>{' '}
-          <hr />
-          <br />
-          <br />
         </>
       )}
     </div>

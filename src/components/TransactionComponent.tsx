@@ -8,6 +8,8 @@ import {
   getDappKeyPair,
   getDocumentByUserId,
 } from '@/utils/getDocumentByUserId';
+import { ButtonPambii } from 'pambii-devtrader-front';
+import Image from 'next/image';
 interface ExplorationCardGameProps {
   spl: number;
   userid: string;
@@ -77,9 +79,39 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
   return (
     <div>
       {deeplink ? (
-        <a href={deeplink} target="_blank" rel="noopener noreferrer">
-          Firmar en Phantom
-        </a>
+        <>
+          <a href={deeplink} target="_blank" rel="noopener noreferrer">
+            <ButtonPambii
+              color="white"
+              className="mb-2"
+              icon={
+                <Image
+                  src="/assets/bee-characters/icons/explore-icon.svg"
+                  alt="Select arena"
+                  width={24}
+                  height={24}
+                />
+              }
+            >
+              Select bee to explore
+            </ButtonPambii>{' '}
+          </a>
+          <ButtonPambii
+            color="white"
+            className="mb-2"
+            href={deeplink}
+            icon={
+              <Image
+                src="/assets/bee-characters/icons/explore-icon.svg"
+                alt="Select arena"
+                width={24}
+                height={24}
+              />
+            }
+          >
+            2 Select bee to explore
+          </ButtonPambii>
+        </>
       ) : (
         <p>Generando deeplink...</p>
       )}

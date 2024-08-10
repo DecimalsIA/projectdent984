@@ -8,6 +8,8 @@ import { ButtonPambii, CardPambii, SlidePambii } from 'pambii-devtrader-front';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
+import TransactionComponent from '@/components/TransactionComponent';
+import { useTelegram } from '@/context/TelegramContext';
 const slideData = [
   {
     image: '/assets/bee-characters/fire.png',
@@ -476,6 +478,9 @@ const badgesData = [
 ];
 
 const ExplorePage: React.FC = () => {
+  const { user } = useTelegram();
+
+  const userId = user?.id?.toString() ?? '792924145';
   const [cardType, setCardType] = useState<string>(slideData[0].type ?? '');
   const [abilitiesData, setAbilitiesData] = useState<any>(
     slideData[0].abilitiesData ?? [],
@@ -571,6 +576,7 @@ const ExplorePage: React.FC = () => {
                 />
               </div>
               {badgesData && <ExplorationInfo badges={badgesData} />}
+              <TransactionComponent spl={100} userid={userId} />
 
               <ButtonPambii
                 color="white"

@@ -1,3 +1,4 @@
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getDocumentById, createDocument, updateDocument, getDocuments, getAllDocuments } from '@/utils/firebase';
 import * as crypto from 'crypto';
@@ -14,6 +15,12 @@ interface UserStatus {
   banned: boolean;
 }
 
+interface UserDocument {
+  userId: string;
+  banned?: boolean;
+  // Otras propiedades del usuario
+}
+
 interface GameHistory {
   userId: string;
   result: string;
@@ -28,7 +35,9 @@ interface UserStats {
 interface LeaderboardEntry {
   wins: number;
 }
+
 const DB = process.env.NEXT_PUBLIC_FIREBASE_USER_COLLETION || 'USERS';
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -38,34 +47,32 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'FIELDS required' }, { status: 400 });
     }
 
-    const { exists, banned } = await getUserStatus(userId) as { exists: boolean, banned?: boolean };
+    const { exists, banned } = await getUserStatus(userId);
     if (!exists) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
-    console.log('banned', banned)
 
     if (banned) {
       return NextResponse.json({ error: 'User Banned' }, { status: 200 });
     } else {
       const balanceGame = await getUserWallet(userId);
       if (balanceGame[0].balance > valuePambii) {
+        await updateDocument('WALLET', balanceGame[0].id, { id: balanceGame[0].id, balance: balanceGame[0].balance - valuePambii, timeUpdate: new Date().getTime() });
 
-        await updateDocument('WALLET', balanceGame[0].id, { id: balanceGame[0].id, balance: balanceGame[0].balance - valuePambii, timeUpdate: new Date(new Date().toISOString()).getTime() });
-
-        const b = await getUserWallet(userId);
-        const idWallet = b[0].id;
+        const updatedBalance = await getUserWallet(userId);
+        const idWallet = updatedBalance[0].id;
 
         const result = calculateResult(mapNumber);
         const payout = calculatePayout(valuePambii, result);
 
-        const balanceWallet = b[0].balance;
-        await updateDocument('WALLET', idWallet, { balance: balanceWallet + payout, timeUpdate: new Date(new Date().toISOString()).getTime() });
+        const balanceWallet = updatedBalance[0].balance;
+        await updateDocument('WALLET', idWallet, { balance: balanceWallet + payout, timeUpdate: new Date().getTime() });
 
-        const pool = { userId, valuePambii, payout, mapNumber, signature, timestamp: new Date(new Date().toISOString()).getTime() }
+        const pool = { userId, valuePambii, payout, mapNumber, signature, timestamp: new Date().getTime() }
 
         const hash = await hashName(JSON.stringify(pool))
 
-        await createDocument('PoolMaps', { userId, valuePambii, payout, mapNumber, signature, timestamp: new Date(new Date().toISOString()).getTime(), hash });
+        await createDocument('PoolMaps', { ...pool, hash });
 
         return NextResponse.json({
           map: mapNumber,
@@ -78,37 +85,25 @@ export async function POST(req: NextRequest) {
       } else {
         return NextResponse.json({ message: 'User not Value', activeWallet: true }, { status: 200 });
       }
-
     }
-
-  } catch (error) {
-    return NextResponse.json({ error: error }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-
-async function hashName(sms: any) {
-
-  // El texto o datos que deseas hashear
-  const data = sms;
-
-  // Crea el hash utilizando el algoritmo SHA-256
+async function hashName(sms: any): Promise<string> {
   const hash = crypto.createHash('sha256');
-
-  // Actualiza el hash con los datos
-  hash.update(data);
-
-  // Obtiene el valor hash final en formato hexadecimal
-  const hashDigest = hash.digest('hex');
-  return hashDigest;
+  hash.update(sms);
+  return hash.digest('hex');
 }
 
+async function getUserStatus(userId: string): Promise<UserStatus> {
+  const users = await getDocuments(DB, 'idUser', userId);
+  console.log('userId', userId)
+  console.log('users', users)
 
-async function getUserStatus(id: string): Promise<UserStatus> {
-
-  const user = await getDocumentById(DB, id) as { banned?: boolean };
-
-  if (user) {
+  if (users && users.length > 0) {
+    const user = users[0] as UserDocument;
     return {
       exists: true,
       banned: user.banned || false
@@ -117,23 +112,17 @@ async function getUserStatus(id: string): Promise<UserStatus> {
   return { exists: false, banned: false };
 }
 
-async function getUserWallet(id: string): Promise<any> {
-  const balance = await getDocuments('WALLET', 'userId', id);
-  return balance;
+async function getUserWallet(userId: string): Promise<any[]> {
+  return await getDocuments('WALLET', 'userId', userId);
 }
-
 
 function secureRandom(): number {
   const buffer = crypto.randomBytes(8);
-  // Leer como un entero sin signo de 64 bits en formato little-endian
   const high = buffer.readUInt32LE(4);
   const low = buffer.readUInt32LE(0);
-  // Combinar las dos partes en un solo número de 64 bits
   const combined = high * 0x100000000 + low;
   return combined / 0xffffffffffffffff;
 }
-
-
 
 function calculateResult(mapNumber: number): string {
   const randomValue = secureRandom();
@@ -163,7 +152,5 @@ function calculateResult(mapNumber: number): string {
 }
 
 function calculatePayout(valuePambii: number, multiplier: string): number {
-  const baseValue = valuePambii;
-  const multiplierValue = parseFloat(multiplier.slice(1));
-  return baseValue * multiplierValue;
+  return valuePambii * parseFloat(multiplier.slice(1));
 }

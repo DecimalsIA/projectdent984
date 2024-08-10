@@ -75,6 +75,7 @@ export async function generatePhantomDeeplink(
     nonce: bs58.encode(nonce),
     redirect_link: `https://pambii-front.vercel.app/api/phantom-redirect-sing?userId=${userId}`,
     payload: bs58.encode(encryptedPayload),
+    skip_preflight: 'true', // Añadir este parámetro
   });
 
   // Construir y devolver el URL del deeplink para Phantom Wallet

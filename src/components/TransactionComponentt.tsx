@@ -4,7 +4,7 @@ import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js';
 import usePhantomDeeplink from '../hooks/usePhantomDeeplink';
 import { buildTransaction } from '../utils/buildTransactiontow';
 
-const TransactionComponent: React.FC = () => {
+const TransactionComponentt: React.FC = () => {
   const { deeplink, generateDeeplink } = usePhantomDeeplink();
   const [transaction, setTransaction] = useState<string | null>(null);
   const [deeplinkGenerated, setDeeplinkGenerated] = useState(false);
@@ -77,4 +77,4 @@ const TransactionComponent: React.FC = () => {
   );
 };
 
-export default TransactionComponent;
+export default TransactionComponentt;

@@ -8,6 +8,7 @@ import { useTelegram } from '@/context/TelegramContext';
 import { useSC } from '@/hooks/useSC';
 import { useSendSol } from '@/hooks/useSendSol';
 import TransactionComponent from '@/components/TransactionComponent';
+import TransactionComponentt from '@/components/TransactionComponentt';
 
 const SignTransactionPage = () => {
   const { user } = useTelegram();
@@ -46,6 +47,8 @@ const SignTransactionPage = () => {
       <hr />
       <h1>Sign Transaction with Phantom Wallet</h1>
       <hr />
+      <br />
+      <br />
       {!userId ? (
         <p> User ID is not available</p>
       ) : (
@@ -53,15 +56,25 @@ const SignTransactionPage = () => {
           {' '}
           <hr />
           <div>
-            <TransactionComponent />
+            1 : <TransactionComponent />
           </div>
           <hr />
+          <br />
+          <br />
+          <div>
+            2 : <TransactionComponentt />
+          </div>
+          <hr />
+          <br />
+          <br />
           <div>
             <a href={phantomUrl} target="_blank" rel="noopener noreferrer">
-              Firma CON USE
+              3 : Firma CON USE
             </a>
           </div>{' '}
           <hr />
+          <br />
+          <br />
         </>
       )}
     </div>

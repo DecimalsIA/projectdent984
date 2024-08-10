@@ -5,20 +5,18 @@ import {
   getDappKeyPair,
   getDocumentByUserId,
 } from '@/utils/getDocumentByUserId';
-import { PublicKey } from "@solana/web3.js";
+import { PublicKey, Transaction } from "@solana/web3.js";
 
 export const signAndSendTransaction = async (
   userId: string,
-  functionTransaction: Function,
-  transactionParams?: any // Parámetros opcionales que se pasarán a la función de transacción
+  transactionParams: Transaction // Parámetros opcionales que se pasarán a la función de transacción
 ) => {
-  // Obtener los datos del usuario
+
   const {
     session,
-    sharedSecretDapp,
-    publicKey: fromPublicKeyString,
+    sharedSecretDapp
   } = await getDocumentByUserId(userId);
-  const fromPublicKey = new PublicKey(fromPublicKeyString);
+
 
   // Obtener el par de claves del dapp
   const dappKeyPairDocument = await getDappKeyPair(userId);
@@ -26,15 +24,10 @@ export const signAndSendTransaction = async (
     publicKey: bs58.decode(dappKeyPairDocument.publicKey),
   };
 
-  // Incluir fromPubkey en los parámetros de transacción
-  if (transactionParams) {
-    transactionParams.fromPubkey = fromPublicKey;
-  } else {
-    transactionParams = { fromPubkey: fromPublicKey };
-  }
+
 
   // Crear la transacción
-  const transaction = await functionTransaction(transactionParams);
+  const transaction = transactionParams;
 
   // Serializar la transacción
   const serializedTransaction = transaction.serialize({

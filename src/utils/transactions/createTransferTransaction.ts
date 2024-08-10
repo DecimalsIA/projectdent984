@@ -7,7 +7,7 @@ export interface TransferParams {
   fromPubkey?: PublicKey;
   toPubkey: PublicKey;
   lamports: number;
-  userId?: string | any
+  userId: string
 }
 
 export const createTransferTransaction = async (params: TransferParams) => {

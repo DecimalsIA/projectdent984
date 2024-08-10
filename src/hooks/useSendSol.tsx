@@ -21,6 +21,7 @@ export const useSendSol = () => {
         const transferParams: TransferParams = {
           toPubkey,
           lamports,
+          userId,
         };
 
         // Obtener la transacción a partir de los parámetros

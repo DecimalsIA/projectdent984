@@ -8,30 +8,32 @@ import {
   getDappKeyPair,
   getDocumentByUserId,
 } from '@/utils/getDocumentByUserId';
+interface ExplorationCardGameProps {
+  spl: number;
+  userid: string;
+}
 
-const TransactionComponent: React.FC = () => {
+const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
+  spl,
+  userid,
+}) => {
   const { deeplink, generateDeeplink } = usePhantomDeeplink();
   const [transaction, setTransaction] = useState<string | null>(null);
   const [deeplinkGenerated, setDeeplinkGenerated] = useState(false);
-  const userId = '792924145';
 
   // Este useEffect solo se ejecutará una vez cuando el componente se monte
   useEffect(() => {
     const createTransaction = async () => {
       const connection = new Connection('https://api.devnet.solana.com');
-      const { publicKey: publicKeyString } = await getDocumentByUserId(userId);
+      const sc = '3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe';
+      const token = 'HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ';
+      const { publicKey: publicKeyString } = await getDocumentByUserId(userid);
 
       const senderPublicKey = new PublicKey(publicKeyString);
-      const tokenMintAddress = new PublicKey(
-        'HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ',
-      );
-      const contractPublicKey = new PublicKey(
-        '3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe',
-      );
-      const programId = new PublicKey(
-        '3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe',
-      );
-      const amount = 100; // Cantidad de tokens SPL (en la mínima unidad)
+      const tokenMintAddress = new PublicKey(token);
+      const contractPublicKey = new PublicKey(sc);
+      const programId = new PublicKey(sc);
+      const amount = spl; // Cantidad de tokens SPL (en la mínima unidad)
       const serializedTransaction = await buildTransaction(
         senderPublicKey,
         tokenMintAddress,
@@ -51,12 +53,10 @@ const TransactionComponent: React.FC = () => {
   useEffect(() => {
     const generateLink = async () => {
       if (transaction && !deeplinkGenerated) {
-        const { session, sharedSecretDapp } = await getDocumentByUserId(userId);
-        const { publicKey } = await getDappKeyPair(userId);
-        console.log('dappKeyPairDocument----->', publicKey);
-
+        const { session, sharedSecretDapp } = await getDocumentByUserId(userid);
+        const { publicKey } = await getDappKeyPair(userid);
         const redirectLink =
-          'https://pambii-front.vercel.app/api/phantom-redirect';
+          'https://pambii-front.vercel.app/api/phantom-redirect-sing';
         const dappEncryptionPublicKey = publicKey;
 
         generateDeeplink({

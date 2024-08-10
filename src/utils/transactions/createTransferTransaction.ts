@@ -16,7 +16,7 @@ export const createTransferTransaction = async (params: TransferParams) => {
   const {
     publicKey: fromPublicKeyString,
   } = await getDocumentByUserId(userId);
-  const fromPubkey = new PublicKey(fromPublicKeyString);
+  const fromPubkey = params.fromPubkey ? params.fromPubkey : new PublicKey(fromPublicKeyString);
   if (!fromPubkey) throw new Error("missing public key from user");
 
   let transaction = new Transaction().add(

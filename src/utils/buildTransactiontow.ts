@@ -40,10 +40,9 @@ const buildTransaction = async (
   // Construir la transacción
   const transaction = new Transaction().add(instruction);
 
-  // Asignar el `recentBlockhash` y `feePayer`
-  transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
+  const { blockhash } = await connection.getLatestBlockhash();
+  transaction.recentBlockhash = blockhash;
   transaction.feePayer = senderPublicKey;
-
   // Serializar la transacción
   const serializedTransaction = transaction.serialize({
     requireAllSignatures: false,

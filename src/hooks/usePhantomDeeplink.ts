@@ -23,10 +23,11 @@ const usePhantomDeeplink = () => {
     sharedSecret,
   }: DeeplinkParams) => {
     try {
-      const payload = JSON.stringify({
+
+      const payload = {
         transaction,
         session,
-      });
+      };
 
 
 
@@ -40,6 +41,7 @@ const usePhantomDeeplink = () => {
         nonce: bs58.encode(nonce),
         redirect_link: redirectLink,
         payload: bs58.encode(encryptedPayload),
+
       });
 
       const deeplinkUrl = buildUrl('signAndSendTransaction', params);

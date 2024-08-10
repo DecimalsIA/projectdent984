@@ -39,7 +39,8 @@ const buildTransaction = async (
       .instruction()
   );
 
-  transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
+  const { blockhash } = await connection.getLatestBlockhash();
+  transaction.recentBlockhash = blockhash;
   transaction.feePayer = senderPublicKey;
 
   const serializedTransaction = transaction.serialize({

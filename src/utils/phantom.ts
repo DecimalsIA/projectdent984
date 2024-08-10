@@ -64,6 +64,10 @@ export async function generatePhantomDeeplink(
   const payload = {
     transaction: bs58.encode(serializedTransaction),
     session,
+    sendOptions: {
+      skipPreflight: true,          // Omitir la simulación preflight
+      preflightCommitment: 'none',  // Deshabilitar la simulación
+    }
   };
 
   // Encriptar el payload
@@ -76,6 +80,8 @@ export async function generatePhantomDeeplink(
     redirect_link: `https://pambii-front.vercel.app/api/phantom-redirect-sing?userId=${userId}`,
     payload: bs58.encode(encryptedPayload),
     skip_preflight: 'true', // Añadir este parámetro
+    preflight_commitment: 'none', // Deshabilitar la simulación
+    disable_account_verification: 'true',
   });
 
   // Construir y devolver el URL del deeplink para Phantom Wallet

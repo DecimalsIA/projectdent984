@@ -56,6 +56,7 @@ export async function buildTransaction(
   transaction.add(instruction);
   transaction.feePayer = userPublicKey;
 
+
   // Obtén el último blockhash para la transacción
   try {
     const { blockhash } = await connection.getLatestBlockhash();

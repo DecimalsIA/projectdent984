@@ -27,7 +27,7 @@ const TransactionComponent: React.FC = () => {
       const programId = new PublicKey(
         '3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe',
       );
-      const amount = 1000000; // Cantidad de tokens SPL (en la mínima unidad)
+      const amount = 100; // Cantidad de tokens SPL (en la mínima unidad)
 
       const serializedTransaction = await buildTransaction(
         senderPublicKey,

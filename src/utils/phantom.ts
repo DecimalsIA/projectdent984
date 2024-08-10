@@ -66,7 +66,6 @@ export async function generatePhantomDeeplink(
     session,
     sendOptions: {
       skipPreflight: true,          // Omitir la simulación preflight
-      preflightCommitment: 'none',  // Deshabilitar la simulación
     }
   };
 

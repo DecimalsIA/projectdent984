@@ -27,12 +27,11 @@ const usePhantomDeeplink = () => {
       const payload = {
         transaction,
         session,
+        sendOptions: {
+          skipPreflight: true,          // Omitir la simulación preflight
+        }
       };
 
-
-
-      // Usa la función encryptPayload para cifrar el payload
-      //const { nonce, encryptedPayload } = encryptPayload({ payload, sharedSecret });
       const sharedSecretkey = bs58.decode(sharedSecret);
       const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecretkey);
 

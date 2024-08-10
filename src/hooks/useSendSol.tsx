@@ -1,10 +1,12 @@
-import { useCallback } from 'react';
-import { createTransferTransaction } from '@/utils/transactions/createTransferTransaction';
-import { signAndSendTransaction } from '@/utils/signAndSendTransaction';
 import { PublicKey } from '@solana/web3.js';
+import {
+  createTransferTransaction,
+  TransferParams,
+} from '@/utils/transactions/createTransferTransaction';
+import { signAndSendTransaction } from '@/utils/signAndSendTransaction';
+import { useCallback } from 'react';
 
 export const useSendSol = () => {
-  // Función para generar el deeplink
   const getSendSolUrl = useCallback(
     async (
       userId: string,
@@ -13,15 +15,18 @@ export const useSendSol = () => {
       try {
         const toPubkey = new PublicKey(to);
 
-        // Aquí solo pasas toPubkey y lamports, sin fromPubkey
-        const sendSolUrl = await signAndSendTransaction(userId, () =>
-          createTransferTransaction({
-            toPubkey,
-            lamports,
-            userId,
-          }),
-        );
+        // Crear los parámetros de transacción sin 'fromPubkey'
+        const transferParams: TransferParams = {
+          toPubkey,
+          lamports,
+        };
 
+        // Pasar una función que crea la transacción
+        const sendSolUrl = await signAndSendTransaction(
+          userId,
+          async (params: TransferParams) => createTransferTransaction(params),
+          transferParams,
+        );
         return sendSolUrl; // Retorna la URL generada
       } catch (error) {
         console.log('Error al generar la url :', error);

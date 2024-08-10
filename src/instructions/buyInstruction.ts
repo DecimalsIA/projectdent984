@@ -9,7 +9,7 @@ const contractPublicKey = new PublicKey('3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYy
 function encodeBuyInstruction(amount: number): Buffer {
   const amountBuffer = Buffer.alloc(8);
   new BN(amount).toArrayLike(Buffer, 'le', 8).copy(amountBuffer);
-  return Buffer.concat([Buffer.from([0]), amountBuffer]); // `0` es un código para el método `buy`
+  return Buffer.concat([Buffer.from([1]), amountBuffer]); // `0` es un código para el método `buy`
 }
 
 // Construir la instrucción para el método `buy`

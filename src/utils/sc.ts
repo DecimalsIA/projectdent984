@@ -47,32 +47,6 @@ export async function buildTransaction(
       );
       break;
 
-    // Descomenta y agrega otros casos según sea necesario
-    // case 'cobrar':
-    //   if (!params.userAccount || !params.splToken || !params.contract || params.amount === undefined) {
-    //     throw new Error('Faltan parámetros requeridos para la instrucción de cobrar');
-    //   }
-    //   instruction = await buildCobrarInstruction(
-    //     userPublicKey,
-    //     params.userAccount,
-    //     params.splToken,
-    //     params.contract,
-    //     params.amount
-    //   );
-    //   break;
-
-    // case 'withdrawAll':
-    //   if (!params.ownerToken || !params.splToken || !params.contract) {
-    //     throw new Error('Faltan parámetros requeridos para la instrucción de retirar todo (withdrawAll)');
-    //   }
-    //   instruction = await buildWithdrawAllInstruction(
-    //     userPublicKey,
-    //     params.ownerToken,
-    //     params.splToken,
-    //     params.contract
-    //   );
-    //   break;
-
     default:
       throw new Error('Tipo de instrucción inválido');
   }

@@ -28,6 +28,8 @@ const usePhantomDeeplink = () => {
         session,
       });
 
+
+
       // Usa la función encryptPayload para cifrar el payload
       const { nonce, encryptedPayload } = encryptPayload({ payload, sharedSecret });
 

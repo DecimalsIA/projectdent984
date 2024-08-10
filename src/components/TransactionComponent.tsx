@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Connection, PublicKey } from '@solana/web3.js';
 import usePhantomDeeplink from '../hooks/usePhantomDeeplink';
 import { buildTransaction } from '../utils/buildTransaction';
+import bs58 from 'bs58';
 
 const TransactionComponent: React.FC = () => {
   const { deeplink, generateDeeplink } = usePhantomDeeplink();
@@ -49,8 +51,9 @@ const TransactionComponent: React.FC = () => {
         '43WSmevaVx8o4uHt7ZByrtqdJYFHSuB6TY2ZhG8SBDRBBt6p898RXW3uP1i895kiscfFHioQhPzYC3ZMZzy6ojrNRsB1rRfhg2YWA9XceW4qVU5wqmcFuD7MEhuViZdozmRjfirjVUn8ySgA2tzWDgiXbQJ2RPdxZK2kU5ehcUSzRnMJfYh8rcWjrXQU6rcjnPxj3aHwvd3NkM9dwaAWXvwUHvuzHrfyFDcZrWT9Fr';
       const redirectLink =
         'https://pambii-front.vercel.app/api/phantom-redirect';
-      const dappEncryptionPublicKey =
-        'GrLco62VByQdt4x6xPC2vtBrtgFVpKSQ6zvuAK1r9SWC';
+      const dappEncryptionPublicKey = bs58.encode(
+        Buffer.from('GrLco62VByQdt4x6xPC2vtBrtgFVpKSQ6zvuAK1r9SWC'),
+      );
 
       generateDeeplink({
         transaction,
@@ -62,7 +65,7 @@ const TransactionComponent: React.FC = () => {
 
       setDeeplinkGenerated(true); // Marca que el deeplink ha sido generado
     }
-  }, [transaction, deeplinkGenerated]); // Solo se ejecuta cuando `transaction` cambia y el deeplink no ha sido generado
+  }, [transaction, deeplinkGenerated]); // Solo se ejecuta cuando `transaction` cambie y el deeplink no ha sido generado
 
   return (
     <div>

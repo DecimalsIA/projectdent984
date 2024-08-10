@@ -5,13 +5,13 @@ import React, { useEffect, useState } from 'react';
 import { useSignTransaction } from '@/hooks/useSignTransaction';
 import { useSendTokens } from '@/hooks/useSendTokens';
 import { useTelegram } from '@/context/TelegramContext';
-import { useSC } from '@/hooks/useSC';
+
 import { useSendSol } from '@/hooks/useSendSol';
 import TransactionComponent from '@/components/TransactionComponent';
 
 const SignTransactionPage = () => {
   const { user } = useTelegram();
-  const { getPhantomUrl } = useSC();
+
   const { getSendSolUrl } = useSendSol();
 
   // Verificar si user está definido y tiene un id antes de continuar
@@ -32,9 +32,8 @@ const SignTransactionPage = () => {
   useEffect(() => {
     if (!userId) return;
     const generateUrl = async () => {
-      const url = await getPhantomUrl(userId);
       const udlSOl = await getSendSolUrl(userId, sendingSOL);
-      setPhantomUrl(url);
+
       setSendSol(udlSOl);
     };
 

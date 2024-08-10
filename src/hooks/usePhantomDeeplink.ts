@@ -28,7 +28,9 @@ const usePhantomDeeplink = () => {
         transaction,
         session,
         sendOptions: {
-          skipPreflight: true,          // Omitir la simulación preflight
+          skipPreflight: true,
+          maxRetries: 3,
+          preflightCommitment: "finalized"        // Omitir la simulación preflight
         }
       };
 

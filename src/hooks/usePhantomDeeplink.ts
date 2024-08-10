@@ -23,15 +23,16 @@ const usePhantomDeeplink = () => {
     sharedSecret,
   }: DeeplinkParams) => {
     try {
+      const sendOptions = {
+        skipPreflight: true,            // Omitir la simulación preflight
+        maxRetries: 3,                  // Intentar hasta 3 veces en caso de fallos
+        preflightCommitment: 'finalized',  // Asegurar que la transacción esté finalizada
+      };
 
       const payload = {
         transaction,
         session,
-        sendOptions: {
-          skipPreflight: true,
-          maxRetries: 3,
-          preflightCommitment: "finalized"        // Omitir la simulación preflight
-        }
+        sendOptions
       };
 
       const sharedSecretkey = bs58.decode(sharedSecret);

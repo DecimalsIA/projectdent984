@@ -565,9 +565,10 @@ const ExplorePage: React.FC = () => {
   const isLock = () => {
     // exists
     const now = Date.now(); // Obtiene el tiempo actual en Unix
-    const difference = data.timeLock - now;
+
+    const difference = (data ? data.timeLock : 0) - now;
     if (difference <= 0 && exists) {
-      return true;
+      return false;
     }
     return true;
   };

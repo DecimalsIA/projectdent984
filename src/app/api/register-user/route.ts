@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
       nomTlram,
       userName,
       language_code,
-      idWallet: '',
       registeredAt: Math.floor(Date.now() / 1000),
       lastActivity: Math.floor(Date.now() / 1000),
       timestamp: Math.floor(Date.now() / 1000),

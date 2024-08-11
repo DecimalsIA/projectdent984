@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
       const payout = calculatePayout(valuePambii, result);
       const { exp: experience, win, loss } = calculateExperience(result, mapNumber)
 
-      const pool = { userId, valuePambii, payout, mapNumber, signature, timestamp: new Date().getTime(), experience, win, loss }
+      const pool = { userId, valuePambii, payout, mapNumber, signature, timestamp: new Date().getTime(), experience, win, loss, result }
 
       const hash = await hashName(JSON.stringify(pool))
 
@@ -123,7 +123,7 @@ function secureRandom(): number {
 function calculateExperience(multiplier: string, mapNumber: number): any {
   let exp = 0;
   let win = 0;
-  let loss = 0;
+  let loss = 1;
   switch (mapNumber) {
     case 1:
       if (multiplier == 'x2' || multiplier == 'x1.5') {

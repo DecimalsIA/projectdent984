@@ -163,8 +163,8 @@ export async function GET(request: NextRequest) {
 
       }
 
-      if (fromTrn === 'explore' && bee) {
-        const explorationPlay: any = await makePostRequest(userId, bee, decodedPayload.signature)
+      if (fromTrn === 'explore' && map) {
+        const explorationPlay: any = await makePostRequest(userId, map, decodedPayload.signature)
         if (explorationPlay.status == 'OK') {
           const data = {
             userId: userId,

@@ -34,6 +34,7 @@ export const useAccountInfoToken = (id: string) => {
           connection,
           associatedTokenAddress,
         );
+        console.log('accountInfo', accountInfo);
 
         // Guardar la información en el estado
         setAccountInfo(accountInfo);

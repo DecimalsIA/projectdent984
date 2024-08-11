@@ -178,9 +178,10 @@ export async function GET(request: NextRequest) {
           console.log('explore', dta);
         }
       }
+      return NextResponse.redirect('https://t.me/PambiiGameBot');
     }
 
-    return NextResponse.redirect('https://t.me/PambiiGameBot');
+
   } catch (error: any) {
     console.error('Error decrypting payload:', error.message);
     return NextResponse.json({ error: 'Failure to decrypt payload', message: error.message }, { status: 500 });

@@ -15,6 +15,7 @@ const slideData = [
     image: '/assets/bee-characters/fire.png',
     title: 'Abejitachula',
     type: 'fire',
+    id: 1,
     powers: [
       {
         power: 'Fire',
@@ -97,6 +98,7 @@ const slideData = [
     image: '/assets/bee-characters/rock.png',
     title: 'Carnero',
     type: 'rock',
+    id: 2,
     powers: [
       {
         power: 'Rock',
@@ -534,6 +536,8 @@ const ExplorePage: React.FC = () => {
                 spl={bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35}
                 userid={userId}
                 fromTrn="explore"
+                bee={slideData[currentSlide].id}
+                map={bee}
               />
             </CardPambii>
           </div>
@@ -542,7 +546,7 @@ const ExplorePage: React.FC = () => {
         <>
           <ExplorationPlay
             bee={bee}
-            existPay={connectionExists}
+            data={connectionExists.data}
             slideData={slideData[currentSlide]}
             userId={userId}
           />

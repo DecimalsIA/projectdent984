@@ -10,69 +10,27 @@ interface ExplorationPlayProps {
   bee: any;
   userId: string;
   slideData: any;
-  existPay: boolean;
+  data: any;
 }
 
 const ExplorationPlay: React.FC<ExplorationPlayProps> = ({
-  existPay,
   bee,
-  userId,
   slideData,
+  data,
 }) => {
   const [slideType, setSlideType] = useState<string>('');
   const [dificultad, setDificultad] = useState<any>('');
-  const [exploration, setExploration] = useState<any>(null);
 
   const memoizedSlideData = useMemo(() => slideData, [slideData]);
   const memoizedBee = useMemo(() => bee, [bee]);
-
-  const notify = useCallback(() => {
-    toast.success('Hello, you Bee Currently under exploration');
-  }, []);
-
-  const validExplorer = useCallback(async (bee: any) => {
-    const data = JSON.stringify({
-      userId: userId,
-      mapNumber: bee === 'easy' ? 1 : bee === 'middle' ? 2 : 3,
-      valuePambii: bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35,
-      signature: '',
-    });
-
-    const config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: '/api/gexplore',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: data,
-    };
-
-    try {
-      const response = await axios.request(config);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }, []);
+  console.log('data', data);
 
   const handleSelectArena = useCallback(
     async (slide: any, bee: any) => {
       console.log('slide', slide, bee);
       setSlideType(slide.type);
       setDificultad(bee);
-      notify();
-      try {
-        let data = exploration; // Mantén el estado actual
-        if (existPay) {
-          data = await validExplorer(bee); // Solo llama a validExplorer si existPay es true
-        }
-        console.log(data);
-        setExploration(data);
-      } catch (error) {
-        console.error('Error fetching explorer data:', error);
-      }
+      // notify();
     },
     [], // Agregué existPay y exploration como dependencias para asegurar la coherencia
   );
@@ -91,8 +49,8 @@ const ExplorationPlay: React.FC<ExplorationPlayProps> = ({
           <ExplorationCardGame
             bee={slideType}
             dificultad={dificultad}
-            payout={exploration?.payout}
-            multiplier={exploration?.multiplier}
+            payout={data.explorationPlay.payout}
+            multiplier={data.explorationPlay.multiplier}
           />
         </div>
       </CardPambii>

@@ -8,8 +8,16 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 
-const useVerifyPayment = (userId: string) => {
-  const [exists, setExists] = useState(false);
+interface PaymentData {
+  exists: boolean;
+  data: any | null;
+}
+
+const useVerifyPayment = (userId: string): PaymentData => {
+  const [paymentData, setPaymentData] = useState<PaymentData>({
+    exists: false,
+    data: null,
+  });
 
   useEffect(() => {
     if (!userId) return;
@@ -24,20 +32,22 @@ const useVerifyPayment = (userId: string) => {
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
         const data = doc.data();
-        if (data.state === true) {
-          setExists(true);
-        } else {
-          setExists(false);
-        }
+        setPaymentData({
+          exists: data.state === true,
+          data: data,
+        });
       } else {
-        setExists(false);
+        setPaymentData({
+          exists: false,
+          data: null,
+        });
       }
     });
 
     return () => unsubscribe();
   }, [userId]);
 
-  return exists;
+  return paymentData;
 };
 
 export default useVerifyPayment;

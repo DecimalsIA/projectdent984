@@ -9,8 +9,8 @@ import HiveContainer from '@/components/HiveContainer';
 import useVerifyBee from '@/hooks/useVerifyBee';
 import { useRouter } from 'next/navigation';
 import { useAccountInfoToken } from '@/hooks/useAccountInfoToken';
-import { ButtonPambii } from 'pambii-devtrader-front';
-import Image from 'next/image';
+
+import NoSaldo from '@/components/NoSaldo';
 const SignTransactionPage = () => {
   const router = useRouter();
   const { user } = useTelegram();
@@ -18,7 +18,6 @@ const SignTransactionPage = () => {
   const verifyBee = useVerifyBee(userId);
   const { accountInfo } = useAccountInfoToken(userId);
   const slpValue = Number(accountInfo?.amount.toString());
-  console.log(slpValue);
 
   console.log(verifyBee);
   useEffect(() => {
@@ -45,35 +44,7 @@ const SignTransactionPage = () => {
                 fromTrn="buyBee"
               />
             ) : (
-              <>
-                <a
-                  href="https://phantom.app/ul/browse/https://raydium.io/swap/?inputMint=sol&outputMint=8dGUaPCybF4e2EbqtKcDsvW74shNTsabd5M6z6zG9BN2&ref=https://raydium.io/swap/?inputMint=sol%26outputMint=8dGUaPCybF4e2EbqtKcDsvW74shNTsabd5M6z6zG9BN2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <div className="hivecontainer flex">
-                    <div className="clickTheHive flex-wrap justify-center text-center w-[280px]">
-                      You do not have a balance in PAMBII, you can buy where the
-                      button
-                    </div>
-                  </div>
-                  <ButtonPambii
-                    color="white"
-                    bg="#131e39"
-                    className="mb-2"
-                    icon={
-                      <Image
-                        src="https://www.pambi.tech/_next/static/media/raydium.3e1cb57d.svg"
-                        alt="Select arena"
-                        width={24}
-                        height={24}
-                      />
-                    }
-                  >
-                    buy Pambii on Raydium
-                  </ButtonPambii>{' '}
-                </a>
-              </>
+              <NoSaldo id={userId} />
             )}
           </div>
         </>

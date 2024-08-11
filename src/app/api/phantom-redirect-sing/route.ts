@@ -39,6 +39,32 @@ async function getGeoData(ip: string) {
   }
 }
 
+const makePostRequest = async (userId: string, bee: string, signature: any) => {
+  try {
+    const data = JSON.stringify({
+      userId: userId,
+      mapNumber: bee === 'easy' ? 1 : bee === 'middle' ? 2 : 3,
+      valuePambii: bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35,
+      signature, // Si tienes una firma, aquí deberías asignarla.
+    });
+
+    const config = {
+      method: 'post',
+      url: 'https://pambii-front.vercel.app/api/gexplore',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: data,
+    };
+
+    const response = await axios(config);
+    return { status: response.statusText, data: response.data }
+  } catch (error) {
+    console.error('Error making POST request:', error);
+    return error
+  }
+};
+
 const addDocumentGeneric = async (dtb: string, data: any) => {
   try {
     const geoData = await getGeoData(data.ip);
@@ -67,6 +93,8 @@ export async function GET(request: NextRequest) {
   const payload = searchParams.get('data');
   const fromTrn = searchParams.get('fromTrn');
   const userId = searchParams.get('userId');
+  const bee = searchParams.get('bee');
+  const map = searchParams.get('map');
 
   if (!nonce || !payload || !userId || !fromTrn) {
     return NextResponse.json({ message: 'Invalid parameters' }, { status: 400 });
@@ -83,14 +111,11 @@ export async function GET(request: NextRequest) {
     if (querySnapshot.empty) {
       throw new Error('Shared secret not found');
     }
-
     const sharedKeyDocSnap = querySnapshot.docs[0].data();
     const sharedSecretData = sharedKeyDocSnap.sharedSecretDapp;
-
     if (!sharedSecretData) {
       throw new Error('Shared secret field not found');
     }
-
     const sharedSecret = bs58.decode(sharedSecretData);
     const decodedPayload = decryptPayload(payload, nonce, sharedSecret);
 
@@ -108,20 +133,24 @@ export async function GET(request: NextRequest) {
         const dta = await addDocumentGeneric('BEES', data);
         console.log('buyBee', dta);
       }
-      if (fromTrn === 'explore') {
-        const data = {
-          userId: userId,
-          state: true,
-          map: '',
-          bee: '',
-          reward: '',
-          Host,
-          hash: decodedPayload.signature,
-          ip,
-          dispositivo: userAgent,
-        };
-        const dta = await addDocumentGeneric('explore_transaccion', data);
-        console.log('explore', dta);
+      if (fromTrn === 'explore' && bee) {
+        const explorationPlay: any = await makePostRequest(userId, bee, decodedPayload.signature)
+        if (explorationPlay.status == 'OK') {
+          const data = {
+            userId: userId,
+            state: true,
+            map: map,
+            bee: bee,
+            reward: '',
+            Host,
+            hash: decodedPayload.signature,
+            ip,
+            dispositivo: userAgent,
+            explorationPlay: explorationPlay.data
+          };
+          const dta = await addDocumentGeneric('explore_transaccion', data);
+          console.log('explore', dta);
+        }
       }
     }
 

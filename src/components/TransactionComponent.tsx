@@ -15,6 +15,8 @@ interface ExplorationCardGameProps {
   userid: string;
   textButton?: string;
   fromTrn: string;
+  bee?: any;
+  map?: any;
 }
 
 const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
@@ -22,6 +24,8 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
   userid,
   textButton,
   fromTrn,
+  bee,
+  map,
 }) => {
   const { deeplink, generateDeeplink } = usePhantomDeeplink();
   const [transaction, setTransaction] = useState<string | null>(null);
@@ -61,7 +65,9 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
       if (transaction && !deeplinkGenerated) {
         const { session, sharedSecretDapp } = await getDocumentByUserId(userid);
         const { publicKey } = await getDappKeyPair(userid);
-        const redirectLink = `https://pambii-front.vercel.app/api/phantom-redirect-sing?userId=${userid}&fromTrn=${fromTrn}`;
+        const aditionalParamBee = bee && `&bee=${bee}`;
+        const aditionalParamMap = map && `&map=${map}`;
+        const redirectLink = `https://pambii-front.vercel.app/api/phantom-redirect-sing?userId=${userid}&fromTrn=${fromTrn}${aditionalParamBee}${aditionalParamMap}`;
         const dappEncryptionPublicKey = publicKey;
 
         generateDeeplink({
@@ -99,7 +105,7 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
           </ButtonPambii>{' '}
         </a>
       ) : (
-        <p className="center text-cyan-50">Generating...</p>
+        <p className="center text-cyan-50"></p>
       )}
     </div>
   );

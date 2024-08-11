@@ -47,35 +47,6 @@ const updateDocument = async (
   updatedData: any,
 ) => {
   try {
-    /*
-    const demoon = {
-      bee: {
-        image: '/assets/bee-characters/fire.png',
-        title: 'ABEJITACHULS',
-        abilitiesData: [
-          {
-            id: 0,
-            name: '',
-            icon: '',
-          },
-        ],
-        power: [
-          {
-            power: 'Fire',
-            icon: 'fire',
-            value: 1,
-          },
-        ],
-        progress: {
-          level: 1,
-          current: 1,
-          max: 100,
-        },
-        index: 0,
-        id: 'iEpsUdtxGJSs2oUCwPrK',
-      },
-    };*/
-
     const docRef = doc(db, collectionName, documentId);
     await updateDoc(docRef, updatedData);
     console.log('Document successfully updated!');
@@ -89,10 +60,11 @@ const Home = () => {
   const { user } = useTelegram();
   const userid = user?.id.toString() ?? '792924145';
   const { bees, loading } = useGetBee(userid);
+  const { totalPayout, experience } = useGetExplorer(userid);
   //const { accountInfo } = useAccountInfoToken(userid);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nameBee, setNameBee] = useState('Mr Bee');
-  const { totalPayout, experience } = useGetExplorer(userid);
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [currentSlide, setCurrentSlide] = useState<number>(0);
@@ -281,7 +253,13 @@ const Home = () => {
 
                 <div className=" w-full ml-3">
                   <ButtonPambii
-                    onClick={() => alert('Battle button clicked')}
+                    onClick={() =>
+                      alert(
+                        'Withdraw the ' +
+                          formatLargeNumber(totalPayout) +
+                          'PAMBII',
+                      )
+                    }
                     color="#fff"
                     titleText="PAMBII"
                     bg="#FF9E5D"

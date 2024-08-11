@@ -79,7 +79,8 @@ export async function GET(request: NextRequest) {
         sharedSecretDapp: sharedSecretDappBase64 // Almacenar en Base64
       });
 
-      return NextResponse.json({ message: 'Connection to Phantom Wallet successful!', session: connectData.session, publicKey: connectData.public_key });
+      // return NextResponse.json({ message: 'Connection to Phantom Wallet successful!', session: connectData.session, publicKey: connectData.public_key });
+      return NextResponse.redirect('https://t.me/PambiiGameBot');
     }
   } catch (error: any) {
     return NextResponse.json({ message: 'Failed to save data', error: error.message }, { status: 500 });

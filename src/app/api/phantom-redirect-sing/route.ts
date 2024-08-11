@@ -121,14 +121,40 @@ export async function GET(request: NextRequest) {
 
     if (decodedPayload.signature) {
       if (fromTrn === 'buyBee') {
+        const beeData = {
+          image: 'fire',
+          title: 'Abejitachula',
+          type: 'fire',
+          id: 1,
+          powers: [
+            {
+              power: 'Fire',
+              icon: 'fire',
+            },
+          ],
+          habilities: [{
+            name: '',
+            icon: '',
+          },
+
+          ],
+          abilitiesData: [
+            {
+              id: null,
+              name: '',
+              icon: '',
+            },
+          ],
+          userId: userId, // Reemplaza con el ID del usuario correspondiente
+        };
         const data = {
           userId: userId,
           state: true,
-          bee: '',
           hash: decodedPayload.signature,
           Host,
           ip,
           dispositivo: userAgent,
+          bee: beeData
         };
         const dta = await addDocumentGeneric('BEES', data);
         console.log('buyBee', dta);

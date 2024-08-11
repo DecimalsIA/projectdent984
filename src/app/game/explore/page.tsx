@@ -208,13 +208,7 @@ const ExplorePage: React.FC = () => {
   const [abilitiesData, setAbilitiesData] = useState<any>(
     slideData[0].abilitiesData ?? [],
   );
-
   const [currentSlide, setCurrentSlide] = useState<number>(0);
-  const router = useRouter();
-  const handleSelectArena = (type: any) => {
-    router.push('/game/explore/' + type.type);
-    // router.push('/game/explore/buy');
-  };
 
   const handlePrevSlide = () => {
     setCurrentSlide((prevSlide) => {
@@ -235,7 +229,11 @@ const ExplorePage: React.FC = () => {
       return newSlide;
     });
   };
-
+  const router = useRouter();
+  const handleSelectArena = (type: any) => {
+    router.push('/game/explore/' + type.type);
+    // router.push('/game/explore/buy');
+  };
   return (
     <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
       <CardPambii

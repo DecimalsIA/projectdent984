@@ -4,13 +4,15 @@ import ExplorationInfo from '@/components/Exploration';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { CardPambii, SlidePambii } from 'pambii-devtrader-front';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import TransactionComponent from '@/components/TransactionComponent';
 import { useTelegram } from '@/context/TelegramContext';
 import useVerifyPayment from '@/hooks/useVerifyPayment';
 import ExplorationPlay from '@/components/ExplorationPlay';
-const slideData = [
+import useGetBee from '@/hooks/useGetBee';
+import useGetExplorer from '@/hooks/usGetExplorer';
+/*const slideData = [
   {
     image: '/assets/bee-characters/fire.png',
     title: 'Abejitachula',
@@ -426,80 +428,124 @@ const slideData = [
     ],
   },
   // Añade más objetos según sea necesario
-];
+]; */
+type Power = {
+  power: string;
+  powerIcon: JSX.Element;
+};
 
-const badgesData = [
-  {
-    Icon: (
-      <Image
-        src="/assets/bee-characters/icons/dollar.svg"
-        alt="fire"
-        width={18}
-        height={18}
-      />
-    ),
-    text: 'Total wins:',
-    value: '129',
-  },
-  {
-    Icon: (
-      <Image
-        src="/assets/bee-characters/icons/location.svg"
-        alt="fire"
-        width={18}
-        height={18}
-      />
-    ),
-    text: 'Total explorations:',
-    value: '67',
-  },
-  {
-    Icon: (
-      <Image
-        src="/assets/bee-characters/icons/startt.svg"
-        alt="fire"
-        width={18}
-        height={18}
-      />
-    ),
-    text: 'Total experience obtained:',
-    value: '9.850',
-  },
-  {
-    Icon: (
-      <Image
-        src="/assets/bee-characters/icons/dollar.svg"
-        alt="fire"
-        width={18}
-        height={18}
-      />
-    ),
-    text: 'Total PAMBII obtained:',
-    value: '1.200',
-  },
-];
+type Ability = {
+  id: number;
+  name: string;
+  icon: JSX.Element;
+};
+
+type Progress = {
+  // define the properties of progress, e.g.:
+  percentage: number;
+};
+
+type BeeData = {
+  image: string;
+  title: string;
+  abilitiesData: Ability[];
+  power: Power[] | null;
+  progress: Progress;
+  type: string;
+  id: string;
+  index: number;
+};
 
 const ExplorePage: React.FC = () => {
   const { user } = useTelegram();
-
   const userId = user?.id?.toString() ?? '792924145';
-  const [cardType, setCardType] = useState<string>(slideData[0].type ?? '');
-  const [abilitiesData, setAbilitiesData] = useState<any>(
-    slideData[0].abilitiesData ?? [],
-  );
-  //useVerifyPayment
+
+  const { bees } = useGetBee(userId);
+  const { totalRecords, totalPayout, experience, win, loss } =
+    useGetExplorer(userId);
+  const [slideData, setSlideData] = useState<BeeData[]>([]);
+  const [cardType, setCardType] = useState<string>('');
+  const [abilitiesData, setAbilitiesData] = useState<any[]>([]);
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  console.log(totalRecords, totalPayout);
+  const badgesData: any = [
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/win.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Total wins:',
+      value: win,
+    },
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/location.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Total explorations:',
+      value: totalRecords,
+    },
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/startt.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Total experience obtained:',
+      value: experience,
+    },
+    {
+      Icon: (
+        <Image
+          src="/assets/bee-characters/icons/dollar.svg"
+          alt="fire"
+          width={18}
+          height={18}
+        />
+      ),
+      text: 'Total PAMBII obtained:',
+      value: totalPayout,
+    },
+  ];
+
+  useEffect(() => {
+    if (bees && bees.length > 0) {
+      const mappedSlideData: any[] = bees.map((bee, index) => ({
+        image: '/assets/bee-characters/' + bee.image + '.png',
+        title: bee.title ? bee.title.toUpperCase() : 'UNKNOWN',
+        abilitiesData: bee.abilitiesData,
+        power: bee.powers && bee.powers.length > 0 ? bee.powers : null,
+        progress: bee.progress,
+        type: bee.type,
+        id: bee.id,
+        index: index,
+      }));
+
+      setSlideData(mappedSlideData);
+      setCardType(mappedSlideData[0].type);
+      setAbilitiesData(mappedSlideData[0].abilitiesData);
+    }
+  }, [bees]);
 
   const { exists, data } = useVerifyPayment(userId);
   const { bee } = useParams();
-
-  const [currentSlide, setCurrentSlide] = useState<number>(0);
 
   const handlePrevSlide = () => {
     setCurrentSlide((prevSlide) => {
       const newSlide = prevSlide > 0 ? prevSlide - 1 : slideData.length - 1;
       setCardType(slideData[newSlide].type);
       setAbilitiesData(slideData[newSlide].abilitiesData ?? []);
-
       return newSlide;
     });
   };
@@ -513,6 +559,10 @@ const ExplorePage: React.FC = () => {
     });
   };
 
+  if (!bees || slideData.length === 0) {
+    return <div>Loading...</div>; // Muestra un indicador de carga mientras se inicializan los datos
+  }
+
   return (
     <>
       {!exists ? (
@@ -522,14 +572,16 @@ const ExplorePage: React.FC = () => {
               type={cardType}
               className="bg-gray-200 w-full card-pambii-b  text-black flex items-center justify-center"
             >
-              <div className="w-full flex flex-row justify-center flex-wrap gap-1">
-                <SlidePambii
-                  slides={slideData}
-                  className="w-full max-w-md mx-auto"
-                  onPrevSlide={handlePrevSlide}
-                  onNextSlide={handleNextSlide}
-                />
-              </div>
+              {slideData.length > 0 && (
+                <div className="w-full flex flex-row justify-center flex-wrap gap-1">
+                  <SlidePambii
+                    slides={slideData}
+                    className="w-full max-w-md mx-auto"
+                    onPrevSlide={handlePrevSlide}
+                    onNextSlide={handleNextSlide}
+                  />
+                </div>
+              )}
               {badgesData && <ExplorationInfo badges={badgesData} />}
               <TransactionComponent
                 spl={bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35}

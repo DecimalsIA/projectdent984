@@ -1,9 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import bgImgeHome from '../../assets/bg-home.png';
-import imgSprite from '../../assets/fuego1.png';
+
 import {
   BadgePambii,
   BeeIcon,
@@ -22,26 +20,69 @@ import {
 import UserHome from '@/components/UserHome';
 import { useRouter } from 'next/navigation';
 import { useTelegram } from '@/context/TelegramContext';
+import useGetBee from '@/hooks/useGetBee';
+import Image from 'next/image';
+import { useAccountInfoToken } from '@/hooks/useAccountInfoToken';
+import useGetExplorer from '@/hooks/usGetExplorer';
+
+function formatLargeNumber(number: number) {
+  const units = ['B', 'M', 'K'];
+  const thresholds = [1e9, 1e6, 1e3];
+
+  for (let i = 0; i < thresholds.length; i++) {
+    if (number >= thresholds[i]) {
+      const value = (number / thresholds[i]).toFixed(0);
+      return `${value} ${units[i]}`;
+    }
+  }
+
+  return number.toString(); // Return the original number if it's smaller than 1,000
+}
 
 const Home = () => {
   const router = useRouter();
   const { user } = useTelegram();
+  const userid = user?.id.toString() ?? '792924145';
+  const { bees, loading } = useGetBee(userid);
+  const { accountInfo } = useAccountInfoToken(userid);
+  const { totalPayout, experience } = useGetExplorer(userid);
 
-  const slideData = [
-    {
-      image: imgSprite.src,
-      title: 'ABEJITACHULA',
-      power: 'Fire',
-      powerIcon: <ForceIcon />,
-    },
-    {
-      image: imgSprite.src,
-      title: 'BEE NAME 2',
-      power: 'Water',
-      powerIcon: <ForceIcon />,
-    },
-    // Añade más objetos según sea necesario
-  ];
+  const slideData = bees.map((bee, index) => ({
+    image: '/assets/bee-characters/' + bee.image + '.png',
+    title: bee.title ? bee.title.toUpperCase() : 'UNKNOWN',
+    abilitiesData: bee.abilitiesData,
+    power: bee.powers && bee.powers.length > 0 ? bee.powers : null,
+    progress: bee.progress,
+    index: index,
+  }));
+
+  const [abilitiesData, setAbilitiesData] = useState<any>(
+    slideData[0]?.abilitiesData ?? [],
+  );
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+
+  useEffect(() => {
+    if (slideData.length > 0) {
+      setAbilitiesData(slideData[currentSlide]?.abilitiesData ?? []);
+    }
+  }, [currentSlide, slideData]);
+
+  const handlePrevSlide = () => {
+    setCurrentSlide((prevSlide) => {
+      const newSlide = prevSlide > 0 ? prevSlide - 1 : slideData.length - 1;
+      setAbilitiesData(slideData[newSlide]?.abilitiesData ?? []);
+      return newSlide;
+    });
+  };
+
+  const handleNextSlide = () => {
+    setCurrentSlide((prevSlide) => {
+      const newSlide = prevSlide < slideData.length - 1 ? prevSlide + 1 : 0;
+      setAbilitiesData(slideData[newSlide]?.abilitiesData ?? []);
+      return newSlide;
+    });
+  };
+
   const tabs = [
     {
       title: 'Ranking',
@@ -60,7 +101,6 @@ const Home = () => {
       className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4"
       style={{ backgroundImage: 'url(' + bgImgeHome.src + ')' }}
     >
-      {/* Top Navigation */}
       <div className="mb-110">
         <div className="w-full">
           <TabsPambii
@@ -69,46 +109,55 @@ const Home = () => {
             bg="#2a2a2a"
             className="mt-4 mb-8"
           />
-
-          <SlidePambii
-            slides={slideData}
-            className="w-full mt-[10px] max-w-md mx-auto"
-          />
+          {!loading && slideData.length > 0 && (
+            <SlidePambii
+              slides={slideData}
+              className="w-full mt-[10px] max-w-md mx-auto"
+              onPrevSlide={handlePrevSlide}
+              onNextSlide={handleNextSlide}
+            />
+          )}
 
           <div>
-            <CardPambii className="beeCard w-full mt-2">
+            <CardPambii className="beeCard w-full mt-2 min-w-[381px] ">
               <UserHome userName={`${user?.first_name} ${user?.last_name}`} />
-              <div className="flex space-x-2 w-full">
-                <BadgePambii
-                  icon={<FireIcon className="w-5 h-5" color="red" />}
-                  number={250}
-                  className="bg-border w-full badge"
-                />
-                <BadgePambii
-                  icon={<FireIcon className="w-5 h-5" />}
-                  number={150}
-                  className="bg-border w-full badge"
-                />
-                <BadgePambii
-                  icon={<FireIcon className="w-5 h-5" />}
-                  number={350}
-                  className="bg-border w-full badge"
-                />
-                <BadgePambii
-                  icon={<FireIcon className="w-5 h-5" />}
-                  number={450}
-                  className="bg-border w-full badge"
-                />
-              </div>
-              <div className="w-full border-b-m">
-                <ProgressBarPambii
-                  level={9}
-                  current={2800}
-                  max={3000}
-                  barColor="bg-green-500 glow"
-                  backgroundColor="bg-gray-700"
-                />
-              </div>
+              {slideData[currentSlide]?.power && (
+                <div className="flex  overflow-x-auto max-w-full min-w-[320px]">
+                  <div className="flex flex-wrap space-x-1 gap-2 ">
+                    {slideData[currentSlide]?.power?.map((power, index) => (
+                      <BadgePambii
+                        key={index}
+                        icon={
+                          <Image
+                            src={
+                              '/assets/bee-characters/icons/' +
+                              power.power.toLowerCase() +
+                              '.png'
+                            }
+                            alt={power.power}
+                            width={20}
+                            height={20}
+                            id={index.toString()}
+                          />
+                        }
+                        number={power.value}
+                        className="bg-border flex-grow badge"
+                      />
+                    ))}{' '}
+                  </div>
+                </div>
+              )}
+              {slideData[currentSlide]?.progress && (
+                <div className="w-full border-b-m">
+                  <ProgressBarPambii
+                    level={slideData[currentSlide].progress.level}
+                    current={experience}
+                    max={slideData[currentSlide].progress.level * 100000}
+                    barColor="bg-green-500 glow"
+                    backgroundColor="bg-gray-700"
+                  />
+                </div>
+              )}
 
               <div className="flex justify-between items-center w-full text-xs">
                 <div className="w-full mr-3">
@@ -118,13 +167,12 @@ const Home = () => {
                     bg="#52BE97"
                     icon={<FireIcon style={{ color: '#fff' }} />}
                   >
-                    457
+                    1
                   </ButtonPambii>
                 </div>
                 <div className="w-full mt-[10px]">
-                  {' '}
                   <ButtonPambii
-                    onClick={() => alert('Battle button clicked')}
+                    onClick={() => alert(slideData[currentSlide].title)}
                     color="#fff"
                     className="fz15"
                     icon={<PencilIcon />}
@@ -141,7 +189,7 @@ const Home = () => {
                     bg="#FF9E5D"
                     icon={<IconPambii />}
                   >
-                    8000
+                    {formatLargeNumber(totalPayout)}
                   </ButtonPambii>
                 </div>
               </div>

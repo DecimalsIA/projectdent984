@@ -64,11 +64,14 @@ export async function POST(req: NextRequest) {
 
         const result = calculateResult(mapNumber);
         const payout = calculatePayout(valuePambii, result);
+        const { exp: experience, win, loss } = calculateExperience(result, mapNumber)
+
+        // calculateResult
 
         const balanceWallet = updatedBalance[0].balance;
         await updateDocument('WALLET', idWallet, { balance: balanceWallet + payout, timeUpdate: new Date().getTime() });
 
-        const pool = { userId, valuePambii, payout, mapNumber, signature, timestamp: new Date().getTime() }
+        const pool = { userId, valuePambii, payout, mapNumber, signature, timestamp: new Date().getTime(), experience, win, loss }
 
         const hash = await hashName(JSON.stringify(pool))
 
@@ -79,6 +82,9 @@ export async function POST(req: NextRequest) {
           valuePambii: valuePambii,
           multiplier: result,
           payout: payout,
+          experience,
+          win,
+          loss,
           hash
         }, { status: 200 });
 
@@ -99,8 +105,7 @@ async function hashName(sms: any): Promise<string> {
 
 async function getUserStatus(userId: string): Promise<UserStatus> {
   const users = await getDocuments(DB, 'idUser', userId);
-  console.log('userId', userId)
-  console.log('users', users)
+
 
   if (users && users.length > 0) {
     const user = users[0] as UserDocument;
@@ -124,6 +129,43 @@ function secureRandom(): number {
   return combined / 0xffffffffffffffff;
 }
 
+// experience 9,850   12500   18500
+
+// multiplier
+
+function calculateExperience(multiplier: string, mapNumber: number): any {
+  let exp = 0;
+  let win = 0;
+  let loss = 0;
+  switch (mapNumber) {
+    case 1:
+      if (multiplier == 'x2' || multiplier == 'x1.5') {
+        exp = 9850;
+        win = 1
+      }
+
+      break;
+    case 2:
+      if (multiplier == 'x4' || multiplier == 'x2') {
+        exp = 12500;
+        win = 1
+      }
+      break;
+    case 3:
+      if (multiplier == 'x10' || multiplier == 'x5') {
+        exp = 18500;
+        win = 1
+      }
+      break;
+
+    default:
+      exp = 0
+      win = 0
+      loss = 1
+      break;
+  }
+  return { exp, win, loss }
+}
 function calculateResult(mapNumber: number): string {
   const randomValue = secureRandom();
   if (mapNumber === 1) {

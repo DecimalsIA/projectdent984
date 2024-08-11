@@ -6,6 +6,7 @@ import { GrMoney } from 'react-icons/gr';
 import { GiReceiveMoney, GiTakeMyMoney } from 'react-icons/gi';
 import { useAccountInfoToken } from '@/hooks/useAccountInfoToken';
 import { useTelegram } from '@/context/TelegramContext';
+import useGetExplorer from '@/hooks/usGetExplorer';
 function formatLargeNumber(number: number) {
   const units = ['B', 'M', 'K'];
   const thresholds = [1e9, 1e6, 1e3];
@@ -28,6 +29,7 @@ const WalletPage: React.FC = () => {
     alert(`Clicked on ${name}`);
   };
   const { accountInfo } = useAccountInfoToken(userid);
+  const { totalPayout, experience } = useGetExplorer(userid);
   const beeData = [
     {
       name: 'BALANCE PAMBII',
@@ -37,7 +39,7 @@ const WalletPage: React.FC = () => {
     },
     {
       name: 'AVAILABLE FOR WITHDRAWAL',
-      text: '0 PAMBI',
+      text: totalPayout + ' PAMBI',
       icon: <GiReceiveMoney />,
       onClick: () => handleClick('LANGUAJE'),
     },

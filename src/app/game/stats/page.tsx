@@ -1,5 +1,8 @@
 'use client';
 
+import { useTelegram } from '@/context/TelegramContext';
+import useGetBee from '@/hooks/useGetBee';
+import useGetExplorer from '@/hooks/usGetExplorer';
 import { useRouter } from 'next/navigation';
 import {
   BeeIcon,
@@ -10,23 +13,22 @@ import {
 } from 'pambii-devtrader-front';
 
 const StatsPage: React.FC = () => {
-  const handleClick = (name: string) => {
-    alert(`Clicked on ${name}`);
-  };
-  const beeData = [
-    {
-      name: 'ABEJITACHULA',
-      level: 9,
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('ABEJITACHULA'),
-    },
-    {
-      name: 'BEE NAME',
-      level: 7,
-      icon: <BeeIcon className="text-orange-500" />,
-      onClick: () => handleClick('BEE NAME'),
-    },
-  ];
+  const { user } = useTelegram();
+  const userid = user?.id.toString() ?? '792924145';
+  const { bees, loading } = useGetBee(userid);
+  const { totalPayout, experience } = useGetExplorer(userid);
+  const beeData: any = bees.map((bee, index) => ({
+    image: '/assets/bee-characters/' + bee.image + '.png',
+    name: bee.title ? bee.title.toUpperCase() : 'UNKNOWN',
+    abilitiesData: bee.abilitiesData,
+    power: bee.powers && bee.powers.length > 0 ? bee.powers : null,
+    progress: bee.progress,
+    index: index,
+    id: bee.id,
+    level: 1,
+    icon: <BeeIcon className="text-orange-500" />,
+  }));
+
   const tabs = [
     {
       title: 'Ranking',
@@ -52,7 +54,7 @@ const StatsPage: React.FC = () => {
           className="mt-4 mb-3"
         />
       </div>
-      <TablePambii className="w-full" data={beeData} />
+      {beeData && <TablePambii className="w-full" data={beeData} />}
     </div>
   );
 };

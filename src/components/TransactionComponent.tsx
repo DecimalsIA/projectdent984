@@ -61,7 +61,7 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
       if (transaction && !deeplinkGenerated) {
         const { session, sharedSecretDapp } = await getDocumentByUserId(userid);
         const { publicKey } = await getDappKeyPair(userid);
-        const redirectLink = `https://pambii-front.vercel.app/api/phantom-redirect-sing?userId=${userid}&fromTrn${fromTrn}`;
+        const redirectLink = `https://pambii-front.vercel.app/api/phantom-redirect-sing?userId=${userid}&fromTrn=${fromTrn}`;
         const dappEncryptionPublicKey = publicKey;
 
         generateDeeplink({

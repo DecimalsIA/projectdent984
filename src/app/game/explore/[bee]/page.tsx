@@ -489,8 +489,8 @@ const ExplorePage: React.FC = () => {
   );
   //useVerifyPayment
 
-  const connectionExists = useVerifyPayment(userId);
-
+  const { exists, data } = useVerifyPayment(userId);
+  console.log(exists);
   const { bee } = useParams();
 
   const [currentSlide, setCurrentSlide] = useState<number>(0);
@@ -516,7 +516,7 @@ const ExplorePage: React.FC = () => {
 
   return (
     <>
-      {!connectionExists ? (
+      {!exists ? (
         <>
           <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
             <CardPambii
@@ -546,7 +546,7 @@ const ExplorePage: React.FC = () => {
         <>
           <ExplorationPlay
             bee={bee}
-            data={connectionExists.data}
+            data={data}
             slideData={slideData[currentSlide]}
             userId={userId}
           />

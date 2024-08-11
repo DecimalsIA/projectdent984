@@ -3,7 +3,14 @@
 import ExplorationInfo from '@/components/Exploration';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { ButtonPambii, CardPambii, SlidePambii } from 'pambii-devtrader-front';
+import {
+  ButtonPambii,
+  CardPambii,
+  RankingIcon,
+  SlidePambii,
+  StatsIcon,
+  TabsPambii,
+} from 'pambii-devtrader-front';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import TransactionComponent from '@/components/TransactionComponent';
@@ -576,11 +583,28 @@ const ExplorePage: React.FC = () => {
   if (!bees || slideData.length === 0) {
     return <div>Loading...</div>; // Muestra un indicador de carga mientras se inicializan los datos
   }
-
+  const tabs = [
+    {
+      title: 'Select Arena',
+      icon: <RankingIcon />,
+      onClick: () => router.push('/game/explore/easy'),
+    },
+    {
+      title: 'Explorations',
+      icon: <StatsIcon />,
+      onClick: () => router.push('/game/explore/my-explorations'),
+    },
+  ];
   return (
     <>
       <>
-        <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+        <div className=" w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+          <TabsPambii
+            tabs={tabs}
+            mode="background"
+            bg="#2a2a2a"
+            className="mt-4 mb-2 w-full"
+          />
           <CardPambii
             type={cardType}
             className="bg-gray-200 w-full card-pambii-b  text-black flex items-center justify-center"

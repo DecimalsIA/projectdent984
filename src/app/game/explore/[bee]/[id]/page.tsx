@@ -3,7 +3,13 @@
 import ExplorationInfo from '@/components/Exploration';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { CardPambii, SlidePambii } from 'pambii-devtrader-front';
+import {
+  CardPambii,
+  RankingIcon,
+  SlidePambii,
+  StatsIcon,
+  TabsPambii,
+} from 'pambii-devtrader-front';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import TransactionComponent from '@/components/TransactionComponent';
@@ -53,6 +59,7 @@ const ExplorePage: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [lockState, setLockState] = useState(false);
   const { bee, id } = useParams();
+  const router = useRouter();
 
   const { exists, data } = useVerifyPayment(userId);
   useEffect(() => {
@@ -87,14 +94,34 @@ const ExplorePage: React.FC = () => {
   if (!bees || slideData.length === 0) {
     return <div>Loading...</div>; // Muestra un indicador de carga mientras se inicializan los datos
   }
+  const tabs = [
+    {
+      title: 'Select Arena',
+      icon: <RankingIcon />,
+      onClick: () => router.push('/game/explore/easy'),
+    },
+    {
+      title: 'Explorations',
+      icon: <StatsIcon />,
+      onClick: () => router.push('/game/explore/my-explorations'),
+    },
+  ];
 
   return (
-    <ExplorationPlay
-      bee={bee}
-      data={data}
-      slideData={slideData[currentSlide]}
-      userId={userId}
-    />
+    <>
+      <TabsPambii
+        tabs={tabs}
+        mode="background"
+        bg="#2a2a2a"
+        className="space-x-2"
+      />
+      <ExplorationPlay
+        bee={bee}
+        data={data}
+        slideData={slideData[currentSlide]}
+        userId={userId}
+      />
+    </>
   );
 };
 

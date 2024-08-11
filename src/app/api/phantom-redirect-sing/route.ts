@@ -158,7 +158,9 @@ export async function GET(request: NextRequest) {
         };
         const dta = await addDocumentGeneric('BEES', data);
         console.log('buyBee', dta);
+        return NextResponse.redirect('https://t.me/PambiiGameBot');
       }
+
       if (fromTrn === 'explore' && bee) {
         const explorationPlay: any = await makePostRequest(userId, bee, decodedPayload.signature)
         if (explorationPlay.status == 'OK') {
@@ -178,9 +180,8 @@ export async function GET(request: NextRequest) {
           console.log('explore', dta);
         }
       }
-      return NextResponse.redirect('https://t.me/PambiiGameBot');
-    }
 
+    }
 
   } catch (error: any) {
     console.error('Error decrypting payload:', error.message);

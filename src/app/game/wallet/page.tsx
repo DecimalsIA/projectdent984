@@ -29,7 +29,7 @@ const WalletPage: React.FC = () => {
     alert(`Clicked on ${name}`);
   };
   const { accountInfo } = useAccountInfoToken(userid);
-  const { totalPayout, experience } = useGetExplorer(userid);
+  const { totalPayout } = useGetExplorer(userid);
   const beeData = [
     {
       name: 'BALANCE PAMBII',

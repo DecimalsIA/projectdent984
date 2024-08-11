@@ -2,6 +2,8 @@ import Image from 'next/image';
 import styles from './ExplorationCard.module.css';
 import Countdown from './Countdown';
 import TransactionComponent from './TransactionComponent';
+import { ButtonPambii } from 'pambii-devtrader-front';
+import { useRouter } from 'next/navigation';
 interface ExplorationCardGameProps {
   dificultad: string;
   bee: string;
@@ -21,7 +23,8 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
   timeLock,
   updateAt,
 }) => {
-  console.log(data);
+  const router = useRouter();
+
   return (
     <div className={styles.explorationcard}>
       <div className={styles.nameParent}>
@@ -66,7 +69,7 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
         {multiplier && (
           <div>
             <div className={styles.name4}>
-              Next to explore in{' '}
+              This bee will be available in{' '}
               <Countdown
                 stopCounting={false}
                 startTime={updateAt}
@@ -102,12 +105,33 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
           <div className={styles.boldFacesEmotionsSticke1} />
         </div>
         <hr />
+        <div className={styles.name3}>
+          You can buy another one from here or see which ones you have
+          available.
+        </div>
         <TransactionComponent
           textButton="Buy new BEE"
           spl={100}
           userid={data.userId}
           fromTrn="buyBee"
         />
+        or
+        <ButtonPambii
+          color="white"
+          bg="#196620"
+          className="mb-2"
+          onClick={() => router.push('/game/explore')}
+          icon={
+            <Image
+              src="/assets/bee-characters/icons/explore-icon.svg"
+              alt="Select arena"
+              width={24}
+              height={24}
+            />
+          }
+        >
+          {'New Exploration'}
+        </ButtonPambii>
       </div>
     </div>
   );

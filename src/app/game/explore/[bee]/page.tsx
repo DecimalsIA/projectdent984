@@ -467,6 +467,7 @@ const ExplorePage: React.FC = () => {
   const [cardType, setCardType] = useState<string>('');
   const [abilitiesData, setAbilitiesData] = useState<any[]>([]);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [lockState, setLockState] = useState(false);
 
   const badgesData: any = [
     {
@@ -558,24 +559,22 @@ const ExplorePage: React.FC = () => {
       return newSlide;
     });
   };
+  useEffect(() => {
+    if (exists && data) {
+      const now = Date.now();
+      const difference = data.timeLock - now;
+      console.log('difference', difference, difference <= 0);
+      setLockState(difference <= 0);
+    }
+  }, [exists, data]);
 
   if (!bees || slideData.length === 0) {
     return <div>Loading...</div>; // Muestra un indicador de carga mientras se inicializan los datos
   }
-  const isLock = () => {
-    // exists
-    const now = Date.now(); // Obtiene el tiempo actual en Unix
-
-    const difference = (data ? data.timeLock : 0) - now;
-    if (difference <= 0 && exists) {
-      return false;
-    }
-    return true;
-  };
 
   return (
     <>
-      {isLock() ? (
+      {lockState ? (
         <>
           <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
             <CardPambii

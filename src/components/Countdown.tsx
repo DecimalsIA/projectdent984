@@ -2,38 +2,45 @@ import React, { useState, useEffect } from 'react';
 
 interface CountdownProps {
   stopCounting: boolean;
+  startTime: number; // Tiempo inicial en Unix
+  endTime: number; // Tiempo final en Unix
 }
 
-const Countdown: React.FC<CountdownProps> = ({ stopCounting }) => {
-  const [time, setTime] = useState({ hours: 0, minutes: 0, seconds: 0 });
+const Countdown: React.FC<CountdownProps> = ({
+  stopCounting,
+  startTime,
+  endTime,
+}) => {
+  const calculateTimeLeft = () => {
+    const now = Date.now(); // Obtiene el tiempo actual en Unix
+    const difference = endTime - now;
+
+    if (difference <= 0) {
+      return { hours: 0, minutes: 0, seconds: 0 };
+    }
+
+    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((difference / 1000 / 60) % 60);
+    const seconds = Math.floor((difference / 1000) % 60);
+
+    return { hours, minutes, seconds };
+  };
+
+  const [time, setTime] = useState(calculateTimeLeft());
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined = undefined;
 
     if (!stopCounting) {
       timer = setInterval(() => {
-        setTime((prevTime) => {
-          let { hours, minutes, seconds } = prevTime;
-
-          seconds += 1;
-          if (seconds === 60) {
-            seconds = 0;
-            minutes += 1;
-          }
-          if (minutes === 60) {
-            minutes = 0;
-            hours += 1;
-          }
-
-          return { hours, minutes, seconds };
-        });
+        setTime(calculateTimeLeft());
       }, 1000);
     } else if (stopCounting && timer) {
       clearInterval(timer);
     }
 
     return () => clearInterval(timer);
-  }, [stopCounting]);
+  }, [stopCounting, startTime, endTime]);
 
   return (
     <span>

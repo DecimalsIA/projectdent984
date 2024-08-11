@@ -6,6 +6,7 @@ interface ExplorationCardGameProps {
   bee: string;
   payout: number;
   multiplier: string;
+  data?: any;
 }
 
 const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
@@ -13,6 +14,7 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
   bee,
   payout,
   multiplier,
+  data,
 }) => {
   return (
     <div className={styles.explorationcard}>
@@ -58,7 +60,12 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
         {multiplier && (
           <div>
             <div className={styles.name4}>
-              Next to explore en <Countdown stopCounting={false} />
+              Next to explore en{' '}
+              <Countdown
+                stopCounting={false}
+                startTime={data.updateAt}
+                endTime={data.timeLock}
+              />
             </div>
           </div>
         )}
@@ -79,7 +86,12 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
           )}
           {!multiplier && (
             <div className={styles.name4}>
-              EXPLORING... <Countdown stopCounting={false} />
+              EXPLORING...{' '}
+              <Countdown
+                stopCounting={false}
+                startTime={data.updateAt}
+                endTime={data.timeLock}
+              />
             </div>
           )}
 

@@ -618,7 +618,7 @@ const ExplorePage: React.FC = () => {
                   />
                 }
               >
-                View Exploration
+                View Exploration state
               </ButtonPambii>
             )}
           </CardPambii>

@@ -180,8 +180,9 @@ export async function GET(request: NextRequest) {
           };
           const dta = await addDocumentGeneric('explore_transaccion', data);
           console.log('explore', dta);
+          return NextResponse.redirect('https://t.me/PambiiGameBot');
         }
-        return NextResponse.redirect('https://t.me/PambiiGameBot');
+
       }
 
     }

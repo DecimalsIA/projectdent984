@@ -2,6 +2,8 @@
 
 import BeePartsCarousel from '@/components/BeePartsCarousel';
 import ModalPambii from '@/components/ModalPambii';
+import { useTelegram } from '@/context/TelegramContext';
+import useGetBee from '@/hooks/useGetBee';
 import { useRouter } from 'next/navigation';
 import {
   FireAnimated,
@@ -12,12 +14,36 @@ import {
 import { useState } from 'react';
 
 const InventoryPage: React.FC = () => {
+  const { user } = useTelegram();
+  const userid = user?.id.toString() ?? '792924145';
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dataModal, setIsDataModal] = useState();
   const router = useRouter();
+  const { bees, loading } = useGetBee(userid);
+  console.log('bees', bees);
+
+  const slideData = bees.map((bee, index) => ({
+    image: '/assets/bee-characters/' + bee.image + '.png',
+    name: bee.title ? bee.title.toUpperCase() : 'UNKNOWN',
+    abilitiesData: bee.abilitiesData,
+    power: bee.powers && bee.powers.length > 0 ? bee.powers : null,
+    progress: bee.progress,
+    index: index,
+    icon: '/assets/bee-characters/icons/' + bee.type + '.gif',
+    id: bee.id,
+    category: bee.type,
+  }));
+
+  const beeData = {
+    title: 'My BEE',
+    link: '',
+    category: 'fire',
+    parts: slideData,
+  };
 
   const beePartsData = {
     title: 'Fire bee parts',
-    link: 'https://example.com/fire-bee-parts',
+    link: '',
     category: 'fire',
     parts: [
       {
@@ -42,84 +68,57 @@ const InventoryPage: React.FC = () => {
       },
     ],
   };
-  const modalData = {
-    title: 'Front legs',
-    image: '/assets/bee-characters/icons/beeImage.png', // Reemplaza con la ruta real de la imagen
 
-    badges: [
-      { icon: <HeartIcon />, value: 27 },
-      { icon: <HeartIcon />, value: 13 },
-      { icon: <HeartIcon />, value: 13 },
-      { icon: <HeartIcon />, value: 13 },
-      { icon: <HeartIcon />, value: 13 },
-      { icon: <HeartIcon />, value: 13 },
-      { icon: <HeartIcon />, value: 13 },
-      // Añade más badges según sea necesario
-    ],
-    powerTitle: 'Front legs',
-    description:
-      'Throw 3 fireballs (x0.8) and burn the opponent for 2 turns (x0.8 each turn)',
-    buttons: [
-      {
-        text: 'EQUIP',
-        bg: '#7F29EE',
-        color: 'white',
-        w: 'full',
-        icon: <FireAnimated />,
-        onClick: () => alert('Equipped'),
-      },
-      {
-        text: 'SELL ITEM',
-        bg: '#EE9F29',
-        color: 'white',
-        w: 'full',
-        icon: <MoneyIcon width="1.25rem" height="1.25rem" />,
-        onClick: () => alert('Item Sold'),
-      },
-    ],
-    bonus: [{ icon: <IconPambii />, value: 900, textBadge: ' PAMBII' }],
-    onClose: () => setIsModalOpen(false),
-  };
   const handleModal = (part: any, index: any) => {
     console.log('Modal', part, index);
+    const modalData: any = {
+      title: part?.name,
+      image: part?.image, // Reemplaza con la ruta real de la imagen
+      badges: [],
+
+      buttons: [
+        {
+          text: 'BUY PARTS',
+          bg: '#7F29EE',
+          color: 'white',
+          w: 'full',
+          icon: <FireAnimated />,
+          onClick: () => router.push('/game/market/public'),
+        },
+        {
+          text: 'SELL ITEM',
+          bg: '#EE9F29',
+          color: 'white',
+          w: 'full',
+          icon: <MoneyIcon width="1.25rem" height="1.25rem" />,
+          onClick: () => alert('Not available'),
+        },
+      ],
+      bonus: [
+        {
+          icon: (
+            <img src={part?.icon} alt={part?.name} width="24px" height="24px" />
+          ),
+          value: null,
+          textBadge: part.category,
+        },
+      ],
+      onClose: () => setIsModalOpen(false),
+    };
+    setIsDataModal(modalData);
     setIsModalOpen(true);
   };
 
   return (
     <>
-      {isModalOpen && <ModalPambii data={modalData} />}
+      {dataModal && isModalOpen && (
+        <ModalPambii className="p-4" data={dataModal} />
+      )}
       <div className='className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full'>
         <div className="w-full">
           <BeePartsCarousel
-            category={beePartsData}
-            onCategoryClick={() =>
-              router.push('/game/market/category/' + beePartsData.category)
-            }
-            onPartClick={(part, index) => {
-              () => handleModal(part, index);
-            }}
-          />
-          <BeePartsCarousel
-            category={beePartsData}
-            onCategoryClick={() =>
-              router.push('/game/market/category/' + beePartsData.category)
-            }
-            onPartClick={(part, index) => {
-              () => handleModal(part, index);
-            }}
-          />
-          <BeePartsCarousel
-            category={beePartsData}
-            onCategoryClick={() =>
-              router.push('/game/market/category/' + beePartsData.category)
-            }
-            onPartClick={(part, index) => handleModal(part, index)}
-          />{' '}
-          <BeePartsCarousel
-            category={beePartsData}
-            onCategoryClick={() =>
-              router.push('/game/market/category/' + beePartsData.category)
-            }
+            category={beeData}
+            onCategoryClick={() => router.push('/game/inventory/bee')}
             onPartClick={(part, index) => handleModal(part, index)}
           />
         </div>

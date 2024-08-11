@@ -10,7 +10,7 @@ interface BeePart {
 
 interface Category {
   title: string;
-  parts: BeePart[];
+  parts: any[];
   link: string;
 }
 
@@ -34,7 +34,7 @@ const BeePartsCategory: FunctionComponent<BeePartsCategoryProps> = ({
         <div className={styles.badgetext}>{category.title}</div>
         <img
           className={styles.boldArrowsAltArrowRigh}
-          alt=""
+          alt={category.title}
           src="/assets/bee-characters/icons/arowr.svg"
         />
       </div>

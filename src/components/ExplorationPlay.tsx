@@ -41,13 +41,13 @@ const ExplorationPlay: React.FC<ExplorationPlayProps> = ({
   return (
     <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
       <CardPambii
-        type={dificultad}
+        type={data.map}
         className="bg-gray-200 w-full card-pambii-b text-black flex items-center justify-center"
       >
         <div className="w-full flex flex-row justify-center flex-wrap gap-1">
           <ExplorationCardGame
             bee={slideType}
-            dificultad={dificultad}
+            dificultad={data.map}
             payout={data.explorationPlay.payout}
             multiplier={data.explorationPlay.multiplier}
           />

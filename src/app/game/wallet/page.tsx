@@ -30,6 +30,13 @@ const WalletPage: React.FC = () => {
   };
   const { accountInfo } = useAccountInfoToken(userid);
   const { totalPayout } = useGetExplorer(userid);
+  function openInNewTab(url: string) {
+    const newTab = document.createElement('a');
+    newTab.href = url;
+    newTab.target = '_blank';
+    newTab.rel = 'noopener noreferrer';
+    newTab.click();
+  }
   const beeData = [
     {
       name: 'BALANCE PAMBII',
@@ -47,7 +54,7 @@ const WalletPage: React.FC = () => {
       name: 'Buy PAMBII',
       icon: <GiTakeMyMoney />,
       onClick: () =>
-        router.push(
+        openInNewTab(
           'https://phantom.app/ul/browse/https://raydium.io/swap/?inputMint=sol&outputMint=8dGUaPCybF4e2EbqtKcDsvW74shNTsabd5M6z6zG9BN2&ref=https://raydium.io/swap/?inputMint=sol%26outputMint=8dGUaPCybF4e2EbqtKcDsvW74shNTsabd5M6z6zG9BN2',
         ),
     },

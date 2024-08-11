@@ -120,9 +120,9 @@ export async function GET(request: NextRequest) {
     const decodedPayload = decryptPayload(payload, nonce, sharedSecret);
 
     if (decodedPayload.signature) {
-      console.log('Paso 1')
+
       if (fromTrn === 'buyBee') {
-        console.log('Paso buyBee')
+
         const beeData = {
           image: 'fire',
           title: 'Abejitachula',

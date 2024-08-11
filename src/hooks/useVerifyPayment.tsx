@@ -21,7 +21,6 @@ const useVerifyPayment = (userId: string): PaymentData => {
 
   useEffect(() => {
     if (!userId) return;
-
     const q = query(
       collection(db, 'explore_transaccion'),
       where('userId', '==', userId),

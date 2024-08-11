@@ -25,7 +25,8 @@ const SignTransactionPage = () => {
           {' '}
           <hr />
           <div>
-            1999 : <TransactionComponent spl={100} userid={userId} />
+            1999 :{' '}
+            <TransactionComponent spl={100} userid={userId} fromTrn="demo" />
           </div>
         </>
       )}

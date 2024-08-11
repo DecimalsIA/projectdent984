@@ -55,42 +55,29 @@ export async function POST(req: NextRequest) {
     if (banned) {
       return NextResponse.json({ error: 'User Banned' }, { status: 200 });
     } else {
-      const balanceGame = await getUserWallet(userId);
-      if (balanceGame[0].balance > valuePambii) {
-        await updateDocument('WALLET', balanceGame[0].id, { id: balanceGame[0].id, balance: balanceGame[0].balance - valuePambii, timeUpdate: new Date().getTime() });
 
-        const updatedBalance = await getUserWallet(userId);
-        const idWallet = updatedBalance[0].id;
+      const result = calculateResult(mapNumber);
+      const payout = calculatePayout(valuePambii, result);
+      const { exp: experience, win, loss } = calculateExperience(result, mapNumber)
 
-        const result = calculateResult(mapNumber);
-        const payout = calculatePayout(valuePambii, result);
-        const { exp: experience, win, loss } = calculateExperience(result, mapNumber)
+      const pool = { userId, valuePambii, payout, mapNumber, signature, timestamp: new Date().getTime(), experience, win, loss }
 
-        // calculateResult
+      const hash = await hashName(JSON.stringify(pool))
 
-        const balanceWallet = updatedBalance[0].balance;
-        await updateDocument('WALLET', idWallet, { balance: balanceWallet + payout, timeUpdate: new Date().getTime() });
+      await createDocument('PoolMaps', { ...pool, hash });
 
-        const pool = { userId, valuePambii, payout, mapNumber, signature, timestamp: new Date().getTime(), experience, win, loss }
+      return NextResponse.json({
+        map: mapNumber,
+        valuePambii: valuePambii,
+        multiplier: result,
+        payout: payout,
+        experience,
+        win,
+        loss,
+        hash
+      }, { status: 200 });
 
-        const hash = await hashName(JSON.stringify(pool))
 
-        await createDocument('PoolMaps', { ...pool, hash });
-
-        return NextResponse.json({
-          map: mapNumber,
-          valuePambii: valuePambii,
-          multiplier: result,
-          payout: payout,
-          experience,
-          win,
-          loss,
-          hash
-        }, { status: 200 });
-
-      } else {
-        return NextResponse.json({ message: 'User not Value', activeWallet: true }, { status: 200 });
-      }
     }
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

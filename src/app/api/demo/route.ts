@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     const result = calculateResult(mapNumber);
     const payout = calculatePayout(valuePambii, result);
 
-    await updateDocument('gameExplore', '', { userId, result, mapNumber, timestamp: new Date().toISOString() });
+    await updateDocument('gameExplore', '', { userId, result, mapNumber, timestamp: new Date().getTime() });
 
     if (result !== 'x1' && !result.startsWith('x0.')) {
       await updateLeaderboard(userId);

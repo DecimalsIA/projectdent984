@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
       const connectionDoc = querySnapshot.docs[0]; // Asumiendo que solo habrá un documento por userId
       await updateDoc(connectionDoc.ref, {
         session: connectData.session,
-        updateAt: new Date().toISOString(),
+        updateAt: new Date().getTime(),
       });
 
       return NextResponse.json({ message: 'Connection to Phantom Wallet updated successfully!', session: connectData.session, publicKey: connectData.public_key });
@@ -73,8 +73,8 @@ export async function GET(request: NextRequest) {
       await addDoc(collection(db, 'phantomConnections'), {
         session: connectData.session,
         publicKey: connectData.public_key,
-        createdAt: new Date().toISOString(),
-        updateAt: new Date().toISOString(),
+        createdAt: new Date().getTime(),
+        updateAt: new Date().getTime(),
         userId, // Asociar la conexión al usuario
         sharedSecretDapp: sharedSecretDappBase64 // Almacenar en Base64
       });

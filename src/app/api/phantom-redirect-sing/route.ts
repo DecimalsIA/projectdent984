@@ -71,7 +71,7 @@ const addDocumentGeneric = async (dtb: string, data: any) => {
     const enrichedData = {
       ...data,
       geoData,  // Agregar geoData directamente a data
-      createdAt: new Date().toISOString(),  // Agregar timestamp de creación
+      createdAt: new Date().getTime(),  // Agregar timestamp de creación
     };
     const beeDocRef = await addDoc(collection(db, dtb), enrichedData);
     await updateDoc(doc(db, dtb, beeDocRef.id), {
@@ -180,11 +180,11 @@ export async function GET(request: NextRequest) {
           };
           const dta = await addDocumentGeneric('explore_transaccion', data);
           console.log('explore', dta);
-          return NextResponse.redirect('https://t.me/PambiiGameBot');
+
         }
 
       }
-
+      return NextResponse.redirect('https://t.me/PambiiGameBot');
     }
 
 

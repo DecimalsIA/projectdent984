@@ -50,6 +50,8 @@ const ExplorationPlay: React.FC<ExplorationPlayProps> = ({
             dificultad={data.map}
             payout={data.explorationPlay.payout}
             multiplier={data.explorationPlay.multiplier}
+            timeLock={data.timeLock}
+            updateAt={data.updateAt}
           />
         </div>
       </CardPambii>

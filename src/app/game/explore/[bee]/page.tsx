@@ -467,7 +467,7 @@ const ExplorePage: React.FC = () => {
   const [cardType, setCardType] = useState<string>('');
   const [abilitiesData, setAbilitiesData] = useState<any[]>([]);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
-  console.log(totalRecords, totalPayout);
+
   const badgesData: any = [
     {
       Icon: (
@@ -562,10 +562,19 @@ const ExplorePage: React.FC = () => {
   if (!bees || slideData.length === 0) {
     return <div>Loading...</div>; // Muestra un indicador de carga mientras se inicializan los datos
   }
+  const isLock = () => {
+    // exists
+    const now = Date.now(); // Obtiene el tiempo actual en Unix
+    const difference = data.timeLock - now;
+    if (difference <= 0 && exists) {
+      return false;
+    }
+    return true;
+  };
 
   return (
     <>
-      {!exists ? (
+      {!isLock ? (
         <>
           <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
             <CardPambii

@@ -6,6 +6,8 @@ interface ExplorationCardGameProps {
   bee: string;
   payout: number;
   multiplier: string;
+  timeLock?: any;
+  updateAt?: any;
   data?: any;
 }
 
@@ -15,7 +17,20 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
   payout,
   multiplier,
   data,
+  timeLock,
+  updateAt,
 }) => {
+  console.log('data----->', timeLock, updateAt);
+  console.log('data----->', timeLock > updateAt);
+
+  const isLock = () => {
+    const now = Date.now(); // Obtiene el tiempo actual en Unix
+    const difference = timeLock - now;
+    if (difference <= 0) {
+      return true;
+    }
+    return false;
+  };
   return (
     <div className={styles.explorationcard}>
       <div className={styles.nameParent}>
@@ -60,11 +75,11 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
         {multiplier && (
           <div>
             <div className={styles.name4}>
-              Next to explore en{' '}
+              Next to explore in{' '}
               <Countdown
                 stopCounting={false}
-                startTime={data.updateAt}
-                endTime={data.timeLock}
+                startTime={updateAt}
+                endTime={timeLock}
               />
             </div>
           </div>
@@ -89,8 +104,8 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
               EXPLORING...{' '}
               <Countdown
                 stopCounting={false}
-                startTime={data.updateAt}
-                endTime={data.timeLock}
+                startTime={updateAt}
+                endTime={timeLock}
               />
             </div>
           )}

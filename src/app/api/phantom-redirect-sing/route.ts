@@ -120,7 +120,9 @@ export async function GET(request: NextRequest) {
     const decodedPayload = decryptPayload(payload, nonce, sharedSecret);
 
     if (decodedPayload.signature) {
+      console.log('Paso 1')
       if (fromTrn === 'buyBee') {
+        console.log('Paso buyBee')
         const beeData = {
           image: 'fire',
           title: 'Abejitachula',
@@ -158,7 +160,7 @@ export async function GET(request: NextRequest) {
         };
         const dta = await addDocumentGeneric('BEES', data);
         console.log('buyBee', dta);
-        return NextResponse.redirect('https://t.me/PambiiGameBot');
+
       }
 
       if (fromTrn === 'explore' && bee) {
@@ -180,7 +182,7 @@ export async function GET(request: NextRequest) {
           console.log('explore', dta);
         }
       }
-
+      return NextResponse.redirect('https://t.me/PambiiGameBot');
     }
 
   } catch (error: any) {

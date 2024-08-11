@@ -1,7 +1,8 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import bgImgeHome from '../../assets/bg-home.png';
-
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '@/firebase/config';
 import {
   BadgePambii,
   BeeIcon,
@@ -22,8 +23,10 @@ import { useRouter } from 'next/navigation';
 import { useTelegram } from '@/context/TelegramContext';
 import useGetBee from '@/hooks/useGetBee';
 import Image from 'next/image';
-import { useAccountInfoToken } from '@/hooks/useAccountInfoToken';
+
 import useGetExplorer from '@/hooks/usGetExplorer';
+
+import ModalPambii from '@/components/ModalPambii';
 
 function formatLargeNumber(number: number) {
   const units = ['B', 'M', 'K'];
@@ -38,14 +41,65 @@ function formatLargeNumber(number: number) {
 
   return number.toString(); // Return the original number if it's smaller than 1,000
 }
+const updateDocument = async (
+  collectionName: string,
+  documentId: string,
+  updatedData: any,
+) => {
+  try {
+    /*
+    const demoon = {
+      bee: {
+        image: '/assets/bee-characters/fire.png',
+        title: 'ABEJITACHULS',
+        abilitiesData: [
+          {
+            id: 0,
+            name: '',
+            icon: '',
+          },
+        ],
+        power: [
+          {
+            power: 'Fire',
+            icon: 'fire',
+            value: 1,
+          },
+        ],
+        progress: {
+          level: 1,
+          current: 1,
+          max: 100,
+        },
+        index: 0,
+        id: 'iEpsUdtxGJSs2oUCwPrK',
+      },
+    };*/
+
+    const docRef = doc(db, collectionName, documentId);
+    await updateDoc(docRef, updatedData);
+    console.log('Document successfully updated!');
+  } catch (error) {
+    console.error('Error updating document:', error);
+  }
+};
 
 const Home = () => {
   const router = useRouter();
   const { user } = useTelegram();
   const userid = user?.id.toString() ?? '792924145';
   const { bees, loading } = useGetBee(userid);
-  const { accountInfo } = useAccountInfoToken(userid);
+  //const { accountInfo } = useAccountInfoToken(userid);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [nameBee, setNameBee] = useState('Mr Bee');
   const { totalPayout, experience } = useGetExplorer(userid);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
 
   const slideData = bees.map((bee, index) => ({
     image: '/assets/bee-characters/' + bee.image + '.png',
@@ -54,13 +108,56 @@ const Home = () => {
     power: bee.powers && bee.powers.length > 0 ? bee.powers : null,
     progress: bee.progress,
     index: index,
+    id: bee.id,
   }));
-
+  const handleChangeName = async () => {
+    console.log('currentSlide', slideData[currentSlide]);
+    const updatedData = {
+      'bee.title': inputValue, // Los campos que deseas actualizar
+    };
+    await updateDocument('BEES', slideData[currentSlide].id, updatedData);
+    setIsModalOpen(false);
+    setInputValue(slideData[currentSlide]?.title);
+  };
+  const [inputValue, setInputValue] = useState<string>(
+    slideData[currentSlide]?.title,
+  );
   const [abilitiesData, setAbilitiesData] = useState<any>(
     slideData[0]?.abilitiesData ?? [],
   );
-  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const modalData = {
+    title: 'Change name of bee : ' + slideData[currentSlide]?.title,
+    body: (
+      <>
+        {' '}
+        <input
+          type="text"
+          id="textInput"
+          value={inputValue}
+          onChange={handleChange}
+          className="w-full inpurModal"
+          ref={inputRef}
+          placeholder={slideData[currentSlide]?.title}
+        />
+      </>
+    ),
+    buttons: [
+      {
+        text: 'Change name of bee',
+        bg: '#4068f5',
+        color: 'white',
+        w: 'full',
+        icon: <PencilIcon />,
+        onClick: () => handleChangeName(),
+      },
+    ],
 
+    onClose: () => setIsModalOpen(false),
+  };
+  const handleModal = (bee: string) => {
+    setIsModalOpen(true);
+    setNameBee(bee);
+  };
   useEffect(() => {
     if (slideData.length > 0) {
       setAbilitiesData(slideData[currentSlide]?.abilitiesData ?? []);
@@ -120,6 +217,7 @@ const Home = () => {
 
           <div>
             <CardPambii className="beeCard w-full mt-2 min-w-[381px] ">
+              {isModalOpen && <ModalPambii className="p-4" data={modalData} />}
               <UserHome userName={`${user?.first_name} ${user?.last_name}`} />
               {slideData[currentSlide]?.power && (
                 <div className="flex  overflow-x-auto max-w-full min-w-[320px]">
@@ -172,7 +270,7 @@ const Home = () => {
                 </div>
                 <div className="w-full mt-[10px]">
                   <ButtonPambii
-                    onClick={() => alert(slideData[currentSlide].title)}
+                    onClick={() => handleModal(slideData[currentSlide].title)}
                     color="#fff"
                     className="fz15"
                     icon={<PencilIcon />}

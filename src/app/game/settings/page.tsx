@@ -6,10 +6,14 @@ import ModalPambii from '@/components/ModalPambii';
 import { useRouter } from 'next/navigation';
 import { BeeIcon, FireAnimated, TablePambii } from 'pambii-devtrader-front';
 import { useState } from 'react';
+import { TbDoorExit } from 'react-icons/tb';
+import { LuUserCircle } from 'react-icons/lu';
+import { useTelegram } from '@/context/TelegramContext';
 
 const SettingsPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
+  const { user } = useTelegram();
   const handleModal = () => {
     setIsModalOpen(true);
   };
@@ -33,14 +37,20 @@ const SettingsPage: React.FC = () => {
 
   const beeData = [
     {
+      name: 'USER NAME',
+      text: user?.first_name ?? 'BEE',
+      icon: <LuUserCircle />,
+      onClick: () => {},
+    },
+    {
       name: 'LANGUAJE',
-      text: 'ENDN',
+      text: 'EN',
       icon: <Globe />,
       onClick: () => router.push('/game/settings/languaje'),
     },
     {
-      name: 'DELETE ACCOUNT',
-      icon: <Delete />,
+      name: 'LOGOUT',
+      icon: <TbDoorExit />,
       onClick: () => handleModal(),
     },
   ];

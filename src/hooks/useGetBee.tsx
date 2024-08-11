@@ -30,7 +30,7 @@ interface Bee {
   image: string;
   title: string;
   type: string;
-  id: number;
+  id: string;
   progress: Progress;
   powers: Power[];
   abilitiesData: Ability[];

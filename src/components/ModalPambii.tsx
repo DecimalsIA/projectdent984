@@ -25,6 +25,7 @@ type ModalData = {
   powerTitle?: string;
   description?: string;
   buttons?: ButtonData[];
+  body?: React.ReactNode;
   bonus?: BadgeData[];
   onClose: () => void;
 };
@@ -42,6 +43,7 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
     badges,
     powerTitle,
     description,
+    body,
     buttons,
     bonus,
     onClose,
@@ -114,6 +116,9 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
                 {subtitle}
               </p>
             </div>
+          )}
+          {body && (
+            <div className="flex flex-col items-start flex-grow">{body}</div>
           )}
 
           {description && (

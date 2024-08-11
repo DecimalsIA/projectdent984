@@ -626,6 +626,27 @@ h2 {
 }
 
 
+.inpurModal {
+  width: 100%;
+  position: relative;
+  border-radius: 8px;
+  background-color: #292929;
+  border: 1px #434343;
+  box-sizing: border-box;
+  height: 44px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0px 12px;
+  text-align: left;
+  font-size: 14px;
+  color: #fff;
+  font-family: Poppins;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

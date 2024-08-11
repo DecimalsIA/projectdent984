@@ -564,12 +564,14 @@ const ExplorePage: React.FC = () => {
     if (exists && data) {
       const now = Date.now();
       const difference = data.timeLock - now;
+      if (difference > 0) {
+        router.push('/game/explore/' + data?.map + '/' + data?.bee);
+      }
+
       console.log('difference', difference, difference <= 0);
-      setLockState(difference <= 0);
+      setLockState(difference > 0);
     }
   }, [exists, data]);
-
-  console.log('lockState', lockState);
 
   if (!bees || slideData.length === 0) {
     return <div>Loading...</div>; // Muestra un indicador de carga mientras se inicializan los datos

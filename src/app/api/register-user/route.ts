@@ -17,9 +17,9 @@ export async function POST(req: NextRequest) {
       nomTlram,
       userName,
       language_code,
-      registeredAt: Math.floor(Date.now() / 1000),
-      lastActivity: Math.floor(Date.now() / 1000),
-      timestamp: Math.floor(Date.now() / 1000),
+      registeredAt: new Date().getTime(),
+      lastActivity: new Date().getTime(),
+      timestamp: new Date().getTime(),
       banned: false,
       exists: true
 

@@ -76,7 +76,7 @@ const addDocumentGeneric = async (dtb: string, data: any) => {
     const beeDocRef = await addDoc(collection(db, dtb), enrichedData);
     await updateDoc(doc(db, dtb, beeDocRef.id), {
       id: beeDocRef.id,
-      updateAt: new Date()
+      updateAt: new Date().getTime()
 
     });
 
@@ -86,6 +86,12 @@ const addDocumentGeneric = async (dtb: string, data: any) => {
     throw new Error('No se pudo crear el documento');
   }
 };
+function addMinutesToTimestamp(minutes: number) {
+  // 1 minuto = 60,000 milisegundos
+  const millisecondsToAdd = minutes * 60 * 1000;
+  return new Date().getTime() + millisecondsToAdd;
+}
+
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -176,7 +182,8 @@ export async function GET(request: NextRequest) {
             hash: decodedPayload.signature,
             ip,
             dispositivo: userAgent,
-            explorationPlay: explorationPlay.data
+            explorationPlay: explorationPlay.data,
+            timeLock: addMinutesToTimestamp(map === 'easy' ? 5 : map === 'middle' ? 10 : 20)
           };
           const dta = await addDocumentGeneric('explore_transaccion', data);
           console.log('explore', dta);

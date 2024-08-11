@@ -52,6 +52,7 @@ const ExplorationPlay: React.FC<ExplorationPlayProps> = ({
             multiplier={data.explorationPlay.multiplier}
             timeLock={data.timeLock}
             updateAt={data.updateAt}
+            data={data}
           />
         </div>
       </CardPambii>

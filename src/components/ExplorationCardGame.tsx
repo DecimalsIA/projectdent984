@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import styles from './ExplorationCard.module.css';
 import Countdown from './Countdown';
+import TransactionComponent from './TransactionComponent';
 interface ExplorationCardGameProps {
   dificultad: string;
   bee: string;
@@ -20,17 +21,7 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
   timeLock,
   updateAt,
 }) => {
-  console.log('data----->', timeLock, updateAt);
-  console.log('data----->', timeLock > updateAt);
-
-  const isLock = () => {
-    const now = Date.now(); // Obtiene el tiempo actual en Unix
-    const difference = timeLock - now;
-    if (difference <= 0) {
-      return true;
-    }
-    return false;
-  };
+  console.log(data);
   return (
     <div className={styles.explorationcard}>
       <div className={styles.nameParent}>
@@ -93,7 +84,6 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
             className={styles.boldTimeWatchRound}
             unoptimized
           />
-
           {multiplier && (
             <div className={styles.name4}>
               Exploration Reward: {payout} PAMBII
@@ -109,9 +99,15 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
               />
             </div>
           )}
-
           <div className={styles.boldFacesEmotionsSticke1} />
         </div>
+        <hr />
+        <TransactionComponent
+          textButton="Buy new BEE"
+          spl={100}
+          userid={data.userId}
+          fromTrn="buyBee"
+        />
       </div>
     </div>
   );

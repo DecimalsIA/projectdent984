@@ -89,16 +89,12 @@ const ExplorePage: React.FC = () => {
   }
 
   return (
-    <>
-      <>
-        <ExplorationPlay
-          bee={bee}
-          data={data}
-          slideData={slideData[currentSlide]}
-          userId={userId}
-        />
-      </>
-    </>
+    <ExplorationPlay
+      bee={bee}
+      data={data}
+      slideData={slideData[currentSlide]}
+      userId={userId}
+    />
   );
 };
 

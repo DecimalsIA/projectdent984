@@ -3,7 +3,7 @@
 import ExplorationInfo from '@/components/Exploration';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { CardPambii, SlidePambii } from 'pambii-devtrader-front';
+import { ButtonPambii, CardPambii, SlidePambii } from 'pambii-devtrader-front';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import TransactionComponent from '@/components/TransactionComponent';
@@ -459,6 +459,7 @@ type BeeData = {
 const ExplorePage: React.FC = () => {
   const { user } = useTelegram();
   const userId = user?.id?.toString() ?? '792924145';
+  const router = useRouter();
 
   const { bees } = useGetBee(userId);
   const { totalRecords, totalPayout, experience, win, loss } =
@@ -568,6 +569,8 @@ const ExplorePage: React.FC = () => {
     }
   }, [exists, data]);
 
+  console.log('lockState', lockState);
+
   if (!bees || slideData.length === 0) {
     return <div>Loading...</div>; // Muestra un indicador de carga mientras se inicializan los datos
   }
@@ -591,7 +594,7 @@ const ExplorePage: React.FC = () => {
               </div>
             )}
             {badgesData && <ExplorationInfo badges={badgesData} />}
-            {lockState && (
+            {lockState && data.bee == slideData[currentSlide].id ? (
               <TransactionComponent
                 spl={bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35}
                 userid={userId}
@@ -599,6 +602,24 @@ const ExplorePage: React.FC = () => {
                 bee={slideData[currentSlide].id}
                 map={bee}
               />
+            ) : (
+              <ButtonPambii
+                color="white"
+                className="mb-2"
+                onClick={() =>
+                  router.push('/game/explore/' + bee + '/' + data.bee)
+                }
+                icon={
+                  <Image
+                    src="/assets/bee-characters/icons/explore-icon.svg"
+                    alt="Select arena"
+                    width={24}
+                    height={24}
+                  />
+                }
+              >
+                View Exploration
+              </ButtonPambii>
             )}
           </CardPambii>
         </div>

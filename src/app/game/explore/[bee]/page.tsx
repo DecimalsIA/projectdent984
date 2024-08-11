@@ -519,6 +519,7 @@ const ExplorePage: React.FC = () => {
       value: totalPayout,
     },
   ];
+  const { exists, data } = useVerifyPayment(userId);
 
   useEffect(() => {
     if (bees && bees.length > 0) {
@@ -539,7 +540,6 @@ const ExplorePage: React.FC = () => {
     }
   }, [bees]);
 
-  const { exists, data } = useVerifyPayment(userId);
   const { bee } = useParams();
 
   const handlePrevSlide = () => {
@@ -574,24 +574,24 @@ const ExplorePage: React.FC = () => {
 
   return (
     <>
-      {lockState ? (
-        <>
-          <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
-            <CardPambii
-              type={cardType}
-              className="bg-gray-200 w-full card-pambii-b  text-black flex items-center justify-center"
-            >
-              {slideData.length > 0 && (
-                <div className="w-full flex flex-row justify-center flex-wrap gap-1">
-                  <SlidePambii
-                    slides={slideData}
-                    className="w-full max-w-md mx-auto"
-                    onPrevSlide={handlePrevSlide}
-                    onNextSlide={handleNextSlide}
-                  />
-                </div>
-              )}
-              {badgesData && <ExplorationInfo badges={badgesData} />}
+      <>
+        <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+          <CardPambii
+            type={cardType}
+            className="bg-gray-200 w-full card-pambii-b  text-black flex items-center justify-center"
+          >
+            {slideData.length > 0 && (
+              <div className="w-full flex flex-row justify-center flex-wrap gap-1">
+                <SlidePambii
+                  slides={slideData}
+                  className="w-full max-w-md mx-auto"
+                  onPrevSlide={handlePrevSlide}
+                  onNextSlide={handleNextSlide}
+                />
+              </div>
+            )}
+            {badgesData && <ExplorationInfo badges={badgesData} />}
+            {lockState && (
               <TransactionComponent
                 spl={bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35}
                 userid={userId}
@@ -599,19 +599,10 @@ const ExplorePage: React.FC = () => {
                 bee={slideData[currentSlide].id}
                 map={bee}
               />
-            </CardPambii>
-          </div>
-        </>
-      ) : (
-        <>
-          <ExplorationPlay
-            bee={bee}
-            data={data}
-            slideData={slideData[currentSlide]}
-            userId={userId}
-          />
-        </>
-      )}
+            )}
+          </CardPambii>
+        </div>
+      </>
     </>
   );
 };

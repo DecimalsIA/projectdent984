@@ -490,7 +490,6 @@ const ExplorePage: React.FC = () => {
   //useVerifyPayment
 
   const { exists, data } = useVerifyPayment(userId);
-  console.log(exists);
   const { bee } = useParams();
 
   const [currentSlide, setCurrentSlide] = useState<number>(0);

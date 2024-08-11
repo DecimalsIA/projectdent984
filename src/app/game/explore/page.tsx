@@ -138,7 +138,7 @@ const ExplorePage: React.FC = () => {
           />
         ),
         text: 'Maximum win amount:',
-        value: '35 PAMBII',
+        value: '80 PAMBII',
       },
       {
         Icon: (
@@ -176,7 +176,7 @@ const ExplorePage: React.FC = () => {
           />
         ),
         text: 'Maximum win amount:',
-        value: '50 PAMBII',
+        value: '350 PAMBII',
       },
       {
         Icon: (

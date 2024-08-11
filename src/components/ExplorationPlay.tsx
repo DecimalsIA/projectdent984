@@ -23,7 +23,6 @@ const ExplorationPlay: React.FC<ExplorationPlayProps> = ({
 
   const memoizedSlideData = useMemo(() => slideData, [slideData]);
   const memoizedBee = useMemo(() => bee, [bee]);
-  console.log('data', data);
 
   const handleSelectArena = useCallback(
     async (slide: any, bee: any) => {

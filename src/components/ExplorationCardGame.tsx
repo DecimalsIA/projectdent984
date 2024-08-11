@@ -55,6 +55,13 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
           Your selected bee is exploring this area, come back when the
           exploration time is over.
         </div>
+        {multiplier && (
+          <div>
+            <div className={styles.name4}>
+              Next to explore en <Countdown stopCounting={false} />
+            </div>
+          </div>
+        )}
         <div className={styles.badgeMinibuttonTooltip}>
           <Image
             src={'/assets/bee-characters/icons/' + dificultad + '.svg'}
@@ -75,6 +82,7 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
               EXPLORING... <Countdown stopCounting={false} />
             </div>
           )}
+
           <div className={styles.boldFacesEmotionsSticke1} />
         </div>
       </div>

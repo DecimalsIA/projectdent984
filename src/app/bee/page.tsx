@@ -8,11 +8,14 @@ import TransactionComponent from '@/components/TransactionComponent';
 import HiveContainer from '@/components/HiveContainer';
 import useVerifyBee from '@/hooks/useVerifyBee';
 import { useRouter } from 'next/navigation';
+import { useAccountInfoToken } from '@/hooks/useAccountInfoToken';
 const SignTransactionPage = () => {
   const router = useRouter();
   const { user } = useTelegram();
   const userId = user?.id?.toString() ?? '792924145';
   const verifyBee = useVerifyBee(userId);
+  const { accountInfo } = useAccountInfoToken(userId);
+
   console.log(verifyBee);
   useEffect(() => {
     if (verifyBee) {
@@ -27,6 +30,7 @@ const SignTransactionPage = () => {
       ) : (
         <>
           {' '}
+          <p>Saldo del token SPL: {accountInfo?.amount.toString()}</p>
           <hr />
           <div className="p-4">
             <HiveContainer />

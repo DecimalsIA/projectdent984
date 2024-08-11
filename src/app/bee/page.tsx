@@ -34,6 +34,7 @@ const SignTransactionPage = () => {
               textButton="Buy your bee"
               spl={100}
               userid={userId}
+              fromTrn="buyBee"
             />
           </div>
         </>

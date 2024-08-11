@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
     // Verificar si el userId ya existe en la colección 'phantomConnections'
     const connectionsQuery = query(collection(db, 'phantomConnections'), where('userId', '==', userId));
     const querySnapshot = await getDocs(connectionsQuery);
-    console.log('querySnapshot.docs', querySnapshot.docs)
+
 
     if (!querySnapshot.empty) {
       // Si el userId ya existe, actualizar el documento

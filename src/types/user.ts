@@ -9,4 +9,6 @@ export interface UserDocument {
   lastActivity?: number;
   timestamp?: number;
   idsession?: string;
+  exists?: boolean;
+  banned?: boolean;
 }

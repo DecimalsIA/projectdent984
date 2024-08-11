@@ -533,6 +533,7 @@ const ExplorePage: React.FC = () => {
               <TransactionComponent
                 spl={bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35}
                 userid={userId}
+                fromTrn="explore"
               />
             </CardPambii>
           </div>

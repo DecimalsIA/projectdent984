@@ -22,7 +22,6 @@ import {
 import UserHome from '@/components/UserHome';
 import { useRouter } from 'next/navigation';
 import { useTelegram } from '@/context/TelegramContext';
-import useVerifyBee from '@/hooks/useVerifyBee';
 
 const Home = () => {
   const router = useRouter();

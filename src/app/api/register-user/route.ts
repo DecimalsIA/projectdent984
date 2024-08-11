@@ -21,6 +21,8 @@ export async function POST(req: NextRequest) {
       registeredAt: Math.floor(Date.now() / 1000),
       lastActivity: Math.floor(Date.now() / 1000),
       timestamp: Math.floor(Date.now() / 1000),
+      banned: false,
+      exists: true
 
     };
 

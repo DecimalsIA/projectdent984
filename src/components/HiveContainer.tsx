@@ -1,14 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { FunctionComponent, useCallback } from 'react';
 import styles from './HiveContainer.module.css';
+import Image from 'next/image';
 
 const HiveContainer: FunctionComponent = () => {
-  const onHiveContainerClick = useCallback(() => {
-    // Add your code here
-  }, []);
   // Buy your bee to continue
   return (
-    <div className={styles.hivecontainer} onClick={onHiveContainerClick}>
+    <div className={styles.hivecontainer}>
       <div className={styles.clickTheHiveContainer}>
         <span>
           <span className={styles.clickThe}>{`Buy  `}</span>
@@ -20,11 +18,12 @@ const HiveContainer: FunctionComponent = () => {
         <span className={styles.toRecieveOne}> </span>
       </div>
       <div className=" flex center-div p-4 justify-center align-middle">
-        <img
-          className={styles.panal1Icon}
-          alt=""
-          width="120px"
-          src="/Pambii-bee.webp"
+        <Image
+          src="/panal_animado.gif"
+          width={140}
+          height={140}
+          alt="Picture of the author"
+          unoptimized
         />
       </div>
 

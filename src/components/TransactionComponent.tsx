@@ -14,12 +14,14 @@ interface ExplorationCardGameProps {
   spl: number;
   userid: string;
   textButton?: string;
+  fromTrn: string;
 }
 
 const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
   spl,
   userid,
   textButton,
+  fromTrn,
 }) => {
   const { deeplink, generateDeeplink } = usePhantomDeeplink();
   const [transaction, setTransaction] = useState<string | null>(null);
@@ -59,8 +61,7 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
       if (transaction && !deeplinkGenerated) {
         const { session, sharedSecretDapp } = await getDocumentByUserId(userid);
         const { publicKey } = await getDappKeyPair(userid);
-        const redirectLink =
-          'https://pambii-front.vercel.app/api/phantom-redirect-sing';
+        const redirectLink = `https://pambii-front.vercel.app/api/phantom-redirect-sing?userId=${userid}&fromTrn${fromTrn}`;
         const dappEncryptionPublicKey = publicKey;
 
         generateDeeplink({

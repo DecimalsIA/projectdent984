@@ -20,8 +20,8 @@ export interface BeePiece {
   typePart: BeePieceType;
   stats: Stat[];
   ability: Ability;
-  isAssigned: boolean;
-  isForSale: boolean;  // Nuevo campo para indicar si la parte está en venta
+  isAssigned: boolean; // Indica si la parte está asignada a una abeja o libre
+  isForSale: boolean;  // Indica si la parte está en venta
   salePrice?: number;  // Precio de venta si la parte está en venta
 }
 
@@ -84,8 +84,8 @@ export const generateRandomBeePart = (namePart: string): BeePiece => {
     typePart,
     stats: generateRandomStats(),
     ability: generateRandomAbility(typePart),
-    isAssigned: false,  // Inicialmente, no asignado
-    isForSale: false,   // Inicialmente, no en venta
+    isAssigned: false,
+    isForSale: false,
   };
 };
 

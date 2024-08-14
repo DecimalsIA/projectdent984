@@ -153,8 +153,8 @@ export async function GET(request: NextRequest) {
         const genBee = await generateBee(userId);
 
         const beeData = {
-          image: 'fire',
-          title: 'Abejitachula',
+          image: genBee.type.toLowerCase(),
+          title: 'BEE new ' + genBee.type.toLowerCase(),
           type: genBee.type,
           id: genBee.id,
           powers: genBee.powers.map((power: { typePart: string; }) => ({
@@ -209,7 +209,7 @@ export async function GET(request: NextRequest) {
         }
 
       }
-      return NextResponse.redirect('https://t.me/PambiiGameBot');
+      //  return NextResponse.redirect('https://t.me/PambiiGameBot');
     }
 
 

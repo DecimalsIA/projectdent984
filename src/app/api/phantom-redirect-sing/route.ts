@@ -65,6 +65,28 @@ const makePostRequest = async (userId: string, bee: string, signature: any) => {
   }
 };
 
+const generateBee = async (userId: string) => {
+  try {
+    const response = await axios.post('https://pambii-front.vercel.app/api/generateBeeWithParts', {
+      userId: userId, // Enviar el userId en el cuerpo de la solicitud
+    });
+
+    console.log('Bee generated:', response.data.bee);
+    return response.data.bee; // Retorna la abeja generada
+  } catch (error: any) {
+    if (error.response) {
+      // El servidor respondió con un código de estado fuera del rango 2xx
+      console.error('Server Error:', error.response.data);
+    } else if (error.request) {
+      // La solicitud fue hecha pero no hubo respuesta
+      console.error('No response received:', error.request);
+    } else {
+      // Algo sucedió al configurar la solicitud que desencadenó un error
+      console.error('Error setting up request:', error.message);
+    }
+  }
+};
+
 const addDocumentGeneric = async (dtb: string, data: any) => {
   try {
     const geoData = await getGeoData(data.ip);
@@ -128,33 +150,29 @@ export async function GET(request: NextRequest) {
     if (decodedPayload.signature) {
 
       if (fromTrn === 'buyBee') {
+        const genBee = await generateBee(userId);
 
         const beeData = {
           image: 'fire',
           title: 'Abejitachula',
-          type: 'fire',
-          id: 1,
-          powers: [
-            {
-              power: 'Fire',
-              icon: 'fire',
-            },
-          ],
-          habilities: [{
-            name: '',
-            icon: '',
-          },
-
-          ],
-          abilitiesData: [
-            {
-              id: null,
-              name: '',
-              icon: '',
-            },
-          ],
-          userId: userId, // Reemplaza con el ID del usuario correspondiente
+          type: genBee.type,
+          id: genBee.id,
+          powers: genBee.powers.map((power: { typePart: string; }) => ({
+            power: power.typePart,
+            icon: power.typePart.toLowerCase(),
+          })),
+          habilities: genBee.habilities.map((hability: { name: string; }) => ({
+            name: hability.name,
+            icon: hability.name.toLowerCase(),
+          })),
+          abilitiesData: genBee.abilities.map((ability: { id: any; name: string; }) => ({
+            id: ability.id,
+            name: ability.name,
+            icon: ability.name.toLowerCase(),
+          })),
+          userId: userId,
         };
+
         const data = {
           userId: userId,
           state: true,
@@ -162,11 +180,11 @@ export async function GET(request: NextRequest) {
           Host,
           ip,
           dispositivo: userAgent,
-          bee: beeData
+          bee: beeData,
         };
+
         const dta = await addDocumentGeneric('BEES', data);
         console.log('buyBee', dta);
-
       }
 
       if (fromTrn === 'explore' && map) {

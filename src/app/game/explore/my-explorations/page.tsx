@@ -90,7 +90,7 @@ const ExplorePage: React.FC = () => {
   return (
     <>
       <>
-        <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+        <div className=" w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
           {slideData &&
             slideData.map((data, index) => {
               console.log('------', data);

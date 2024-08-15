@@ -69,7 +69,7 @@ const makePostRequest = async (userId: string, bee: string, signature: any) => {
 const generateBee = async (userId: string, hash: string) => {
   try {
     // Hacemos la solicitud POST al endpoint
-    const response = await axios.post('http://localhost:3000/api/generateBeeWithParts', {
+    const response = await axios.post('https://pambii-front.vercel.app/generateBeeWithParts', {
       userId: userId,
       hash: hash, // Enviamos el userId en el cuerpo de la solicitud
     });

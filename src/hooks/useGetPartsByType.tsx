@@ -54,6 +54,7 @@ const useGetPartsByType = (userId: string, typePart?: string) => {
             title: typePart,
             parts: partsByType[typePart].map((part) => ({
               name: part.namePart,
+              title: typePart,
               image: `/assets/bee-characters/category/${typePart.toLowerCase()}/${part.namePart.toLowerCase()}.png`, // Supongamos que las imágenes siguen este patrón de URL
               icon: `/assets/bee-characters/category/${typePart.toLowerCase()}.gif`, // Supongamos que los íconos siguen este patrón de URL
             })),

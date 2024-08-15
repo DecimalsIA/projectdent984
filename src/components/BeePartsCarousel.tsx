@@ -6,6 +6,7 @@ interface BeePart {
   name: string;
   image: string;
   icon: string;
+  title?: string;
 }
 
 interface Category {
@@ -53,7 +54,11 @@ const BeePartsCategory: FunctionComponent<BeePartsCategoryProps> = ({
               />
             </div>
             <div className={styles.beepartname}>
-              <img className={styles.fire11Icon} alt="" src={part.icon} />
+              <img
+                className={styles.fire11Icon}
+                alt={part.name}
+                src={part.icon}
+              />
               <div className={styles.badgetext}>{part.name}</div>
             </div>
           </div>

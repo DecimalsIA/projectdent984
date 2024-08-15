@@ -21,8 +21,8 @@ const InventoryPage: React.FC = () => {
   const handleModal = (part: any, index: any) => {
     console.log('Modal', part, index);
     const modalData: any = {
-      title: part?.name,
-      image: part?.icon, // Usar el tipo para la imagen
+      title: part?.name + '-' + part.title,
+      image: part?.image, // Usar el tipo para la imagen
       badges: [],
       buttons: [
         {
@@ -48,7 +48,7 @@ const InventoryPage: React.FC = () => {
             <img src={part.icon} alt={part.name} width="24px" height="24px" />
           ),
           value: null,
-          textBadge: part.name,
+          textBadge: part.title,
         },
       ],
       onClose: () => setIsModalOpen(false),

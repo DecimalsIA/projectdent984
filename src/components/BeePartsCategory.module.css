@@ -16,6 +16,10 @@
   margin-bottom: 10px;
 }
 
+.beecardImage {
+  padding: 10px;
+}
+
 .beepartcategory {
   display: flex;
   align-items: center;
@@ -27,7 +31,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
   overflow-x: auto;
   /* Permite el desplazamiento horizontal */
   scrollbar-width: none;
@@ -57,6 +61,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  width: 120px;
 }
 
 .badgetext {

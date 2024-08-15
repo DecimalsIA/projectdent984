@@ -45,7 +45,7 @@ const BeePartsCategory: FunctionComponent<BeePartsCategoryProps> = ({
             className={styles.cardbeepart}
             onClick={() => onPartClick?.(part, index)} // Part click handler
           >
-            <div className={styles.beepartcontainer}>
+            <div className="beecardImage">
               <img
                 className={styles.beeimageIcon}
                 alt={part.name}

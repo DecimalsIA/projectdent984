@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 interface Bee {
+  progress: any;
   id: string;
   image: string;
   title: string;

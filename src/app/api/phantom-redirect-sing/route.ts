@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
 import { db } from '@/firebase/config';
-import { collection, query, where, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
 import axios from 'axios';
 
 function decryptPayload(data: string, nonce: string, sharedSecret: Uint8Array) {
@@ -65,27 +65,22 @@ const makePostRequest = async (userId: string, bee: string, signature: any) => {
   }
 };
 
-const generateBee = async (userId: string) => {
-  try {
-    const response = await axios.post('https://pambii-front.vercel.app/api/generateBeeWithParts', {
-      userId: userId, // Enviar el userId en el cuerpo de la solicitud
-    });
 
-    console.log('Bee generated:', response.data.bee);
-    return response.data.bee; // Retorna la abeja generada
-  } catch (error: any) {
-    if (error.response) {
-      // El servidor respondió con un código de estado fuera del rango 2xx
-      console.error('Server Error:', error.response.data);
-    } else if (error.request) {
-      // La solicitud fue hecha pero no hubo respuesta
-      console.error('No response received:', error.request);
-    } else {
-      // Algo sucedió al configurar la solicitud que desencadenó un error
-      console.error('Error setting up request:', error.message);
-    }
+const generateBee = async (userId: string, hash: string) => {
+  try {
+    // Hacemos la solicitud POST al endpoint
+    const response = await axios.post('http://localhost:3000/api/generateBeeWithParts', {
+      userId: userId,
+      hash: hash, // Enviamos el userId en el cuerpo de la solicitud
+    });
+    console.log(response)
+    return response.status;
+  } catch (error) {
+    console.error('Error generating bee with parts:', error);
+    throw error; // Re-lanzamos el error para que pueda ser manejado por el llamador
   }
 };
+
 
 const addDocumentGeneric = async (dtb: string, data: any) => {
   try {
@@ -150,41 +145,21 @@ export async function GET(request: NextRequest) {
     if (decodedPayload.signature) {
 
       if (fromTrn === 'buyBee') {
-        const genBee = await generateBee(userId);
+        const genBee = await generateBee(userId, decodedPayload.signature);
 
-        const beeData = {
-          image: genBee.type.toLowerCase(),
-          title: 'BEE new ' + genBee.type.toLowerCase(),
-          type: genBee.type,
-          id: genBee.id,
-          powers: genBee.powers.map((power: { typePart: string; }) => ({
-            power: power.typePart,
-            icon: power.typePart.toLowerCase(),
-          })),
-          habilities: genBee.habilities.map((hability: { name: string; }) => ({
-            name: hability.name,
-            icon: hability.name.toLowerCase(),
-          })),
-          abilitiesData: genBee.abilities.map((ability: { id: any; name: string; }) => ({
-            id: ability.id,
-            name: ability.name,
-            icon: ability.name.toLowerCase(),
-          })),
-          userId: userId,
-        };
+        if (genBee == 200) {
+          const data = {
+            userId: userId,
+            state: true,
+            hash: decodedPayload.signature,
+            Host,
+            ip,
+            dispositivo: userAgent,
+          };
 
-        const data = {
-          userId: userId,
-          state: true,
-          hash: decodedPayload.signature,
-          Host,
-          ip,
-          dispositivo: userAgent,
-          bee: beeData,
-        };
+          await addDocumentGeneric('beee_transactions', data);
+        }
 
-        const dta = await addDocumentGeneric('BEES', data);
-        console.log('buyBee', dta);
       }
 
       if (fromTrn === 'explore' && map) {
@@ -201,7 +176,8 @@ export async function GET(request: NextRequest) {
             ip,
             dispositivo: userAgent,
             explorationPlay: explorationPlay.data,
-            timeLock: addMinutesToTimestamp(map === 'easy' ? 5 : map === 'middle' ? 10 : 20)
+            timeLock: addMinutesToTimestamp(map === 'easy' ? 5 : map === 'middle' ? 10 : 20),
+            timestamp: serverTimestamp(),
           };
           const dta = await addDocumentGeneric('explore_transaccion', data);
           console.log('explore', dta);
@@ -209,7 +185,8 @@ export async function GET(request: NextRequest) {
         }
 
       }
-      //  return NextResponse.redirect('https://t.me/PambiiGameBot');
+      return NextResponse.redirect('https://t.me/PambiiGameBot');
+      //  return NextResponse.json('https://t.me/PambiiGameBot');
     }
 
 

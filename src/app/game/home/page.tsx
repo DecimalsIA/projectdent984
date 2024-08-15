@@ -5,11 +5,9 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 import {
   BadgePambii,
-  BeeIcon,
   ButtonPambii,
   CardPambii,
   FireIcon,
-  ForceIcon,
   IconPambii,
   PencilIcon,
   ProgressBarPambii,
@@ -21,12 +19,11 @@ import {
 import UserHome from '@/components/UserHome';
 import { useRouter } from 'next/navigation';
 import { useTelegram } from '@/context/TelegramContext';
-import useGetBee from '@/hooks/useGetBee';
+
 import Image from 'next/image';
-
 import useGetExplorer from '@/hooks/usGetExplorer';
-
 import ModalPambii from '@/components/ModalPambii';
+import useFetchBees from '@/hooks/useFetchBees';
 
 function formatLargeNumber(number: number) {
   const units = ['B', 'M', 'K'];
@@ -39,8 +36,9 @@ function formatLargeNumber(number: number) {
     }
   }
 
-  return number.toString(); // Return the original number if it's smaller than 1,000
+  return number.toString();
 }
+
 const updateDocument = async (
   collectionName: string,
   documentId: string,
@@ -59,82 +57,47 @@ const Home = () => {
   const router = useRouter();
   const { user } = useTelegram();
   const userid = user?.id.toString() ?? '792924145';
-  const { bees, loading } = useGetBee(userid);
-  const { totalPayout, experience } = useGetExplorer(userid);
-  //const { accountInfo } = useAccountInfoToken(userid);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [nameBee, setNameBee] = useState('Mr Bee');
 
+  // Hooks de datos
+  const { data, loading, error: errorBee } = useFetchBees(userid);
+  const { totalPayout, experience } = useGetExplorer(userid);
+
+  // Estados
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [abilitiesData, setAbilitiesData] = useState<any>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setAbilitiesData(data[currentSlide]?.abilitiesData ?? []);
+      setInputValue(data[currentSlide]?.title ?? '');
+    }
+  }, [currentSlide, data]);
+
+  if (loading) return <div>Loading...</div>;
+  if (errorBee) return <div>{errorBee}</div>;
+
+  const slideData = data && data.length > 0 ? data : [];
+
+  console.log('slideData', slideData);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  const slideData = bees.map((bee, index) => ({
-    image: '/assets/bee-characters/' + bee.image + '.png',
-    title: bee.title ? bee.title.toUpperCase() : 'UNKNOWN',
-    abilitiesData: bee.abilitiesData,
-    power: bee.powers && bee.powers.length > 0 ? bee.powers : null,
-    progress: bee.progress,
-    index: index,
-    id: bee.id,
-  }));
   const handleChangeName = async () => {
-    console.log('currentSlide', slideData[currentSlide]);
     const updatedData = {
-      'bee.title': inputValue, // Los campos que deseas actualizar
+      'bee.title': inputValue,
     };
     await updateDocument('BEES', slideData[currentSlide].id, updatedData);
     setIsModalOpen(false);
-    setInputValue(slideData[currentSlide]?.title);
   };
-  const [inputValue, setInputValue] = useState<string>(
-    slideData[currentSlide]?.title,
-  );
-  const [abilitiesData, setAbilitiesData] = useState<any>(
-    slideData[0]?.abilitiesData ?? [],
-  );
-  const modalData = {
-    title: 'Change name of bee : ' + slideData[currentSlide]?.title,
-    body: (
-      <>
-        {' '}
-        <input
-          type="text"
-          id="textInput"
-          value={inputValue}
-          onChange={handleChange}
-          className="w-full inpurModal"
-          ref={inputRef}
-          placeholder={slideData[currentSlide]?.title}
-        />
-      </>
-    ),
-    buttons: [
-      {
-        text: 'Change name of bee',
-        bg: '#4068f5',
-        color: 'white',
-        w: 'full',
-        icon: <PencilIcon />,
-        onClick: () => handleChangeName(),
-      },
-    ],
 
-    onClose: () => setIsModalOpen(false),
-  };
-  const handleModal = (bee: string) => {
+  const handleModal = () => {
     setIsModalOpen(true);
-    setNameBee(bee);
   };
-  useEffect(() => {
-    if (slideData.length > 0) {
-      setAbilitiesData(slideData[currentSlide]?.abilitiesData ?? []);
-    }
-  }, [currentSlide, slideData]);
 
   const handlePrevSlide = () => {
     setCurrentSlide((prevSlide) => {
@@ -165,6 +128,32 @@ const Home = () => {
     },
   ];
 
+  const modalData = {
+    title: 'Change name of bee : ' + slideData[currentSlide]?.title,
+    body: (
+      <input
+        type="text"
+        id="textInput"
+        value={inputValue}
+        onChange={handleChange}
+        className="w-full inpurModal"
+        ref={inputRef}
+        placeholder={slideData[currentSlide]?.title}
+      />
+    ),
+    buttons: [
+      {
+        text: 'Change name of bee',
+        bg: '#4068f5',
+        color: 'white',
+        w: 'full',
+        icon: <PencilIcon />,
+        onClick: handleChangeName,
+      },
+    ],
+    onClose: () => setIsModalOpen(false),
+  };
+
   return (
     <div
       className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4"
@@ -191,10 +180,11 @@ const Home = () => {
             <CardPambii className="beeCard w-full mt-2 min-w-[381px] ">
               {isModalOpen && <ModalPambii className="p-4" data={modalData} />}
               <UserHome userName={`${user?.first_name} ${user?.last_name}`} />
-              {slideData[currentSlide]?.power && (
+              {slideData[currentSlide]?.powers &&
+              slideData[currentSlide].powers.length > 0 ? (
                 <div className="flex  overflow-x-auto max-w-full min-w-[320px]">
                   <div className="flex flex-wrap space-x-1 gap-2 ">
-                    {slideData[currentSlide]?.power?.map((power, index) => (
+                    {slideData[currentSlide].powers.map((power, index) => (
                       <BadgePambii
                         key={index}
                         icon={
@@ -213,9 +203,11 @@ const Home = () => {
                         number={power.value}
                         className="bg-border flex-grow badge"
                       />
-                    ))}{' '}
+                    ))}
                   </div>
                 </div>
+              ) : (
+                <div>No powers available</div>
               )}
               {slideData[currentSlide]?.progress && (
                 <div className="w-full border-b-m">
@@ -242,7 +234,7 @@ const Home = () => {
                 </div>
                 <div className="w-full mt-[10px]">
                   <ButtonPambii
-                    onClick={() => handleModal(slideData[currentSlide].title)}
+                    onClick={handleModal}
                     color="#fff"
                     className="fz15"
                     icon={<PencilIcon />}
@@ -257,7 +249,7 @@ const Home = () => {
                       alert(
                         'Withdraw the ' +
                           formatLargeNumber(totalPayout) +
-                          'PAMBII',
+                          ' PAMBII',
                       )
                     }
                     color="#fff"

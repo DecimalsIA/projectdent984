@@ -3,8 +3,9 @@ import {
   collection,
   query,
   where,
-  onSnapshot,
+  orderBy,
   limit,
+  onSnapshot,
 } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 
@@ -21,16 +22,28 @@ const useVerifyPayment = (userId: string): PaymentData => {
 
   useEffect(() => {
     if (!userId) return;
+
     const q = query(
       collection(db, 'explore_transaccion'),
       where('userId', '==', userId),
-      limit(1), // Limitar a un solo resultado, el más reciente
+      orderBy('timestamp', 'desc'),
+      limit(1),
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
         const data = doc.data();
+
+        // Calcular la diferencia de tiempo
+        const now = Date.now();
+        const difference = data.timeLock - now;
+
+        // Si la diferencia es negativa, desuscribirse
+        if (difference <= 0) {
+          unsubscribe(); // Desuscribirse cuando la diferencia sea negativa
+        }
+
         setPaymentData({
           exists: data.state === true,
           data: data,
@@ -43,6 +56,7 @@ const useVerifyPayment = (userId: string): PaymentData => {
       }
     });
 
+    // Limpieza opcional en caso de desmontaje del componente
     return () => unsubscribe();
   }, [userId]);
 

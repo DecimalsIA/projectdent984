@@ -19,423 +19,8 @@ import useVerifyPayment from '@/hooks/useVerifyPayment';
 import ExplorationPlay from '@/components/ExplorationPlay';
 import useGetBee from '@/hooks/useGetBee';
 import useGetExplorer from '@/hooks/usGetExplorer';
-/*const slideData = [
-  {
-    image: '/assets/bee-characters/fire.png',
-    title: 'Abejitachula',
-    type: 'fire',
-    id: 1,
-    powers: [
-      {
-        power: 'Fire',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="fire"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    habilites: [],
-    abilitiesData: [
-      {
-        id: 1,
-        name: 'Ability 1',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 1"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 2,
-        name: 'Ability 2',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 3,
-        name: 'Ability 3',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 3"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 4,
-        name: 'Ability 4',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 4"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 5,
-        name: 'Ability 5',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 5"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-  },
+import useFetchBees from '@/hooks/useFetchBees';
 
-  {
-    image: '/assets/bee-characters/rock.png',
-    title: 'Carnero',
-    type: 'rock',
-    id: 2,
-    powers: [
-      {
-        power: 'Rock',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 1"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    abilitiesData: [
-      {
-        id: 1,
-        name: 'Ability 1',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 1"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 2,
-        name: 'Ability 2',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 3,
-        name: 'Ability 3',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 3"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 4,
-        name: 'Ability 4',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 4"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 5,
-        name: 'Ability 5',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 5"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-  },
-  {
-    image: '/assets/bee-characters/poison.png',
-    title: 'Coringa',
-    type: 'poison',
-    powers: [
-      {
-        power: 'Syringe',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    abilitiesData: [
-      {
-        id: 1,
-        name: 'Ability 1',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 1"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 2,
-        name: 'Ability 2',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 3,
-        name: 'Ability 3',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 3"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 4,
-        name: 'Ability 4',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 4"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 5,
-        name: 'Ability 5',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 5"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-  },
-  {
-    image: '/assets/bee-characters/all.png',
-    title: 'Princesa monstruo',
-    type: 'all',
-    powers: [
-      {
-        power: 'Rock',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        power: 'Fire',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        power: 'Ghost',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/ghost.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        power: 'Water',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/bottle.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    habilities: [
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    abilitiesData: [
-      {
-        id: 1,
-        name: 'Ability 1',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 1"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 2,
-        name: 'Ability 2',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 3,
-        name: 'Ability 3',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 3"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 4,
-        name: 'Ability 4',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/ghost.svg"
-            alt="Ability 4"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 5,
-        name: 'Ability 5',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/bottle.svg"
-            alt="Ability 5"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-  },
-  // Añade más objetos según sea necesario
-]; */
 type Power = {
   power: string;
   powerIcon: JSX.Element;
@@ -448,7 +33,6 @@ type Ability = {
 };
 
 type Progress = {
-  // define the properties of progress, e.g.:
   percentage: number;
 };
 
@@ -469,6 +53,7 @@ const ExplorePage: React.FC = () => {
   const router = useRouter();
 
   const { bees } = useGetBee(userId);
+  const { data: beesData } = useFetchBees(userId);
   const { totalRecords, totalPayout, experience, win, loss } =
     useGetExplorer(userId);
   const [slideData, setSlideData] = useState<BeeData[]>([]);
@@ -530,23 +115,22 @@ const ExplorePage: React.FC = () => {
   const { exists, data } = useVerifyPayment(userId);
 
   useEffect(() => {
-    if (bees && bees.length > 0) {
-      const mappedSlideData: any[] = bees.map((bee, index) => ({
-        image: '/assets/bee-characters/' + bee.image + '.png',
+    if (beesData && bees && bees.length > 0) {
+      const mappedSlideData: any[] = beesData.map((bee, index) => ({
+        image: bee.image,
         title: bee.title ? bee.title.toUpperCase() : 'UNKNOWN',
-        abilitiesData: bee.abilitiesData,
+        abilitiesData: bee?.abilitiesData,
         power: bee.powers && bee.powers.length > 0 ? bee.powers : null,
-        progress: bee.progress,
         type: bee.type,
         id: bee.id,
         index: index,
       }));
 
       setSlideData(mappedSlideData);
-      setCardType(mappedSlideData[0].type);
-      setAbilitiesData(mappedSlideData[0].abilitiesData);
+      setCardType(mappedSlideData[0]?.type || '');
+      setAbilitiesData(mappedSlideData[0]?.abilitiesData || []);
     }
-  }, [bees]);
+  }, [bees, beesData]);
 
   const { bee } = useParams();
 
@@ -568,21 +152,41 @@ const ExplorePage: React.FC = () => {
     });
   };
   useEffect(() => {
+    console.log('exists000', exists);
+    console.log('data---->', data);
+    if (exists && data) {
+      console.log('La transacción existe y los datos son:', data);
+      router.push('/game/explore/' + data?.map + '/' + data?.bee);
+
+      const now = Date.now();
+      const difference = data.timeLock - now;
+
+      if (difference <= 0) {
+        console.log('La transacción ha expirado.');
+
+        // Aquí puedes realizar alguna acción adicional si la transacción ha expirado
+      }
+    } else {
+      console.log('No se encontraron transacciones para el usuario.');
+    }
+  }, [exists, JSON.stringify(data)]);
+  /*
+  useEffect(() => {
+    console.log('exists000', exists);
+    console.log('data---->', data);
     if (exists && data) {
       const now = Date.now();
       const difference = data.timeLock - now;
-      if (difference > 0) {
+      if (difference <= 0 && !exists) {
         router.push('/game/explore/' + data?.map + '/' + data?.bee);
       }
 
-      console.log('difference', difference, difference <= 0);
-      setLockState(difference > 0);
-    }
-  }, [exists, data]);
+      console.log('difference--->', difference, difference <= 0);
 
-  if (!bees || slideData.length === 0) {
-    return <div>Loading...</div>; // Muestra un indicador de carga mientras se inicializan los datos
-  }
+      setLockState(difference <= 0 && !exists);
+    }
+  }, [exists, data, router]); */
+
   const tabs = [
     {
       title: 'Select Arena',
@@ -597,59 +201,58 @@ const ExplorePage: React.FC = () => {
   ];
   return (
     <>
-      <>
-        <div className=" w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
-          <TabsPambii
-            tabs={tabs}
-            mode="background"
-            bg="#2a2a2a"
-            className="mt-4 mb-2 w-full"
-          />
-          <CardPambii
-            type={cardType}
-            className="bg-gray-200 w-full card-pambii-b  text-black flex items-center justify-center"
-          >
-            {slideData.length > 0 && (
-              <div className="w-full flex flex-row justify-center flex-wrap gap-1">
-                <SlidePambii
-                  slides={slideData}
-                  className="w-full max-w-md mx-auto"
-                  onPrevSlide={handlePrevSlide}
-                  onNextSlide={handleNextSlide}
-                />
-              </div>
-            )}
-            {badgesData && <ExplorationInfo badges={badgesData} />}
-            {lockState && data.bee == slideData[currentSlide].id ? (
-              <TransactionComponent
-                spl={bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35}
-                userid={userId}
-                fromTrn="explore"
-                bee={slideData[currentSlide].id}
-                map={bee}
+      <div className="w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+        <TabsPambii
+          tabs={tabs}
+          mode="background"
+          bg="#2a2a2a"
+          className="mt-4 mb-2 w-full"
+        />
+        <CardPambii
+          type={cardType}
+          className="bg-gray-200 w-full card-pambii-b text-black flex items-center justify-center"
+        >
+          {slideData.length > 0 && (
+            <div className="w-full flex flex-row justify-center flex-wrap gap-1">
+              <SlidePambii
+                slides={slideData}
+                className="w-full max-w-md mx-auto"
+                onPrevSlide={handlePrevSlide}
+                onNextSlide={handleNextSlide}
               />
-            ) : (
-              <ButtonPambii
-                color="white"
-                className="mb-2"
-                onClick={() =>
-                  router.push('/game/explore/' + bee + '/' + data.bee)
-                }
-                icon={
-                  <Image
-                    src="/assets/bee-characters/icons/explore-icon.svg"
-                    alt="Select arena"
-                    width={24}
-                    height={24}
-                  />
-                }
-              >
-                View Exploration state
-              </ButtonPambii>
-            )}
-          </CardPambii>
-        </div>
-      </>
+            </div>
+          )}
+          {badgesData && <ExplorationInfo badges={badgesData} />}
+          {lockState ? (
+            <TransactionComponent
+              spl={bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35}
+              userid={userId}
+              fromTrn="explore"
+              bee={slideData[currentSlide].id}
+              map={bee}
+            />
+          ) : (
+            <ButtonPambii
+              color="white"
+              className="mb-2"
+              onClick={() => {
+                console.log('clock', data, bee);
+                router.push('/game/explore/' + bee + '/' + data.bee);
+              }}
+              icon={
+                <Image
+                  src="/assets/bee-characters/icons/explore-icon.svg"
+                  alt="Select arena"
+                  width={24}
+                  height={24}
+                />
+              }
+            >
+              View Exploration state
+            </ButtonPambii>
+          )}
+        </CardPambii>
+      </div>
     </>
   );
 };

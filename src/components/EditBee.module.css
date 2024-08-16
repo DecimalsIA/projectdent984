@@ -1,0 +1,345 @@
+.boldMessagesConversation {
+  width: 18px;
+  position: relative;
+  height: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.name {
+  position: relative;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+.editname {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.fuego1Icon {
+  width: 192px;
+  position: relative;
+  height: 192px;
+  object-fit: cover;
+}
+
+.beecontainer {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.text {
+  position: relative;
+  font-weight: 500;
+}
+
+.boldSecurityBombMinimal {
+  width: 16px;
+  position: relative;
+  height: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.badgetext {
+  position: relative;
+  line-height: 120%;
+  font-weight: 500;
+}
+
+.badge {
+  flex: 1;
+  border-radius: 24px;
+  background-color: #292929;
+  border: 0.8px solid #434343;
+  box-sizing: border-box;
+  height: 28px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  gap: 4px;
+}
+
+.boldLikeHeart {
+  width: 16px;
+  position: relative;
+  border-radius: 5px;
+  height: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.badges {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.powerratecontainer {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.cabezaveneno1Icon {
+  width: 64px;
+  position: relative;
+  height: 80px;
+  object-fit: cover;
+}
+
+.image {
+  width: 100px;
+  border-radius: 10px;
+  background-color: #292929;
+  border: 1px solid #434343;
+  box-sizing: border-box;
+  height: 100px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.text2 {
+  align-self: stretch;
+  position: relative;
+  font-size: 10px;
+  line-height: 130%;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.badge5 {
+  border-radius: 24px;
+  background-color: #292929;
+  border: 0.8px solid #434343;
+  box-sizing: border-box;
+  height: 28px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  gap: 6px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.nameandtype {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.generalinfo {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.box {
+  width: calc(100% + 0.5px);
+  margin: 0 !important;
+  position: absolute;
+  top: 0px;
+  right: -0.5px;
+  left: 0px;
+  box-shadow: 0px 6px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background-color: #4e4e4e;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  height: 36px;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 0;
+}
+
+.label {
+  position: relative;
+  letter-spacing: 0.02em;
+  line-height: 20px;
+  text-transform: uppercase;
+  font-weight: 900;
+  text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.15);
+}
+
+.box1 {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.button {
+  flex: 1;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25), 0px -2px 2px rgba(0, 0, 0, 0.1) inset;
+  border-radius: 10px;
+  background-color: #4e4e4e;
+  height: 42px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 12px 13px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.box2 {
+  width: calc(100% + 0.5px);
+  margin: 0 !important;
+  position: absolute;
+  top: 0px;
+  right: -0.5px;
+  left: 0px;
+  box-shadow: 0px 6px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background-color: #4068f5;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  height: 36px;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 0;
+}
+
+.button1 {
+  flex: 1;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25), 0px -2px 2px rgba(0, 0, 0, 0.1) inset;
+  border-radius: 10px;
+  background-color: #4068f5;
+  height: 42px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 12px 13px;
+  box-sizing: border-box;
+  position: relative;
+  cursor: pointer;
+}
+
+.buttons {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.beepart {
+  align-self: stretch;
+  border-radius: 20px;
+  background-color: #292929;
+  border: 1px solid #434343;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 12px;
+  gap: 12px;
+}
+
+.patasdelanterasveneno1Icon {
+  width: 76px;
+  position: relative;
+  height: 82px;
+  object-fit: cover;
+}
+
+.patastraserasveneno1Icon {
+  width: 84px;
+  position: relative;
+  height: 90px;
+  object-fit: cover;
+}
+
+.torsoveneno1Icon {
+  width: 68px;
+  position: relative;
+  height: 82px;
+  object-fit: cover;
+}
+
+.agijonveneno1Icon {
+  width: 56px;
+  position: relative;
+  height: 68px;
+  object-fit: cover;
+}
+
+.alasveneno1Icon {
+  width: 76px;
+  position: relative;
+  height: 78px;
+  object-fit: cover;
+}
+
+.beecardedit {
+  width: 100%;
+  border-radius: 20px;
+  background: radial-gradient(50% 50% at 50% 50%, #37ff7d, rgba(232, 55, 255, 0)), #303030;
+  border: 1px solid #434343;
+  box-sizing: border-box;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  gap: 16px;
+}
+
+.bodycontainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  font-size: 16px;
+  color: #fff;
+  font-family: Poppins;
+  margin-bottom: 100px;
+}

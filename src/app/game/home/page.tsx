@@ -153,6 +153,7 @@ const Home = () => {
     ],
     onClose: () => setIsModalOpen(false),
   };
+  //game/inventory/bee/e8761868-1e27-49e8-a8cf-b825a5e4490b
 
   return (
     <div
@@ -234,7 +235,11 @@ const Home = () => {
                 </div>
                 <div className="w-full mt-[10px]">
                   <ButtonPambii
-                    onClick={handleModal}
+                    onClick={() =>
+                      router.push(
+                        '/game/inventory/bee/' + slideData[currentSlide].id,
+                      )
+                    }
                     color="#fff"
                     className="fz15"
                     icon={<PencilIcon />}

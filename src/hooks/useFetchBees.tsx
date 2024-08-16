@@ -15,7 +15,7 @@ interface Bee {
   hashId: string;
 }
 
-const useFetchBees = (userId: string) => {
+const useFetchBees = (userId: string, idbee?: string) => {
   const [data, setData] = useState<Bee[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +24,7 @@ const useFetchBees = (userId: string) => {
     const fetchBees = async () => {
       try {
         setLoading(true);
-        const url = `/api/getBees?userId=${userId}`;
+        const url = `/api/getBees?userId=${userId}&idbee=${idbee || ''}`;
         const response = await axios.get<{ bees: Bee[] }>(url);
         setData(response.data.bees);
       } catch (err) {

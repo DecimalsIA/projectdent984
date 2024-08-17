@@ -29,10 +29,10 @@ const InventoryPage: React.FC = () => {
       badges: [],
       htmlButtom: (
         <TransactionComponent
-          textButton="Buy "
+          textButton="Buy Item"
           spl={30}
           userid={userId}
-          fromTrn="buy_market"
+          fromTrn="buy_market_item"
           iconName="dollar.svg"
           idBuy={part.idPart}
         />
@@ -44,7 +44,7 @@ const InventoryPage: React.FC = () => {
             <img src={part.icon} alt={part.name} width="24px" height="24px" />
           ),
           value: null,
-          textBadge: part.title,
+          textBadge: part.typePart,
         },
       ],
       onClose: () => setIsModalOpen(false),

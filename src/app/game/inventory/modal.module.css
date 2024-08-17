@@ -1,0 +1,290 @@
+.badgetext {
+  position: relative;
+  line-height: 120%;
+}
+
+.beepartcategory {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.beepartcategoryParent {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  font-size: 16px;
+  color: #fff;
+  font-family: Poppins;
+}
+
+.badgetext {
+  position: relative;
+  line-height: 120%;
+  font-weight: 500;
+}
+
+.boldMoneyDollar {
+  width: 18px;
+  position: relative;
+  height: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.badgetext {
+  position: relative;
+  line-height: 120%;
+  font-weight: 500;
+}
+
+.achievementcontainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.badgetext1 {
+  position: relative;
+  font-size: 12px;
+  line-height: 120%;
+  font-weight: 500;
+  color: #fff;
+}
+
+.boldFacesEmotionsSticke {
+  width: 18px;
+  position: relative;
+  height: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: none;
+}
+
+.boldNotesArchiveUpMini {
+  width: 18px;
+  position: relative;
+  border-radius: 5px;
+  height: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.badgetext {
+  position: relative;
+  line-height: 120%;
+  font-weight: 500;
+}
+
+.achievementcontainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.badgetext1 {
+  position: relative;
+  font-size: 12px;
+  line-height: 120%;
+  font-weight: 500;
+  color: #fff;
+}
+
+.boldFacesEmotionsSticke {
+  width: 18px;
+  position: relative;
+  height: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: none;
+}
+
+.badgeMinibuttonTooltip {
+  width: 100%;
+  position: relative;
+  border-radius: 24px;
+  background-color: #292929;
+  border: 1px solid #434343;
+  box-sizing: border-box;
+  height: 35px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 10px;
+  color: #626262;
+  font-family: Poppins;
+}
+
+
+.badgeMinibuttonTooltip {
+  width: 100%;
+  position: relative;
+  border-radius: 24px;
+  background-color: #292929;
+  border: 1px solid #434343;
+  box-sizing: border-box;
+  height: 35px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 10px;
+  color: #626262;
+  font-family: Poppins;
+}
+
+
+
+.beepartcontainer {
+  width: 100%;
+  position: relative;
+  border-radius: 8px;
+  background-color: #292929;
+  border: 1px solid #434343;
+  box-sizing: border-box;
+  height: 44px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0px 12px;
+  text-align: left;
+  font-size: 14px;
+  color: #fff;
+  font-family: Poppins;
+}
+
+.text {
+  position: relative;
+  font-weight: 500;
+}
+
+.boldMoneyDollar {
+  width: 18px;
+  position: relative;
+  height: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.badgetext {
+  position: relative;
+  line-height: 120%;
+  font-weight: 500;
+}
+
+.achievementcontainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.badgetext1 {
+  position: relative;
+  font-size: 12px;
+  line-height: 120%;
+  font-weight: 500;
+  color: #fff;
+}
+
+.boldFacesEmotionsSticke {
+  width: 18px;
+  position: relative;
+  height: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: none;
+}
+
+.badgeMinibuttonTooltip {
+  align-self: stretch;
+  border-radius: 24px;
+  background-color: #292929;
+  border: 1px solid #434343;
+  box-sizing: border-box;
+  height: 35px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+}
+
+.boldNotesArchiveUpMini {
+  width: 18px;
+  position: relative;
+  border-radius: 5px;
+  height: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.text {
+  position: relative;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: Poppins;
+  color: #fff;
+  text-align: left;
+}
+
+
+
+.abilities {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.abilitiescontainer1 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: center;
+  font-size: 10px;
+  color: #626262;
+}
+
+.abilitiescontainer {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  text-align: left;
+  font-size: 12px;
+  color: #fff;
+  font-family: Poppins;
+}

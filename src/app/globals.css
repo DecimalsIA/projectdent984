@@ -646,6 +646,129 @@ h2 {
   font-family: Poppins;
 }
 
+.badgeMinibuttonTooltip {
+  align-self: stretch;
+  border-radius: 24px;
+  background-color: #292929;
+  border: 1px solid #434343;
+  box-sizing: border-box;
+  height: 35px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+
+}
+
+.beepartcategoryParent .beepartcategory .badgetext {
+  position: relative;
+  font-size: 16px;
+  line-height: 120%;
+  font-family: Poppins;
+  color: #fff;
+  text-align: left;
+}
+
+.beepartcontainer {
+  width: 100%;
+  position: relative;
+  border-radius: 8px;
+  background-color: #292929;
+  border: 1px #434343;
+  box-sizing: border-box;
+  height: 44px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0px 12px;
+  text-align: left;
+  font-size: 14px;
+  color: #fff;
+  font-family: Poppins;
+  margin-bottom: 14px;
+}
+
+.beepartcontainer .badgetext {
+  position: relative;
+  font-size: 14px;
+  line-height: 120%;
+  font-weight: 500;
+  font-family: Poppins;
+  color: #fff;
+  text-align: left;
+}
+
+.abilitiescontainer .text {
+  position: relative;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: Poppins;
+  color: #fff;
+  text-align: left;
+}
+
+.abilitiescontainer1 .abilities {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.abilitiescontainer1 .abilities .badgeMinibuttonTooltip {
+  width: 100%;
+  position: relative;
+  border-radius: 24px;
+  background-color: #292929;
+
+  border: 1px solid #434343;
+  box-sizing: border-box;
+  height: 35px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 10px;
+  color: #626262;
+  font-family: Poppins
+}
+
+.inpurModal {
+  border: 1px solid #434343;
+}
+
+.abilitiescontainer1 .abilities .badgeMinibuttonTooltip .achievementcontainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.abilitiescontainer1 .abilities .badgetext1 {
+  position: relative;
+  font-size: 12px;
+  line-height: 120%;
+  font-weight: 500;
+  font-family: Poppins;
+  color: #fff;
+  text-align: center;
+}
+
+
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

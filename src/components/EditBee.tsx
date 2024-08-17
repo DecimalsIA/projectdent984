@@ -40,7 +40,7 @@ const EditBee: FunctionComponent<EditBeeProps> = ({
     acc[part.name] = part;
     return acc;
   }, {});
-  console.log('partsByKey', partsByKey);
+
   return (
     <div className={styles.bodycontainer}>
       <div className={styles.beecardedit}>

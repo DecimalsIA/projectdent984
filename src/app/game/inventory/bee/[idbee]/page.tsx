@@ -4,6 +4,7 @@ import EditBee from '@/components/EditBee';
 import ModalPambii from '@/components/ModalPambii';
 import { useTelegram } from '@/context/TelegramContext';
 import useFetchBees from '@/hooks/useFetchBees';
+import { updateDocument } from '@/utils/firebase';
 import { useParams, useRouter } from 'next/navigation';
 import { PencilIcon } from 'pambii-devtrader-front';
 import { ChangeEvent, useRef, useState } from 'react';
@@ -11,7 +12,7 @@ import { ChangeEvent, useRef, useState } from 'react';
 const SpecialMarketPage: React.FC = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [dataModal, setDataModal] = useState();
+  const [dataModal, setDataModal] = useState(false);
   const [inputValue, setInputValue] = useState<string>('');
   const { user } = useTelegram();
   const { idbee } = useParams();
@@ -22,8 +23,6 @@ const SpecialMarketPage: React.FC = () => {
   // Hooks de datos
   const { data, loading, error: errorBee } = useFetchBees(userid, idBee);
 
-  console.log('Edit', data);
-
   const handleViewInfo = (part: any) => {
     console.log('View info clicked for:', part.name);
     // Lógica para ver la información de la parte
@@ -32,39 +31,54 @@ const SpecialMarketPage: React.FC = () => {
   const handleChangePart = (part: any) => {
     alert('You have no parts to change');
   };
-  const handleChangeName = (name: string) => {
-    const modalData: any = {
-      title: 'Change name of bee : ' + name,
-      body: (
-        <input
-          type="text"
-          id="textInput"
-          value={inputValue}
-          onChange={handleChange}
-          className="w-full inpurModal"
-          ref={inputRef}
-          placeholder={name}
-        />
-      ),
-      buttons: [
-        {
-          text: 'Change name of bee',
-          bg: '#4068f5',
-          color: 'white',
-          w: 'full',
-          icon: <PencilIcon />,
-          onClick: handleChangeName,
-        },
-      ],
-      onClose: () => setIsModalOpen(false),
+  const handleChangeName = async () => {
+    // setIsModalOpen(false);
+    setDataModal(false);
+    const updatedData = {
+      title: inputValue,
+      updateAt: new Date().getTime(),
     };
-    setDataModal(modalData);
-    if (dataModal) {
+    if (updatedData) {
+      await updateDocument('BEES', idBee, updatedData);
+
       setIsModalOpen(true);
+      if (dataModal) {
+        closeModal();
+      }
     }
+    //closeModal();
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+    setDataModal(true);
+  };
+  const modalData: any = {
+    title: 'Change name of bee',
+    body: (
+      <input
+        type="text"
+        id="textInput"
+        value={inputValue}
+        onChange={handleChange}
+        className="w-full inpurModal"
+        ref={inputRef}
+      />
+    ),
+    buttons: [
+      {
+        text: 'Change name of bee',
+        bg: '#4068f5',
+        color: 'white',
+        w: 'full',
+        icon: <PencilIcon />,
+        onClick: () => handleChangeName(),
+      },
+    ],
+    onClose: () => closeModal(),
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setDataModal(false);
   };
 
   const transformBeeData = (beeFromRequest: {
@@ -89,7 +103,7 @@ const SpecialMarketPage: React.FC = () => {
       }));
 
     return {
-      name: beeFromRequest.title,
+      name: inputValue ? inputValue : beeFromRequest.title,
       imageSrc: beeFromRequest.image, // Imagen principal de la abeja
       parts: beeParts,
       stats: [],
@@ -107,9 +121,7 @@ const SpecialMarketPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full">
       <div className="w-full">
-        {isModalOpen && dataModal && (
-          <ModalPambii className="p-4" data={dataModal} />
-        )}
+        {isModalOpen && <ModalPambii className="p-4" data={modalData} />}
         {data?.map((bee: any) => {
           const beeData = transformBeeData(bee);
           return (

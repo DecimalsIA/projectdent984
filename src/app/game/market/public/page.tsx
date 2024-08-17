@@ -1,62 +1,110 @@
 'use client';
 
 import BeePartsCarousel from '@/components/BeePartsCarousel';
+import ModalPambii from '@/components/ModalPambii';
+import { useTelegram } from '@/context/TelegramContext';
+import useGetPartsMarketPlaceByType from '@/hooks/useGetPartsMarketPlaceByType';
 import { useRouter } from 'next/navigation';
-import { RankingIcon, StatsIcon, TabsPambii } from 'pambii-devtrader-front';
+import { FireAnimated, MoneyIcon } from 'pambii-devtrader-front';
+import { useState, useEffect } from 'react';
 
-const PublicMarketPage: React.FC = () => {
+const InventoryPage: React.FC = () => {
+  const userid = 'System';
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dataModal, setIsDataModal] = useState();
   const router = useRouter();
-  const beePartsData = {
-    title: 'Fire bee parts',
-    link: 'https://example.com/fire-bee-parts',
-    parts: [
-      {
-        image: '/assets/bee-characters/icons/beeImage.png',
-        icon: '/assets/bee-characters/icons/fire.gif',
-        name: 'Back legs 1',
-      },
-      {
-        image: '/assets/bee-characters/icons/beeImage.png',
-        icon: '/assets/bee-characters/icons/fire.gif',
-        name: 'Back legs 2',
-      },
-      {
-        image: '/assets/bee-characters/icons/beeImage.png',
-        icon: '/assets/bee-characters/icons/fire.gif',
-        name: 'Back legs 3',
-      },
-      {
-        image: '/assets/bee-characters/icons/beeImage.png',
-        icon: '/assets/bee-characters/icons/fire.gif',
-        name: 'Back legs 4',
-      },
-    ],
+
+  // Obtener las partes agrupadas por `typePart` y la función para cargar más
+  const { categories, loading, error, loadMore, hasMore } =
+    useGetPartsMarketPlaceByType(userid);
+
+  const handleModal = (part: any, index: any) => {
+    console.log('Modal', part, index);
+    const modalData: any = {
+      title: part?.name + '-' + part.title,
+      image: part?.image, // Usar el tipo para la imagen
+      badges: [],
+      buttons: [
+        {
+          text: 'EQUIP',
+          bg: '#7F29EE',
+          color: 'white',
+          w: 'full',
+          icon: <FireAnimated />,
+          onClick: () => router.push('/game/market/public'),
+        },
+        {
+          text: 'SELL ITEM',
+          bg: '#EE9F29',
+          color: 'white',
+          w: 'full',
+          icon: <MoneyIcon width="1.25rem" height="1.25rem" />,
+          onClick: () => alert('Not available'),
+        },
+      ],
+      bonus: [
+        {
+          icon: (
+            <img src={part.icon} alt={part.name} width="24px" height="24px" />
+          ),
+          value: null,
+          textBadge: part.title,
+        },
+      ],
+      onClose: () => setIsModalOpen(false),
+    };
+    setIsDataModal(modalData);
+    setIsModalOpen(true);
   };
-  ///Users/user/Desktop/bee-characters/Bold/Arrows/arowr.svg
+
+  // Listener para el scroll para implementar carga perezosa
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+          document.documentElement.offsetHeight ||
+        loading
+      ) {
+        return;
+      }
+      loadMore();
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [loading, loadMore]);
 
   return (
-    <div className='className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full'>
-      <div className="w-full">
-        <BeePartsCarousel
-          category={beePartsData}
-          onCategoryClick={() => console.log('Category clicked!')}
-          onPartClick={(part, index) => console.log('Part clicked:', part)}
-        />
-        <BeePartsCarousel
-          category={beePartsData}
-          onCategoryClick={() => console.log('Category clicked!')}
-          onPartClick={(part, index) => console.log('Part clicked:', part)}
-        />
-        <BeePartsCarousel
-          category={beePartsData}
-          onCategoryClick={() => console.log('Category clicked!')}
-          onPartClick={(part, index) =>
-            console.log('Part clicked:', part, index)
-          }
-        />
+    <>
+      {dataModal && isModalOpen && (
+        <ModalPambii className="p-4" data={dataModal} />
+      )}
+      <div className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full">
+        <div className="w-full mb-44">
+          {loading && categories.length === 0 && <div>Loading...</div>}
+          {error && <div>{error}</div>}
+          {!loading &&
+            categories.length > 0 &&
+            categories.map((category, index) => (
+              <BeePartsCarousel
+                key={category.title + index}
+                category={category}
+                onCategoryClick={() =>
+                  router.push('/game/market/category/' + category.title)
+                }
+                onPartClick={(category, index) => handleModal(category, index)}
+              />
+            ))}
+          {loading && categories.length > 0 && <div>Loading more...</div>}
+          {!loading && hasMore && (
+            <button onClick={loadMore} className="mt-4">
+              Load More
+            </button>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default PublicMarketPage;
+export default InventoryPage;

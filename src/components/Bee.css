@@ -18,26 +18,27 @@
 }
 
 .torso {
-  top: 0px;
-  left: 46px;
+  top: 7px;
+  left: 56px;
   z-index: 1;
 }
 
 .frontlegs {
-  top: 9px;
-  left: 46px;
-  z-index: 12;
+  top: 8px;
+  left: 55px;
+  z-index: 4;
 }
 
 .hindlegs {
-  top: 12px;
-  left: 42px;
-  z-index: 14;
+  top: 10px;
+  left: 57px;
+  z-index: 1;
 }
 
 .stinger {
-  top: 5px;
-  left: 45px;
+  top: 9px;
+  left: 57px;
+  z-index: 2;
 }
 
 .ala1Sup {
@@ -46,8 +47,8 @@
 }
 
 .ala1Inf {
-  top: 19px;
-  left: 67px;
+  top: 7px;
+  left: 56px;
 }
 
 .ala2Sup {

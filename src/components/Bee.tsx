@@ -20,7 +20,7 @@ const Bee: React.FC<BeeProps> = ({
   basePathT,
 }) => {
   return (
-    <div className="bee">
+    <div className="bee slide-image">
       <img
         src={`/assets/bee-characters/category/${basePathH}/parts/head.png`}
         className="part head"

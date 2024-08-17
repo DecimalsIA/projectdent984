@@ -18,7 +18,7 @@ interface Category {
 interface BeePartsCategoryProps {
   category: Category;
   onCategoryClick?: () => void; // Callback for category click
-  onPartClick?: (part: BeePart, index: any) => void; // Callback for part click
+  onPartClick?: (part: any, index: any) => void; // Callback for part click
 }
 
 const BeePartsCategory: FunctionComponent<BeePartsCategoryProps> = ({

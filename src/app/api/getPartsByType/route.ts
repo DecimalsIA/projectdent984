@@ -8,6 +8,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
     const typePart = searchParams.get('typePart'); // Parámetro opcional
+    const typePartName = searchParams.get('part');
 
     if (!userId) {
       return NextResponse.json({ error: 'userId is required' }, { status: 400 });
@@ -57,13 +58,21 @@ export async function GET(request: Request) {
     let partsQuery;
     const partsRef = collection(db, 'beeParts');
 
+
     if (typePart) {
       // Si se proporciona `typePart`, filtrar por tipo de parte y `partIds`
       partsQuery = query(partsRef, where('idPart', 'in', partIdsFromSlots), where('typePart', '==', typePart));
     } else {
-      // Si no se proporciona `typePart`, traer todas las partes asociadas a los `partIds`
-      partsQuery = query(partsRef, where('idPart', 'in', partIdsFromSlots));
+      if (typePartName) {
+        partsQuery = query(partsRef, where('idPart', 'in', partIdsFromSlots), where('namePart', '==', typePartName));
+      } else {
+        // Si no se proporciona `typePart`, traer todas las partes asociadas a los `partIds`
+        partsQuery = query(partsRef, where('idPart', 'in', partIdsFromSlots));
+
+      }
     }
+
+
 
     const partsSnapshot = await getDocs(partsQuery);
 

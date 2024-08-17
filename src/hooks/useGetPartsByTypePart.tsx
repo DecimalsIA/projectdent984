@@ -22,15 +22,15 @@ interface BeePart {
 
 interface Category {
   title: string;
-  parts: {
-    name: string;
-    image: string;
-    icon: string;
-  }[];
+  parts: any[];
   link: string;
 }
 
-const useGetPartsByTypePart = (userId: string, typePart?: string) => {
+const useGetPartsByTypePart = (
+  userId: string,
+  typePart?: string,
+  part?: string,
+) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,14 +41,14 @@ const useGetPartsByTypePart = (userId: string, typePart?: string) => {
         setLoading(true);
         const url = `/api/getPartsByType?userId=${userId}&typePart=${
           typePart || ''
-        }`;
+        }&part=${part || ''}`;
         const response = await axios.get<{
-          partsByType: { [key: string]: BeePart[] };
+          partsByType: { [key: string]: any[] };
         }>(url);
         const partsByType = response.data.partsByType;
 
         // Agrupar las partes por `namePart`
-        const groupedByPartName: { [key: string]: BeePart[] } = {};
+        const groupedByPartName: { [key: string]: any[] } = {};
 
         Object.values(partsByType).forEach((parts) => {
           parts.forEach((part) => {
@@ -65,8 +65,10 @@ const useGetPartsByTypePart = (userId: string, typePart?: string) => {
         ).map((namePart) => ({
           title: namePart,
           parts: groupedByPartName[namePart].map((part) => ({
+            ...part,
             name: part.namePart,
             image: `/assets/bee-characters/category/${part.typePart.toLowerCase()}/${namePart.toLowerCase()}.png`, // Supongamos que las imágenes siguen este patrón de URL
+            typePart: part.typePart,
             icon: `/assets/bee-characters/category/${part.typePart.toLowerCase()}.gif`, // Supongamos que los íconos siguen este patrón de URL
           })),
           link: `/game/inventory/parts/${namePart.toLowerCase()}`, // Enlace para la categoría

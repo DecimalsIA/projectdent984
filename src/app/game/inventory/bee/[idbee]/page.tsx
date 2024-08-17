@@ -25,11 +25,13 @@ const SpecialMarketPage: React.FC = () => {
 
   const handleViewInfo = (part: any) => {
     console.log('View info clicked for:', part.name);
+
     // Lógica para ver la información de la parte
   };
 
   const handleChangePart = (part: any) => {
-    alert('You have no parts to change');
+    //console.log('Change', part);
+    router.push('/game/inventory/bee/' + idBee + '/' + part.name.toLowerCase());
   };
   const handleChangeName = async () => {
     // setIsModalOpen(false);
@@ -40,7 +42,6 @@ const SpecialMarketPage: React.FC = () => {
     };
     if (updatedData) {
       await updateDocument('BEES', idBee, updatedData);
-
       setIsModalOpen(true);
       if (dataModal) {
         closeModal();

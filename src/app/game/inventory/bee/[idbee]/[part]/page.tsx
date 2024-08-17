@@ -39,7 +39,7 @@ const InventoryPage: React.FC = () => {
         color: 'white',
         w: 'full',
         icon: <MoneyIcon width="1.25rem" height="1.25rem" />,
-        onClick: () => alert('Not available'),
+        onClick: () => changeItem(part.isAssigned),
       },
     ];
     const modalData: any = {
@@ -71,6 +71,11 @@ const InventoryPage: React.FC = () => {
     };
     setIsDataModal(modalData);
     setIsModalOpen(true);
+  };
+  const changeItem = (isAssigned: boolean) => {
+    if (isAssigned) {
+      alert('Not available');
+    }
   };
 
   return (

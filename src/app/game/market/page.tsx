@@ -85,9 +85,9 @@ const InventoryPage: React.FC = () => {
           {error && <div>{error}</div>}
           {!loading &&
             categories.length > 0 &&
-            categories.map((category) => (
+            categories.map((category, index) => (
               <BeePartsCarousel
-                key={category.title}
+                key={category.title + index}
                 category={category}
                 onCategoryClick={() =>
                   router.push('/game/market/category/' + category.title)

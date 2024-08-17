@@ -46,7 +46,7 @@ const useGetPartsMarketPlaceByType = (userId: string, typePart?: string) => {
         // Crear la URL con los parámetros para paginación
         let url = `/api/getPartByMarketPlace?userId=${userId}&typePart=${
           typePart || ''
-        }&pageSize=10`;
+        }&pageSize=30`;
         if (lastId) {
           url += `&lastVisibleId=${lastId}`;
         }

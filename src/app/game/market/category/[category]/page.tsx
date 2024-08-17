@@ -1,49 +1,44 @@
 'use client';
 
 import BeePartsComponent from '@/components/BeeParts';
-import { useRouter } from 'next/navigation';
-import { RankingIcon, StatsIcon, TabsPambii } from 'pambii-devtrader-front';
+import useGetPartsMarketPlaceByType from '@/hooks/useGetPartsMarketPlaceByType';
+import { useParams, useRouter } from 'next/navigation';
 
 const SpecialMarketPage: React.FC = () => {
-  const partsData = [
-    {
-      image: '/assets/bee-characters/icons/beeImage.png',
-      icon: '/assets/bee-characters/icons/fire.gif',
-      name: 'Front legs',
-    },
-    {
-      image: '/assets/bee-characters/icons/beeImage.png',
-      icon: '/assets/bee-characters/icons/ghost.gif',
-      name: 'Back legs',
-    },
-    {
-      image: '/assets/bee-characters/icons/beeImage.png',
-      icon: '/assets/bee-characters/icons/fire.gif',
-      name: 'Head',
-    },
-    {
-      image: '/assets/bee-characters/icons/beeImage.png',
-      icon: '/assets/bee-characters/icons/ghost.gif',
-      name: 'Back legs',
-    },
-    {
-      image: '/assets/bee-characters/icons/beeImage.png',
-      icon: '/assets/bee-characters/icons/fire.gif',
-      name: 'Back legs',
-    },
-    {
-      image: '/assets/bee-characters/icons/beeImage.png',
-      icon: '/assets/bee-characters/icons/ghost.gif',
-      name: 'Back legs',
-    },
-    // Más datos aquí...
-  ];
-
   const router = useRouter();
+  const { category } = useParams();
+  const userid = 'System';
+  const cat: any = category;
+  const { categories, loading, error, loadMore, hasMore } =
+    useGetPartsMarketPlaceByType(userid, cat);
+
   return (
-    <div className='className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full'>
-      <div className="w-full">
-        <BeePartsComponent partsData={partsData} title={true} />
+    <div className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full">
+      <div className="w-full mb-48">
+        {loading && <div>Loading...</div>}
+        {error && <div>{error}</div>}
+        {!loading &&
+          categories.length > 0 &&
+          categories.map((category, categoryIndex) => (
+            <div
+              key={`${category.title}-${categoryIndex}`}
+              className="category-section"
+            >
+              <h2 className="m-3">PARTS {category.title} </h2>
+              <BeePartsComponent
+                partsData={category.parts.map((part, partIndex) => ({
+                  ...part,
+                  key: `${part.name}-${categoryIndex}-${partIndex}`, // Clave única usando el nombre, índice de categoría y parte
+                }))}
+                title={false}
+              />
+            </div>
+          ))}
+        {hasMore && !loading && (
+          <button onClick={loadMore} className="mt-4">
+            Load More
+          </button>
+        )}
       </div>
     </div>
   );

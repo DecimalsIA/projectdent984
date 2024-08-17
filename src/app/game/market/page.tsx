@@ -2,6 +2,7 @@
 
 import BeePartsCarousel from '@/components/BeePartsCarousel';
 import ModalPambii from '@/components/ModalPambii';
+import TransactionComponent from '@/components/TransactionComponent';
 import { useTelegram } from '@/context/TelegramContext';
 import useGetPartsMarketPlaceByType from '@/hooks/useGetPartsMarketPlaceByType';
 import { useRouter } from 'next/navigation';
@@ -13,6 +14,8 @@ const InventoryPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dataModal, setIsDataModal] = useState();
   const router = useRouter();
+  const { user } = useTelegram();
+  const userId = user?.id.toString() ?? '792924145';
 
   // Obtener las partes agrupadas por `typePart` y la función para cargar más
   const { categories, loading, error, loadMore, hasMore } =
@@ -24,16 +27,17 @@ const InventoryPage: React.FC = () => {
       title: part?.name,
       image: part?.image, // Usar el tipo para la imagen
       badges: [],
-      buttons: [
-        {
-          text: 'BUY',
-          bg: '#4caf50',
-          color: 'white',
-          w: 'full',
-          icon: <MoneyIcon width="1.25rem" height="1.25rem" />,
-          onClick: () => alert('Not available'),
-        },
-      ],
+      htmlButtom: (
+        <TransactionComponent
+          textButton="Buy "
+          spl={30}
+          userid={userId}
+          fromTrn="buy_market"
+          iconName="dollar.svg"
+          idBuy={part.idPart}
+        />
+      ),
+
       bonus: [
         {
           icon: (
@@ -48,6 +52,17 @@ const InventoryPage: React.FC = () => {
     setIsDataModal(modalData);
     setIsModalOpen(true);
   };
+  /*
+buttons: [
+        {
+          text: 'BUY',
+          bg: '#4caf50',
+          color: 'white',
+          w: 'full',
+          icon: <MoneyIcon width="1.25rem" height="1.25rem" />,
+          onClick: () => alert('Not available'),
+        },
+      ], */
 
   // Listener para el scroll para implementar carga perezosa
   useEffect(() => {

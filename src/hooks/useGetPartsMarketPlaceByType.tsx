@@ -22,7 +22,7 @@ interface BeePartGet {
 
 interface Category {
   title: string;
-  parts: BeePart[];
+  parts: any[];
   link: string;
 }
 interface BeePart {
@@ -63,6 +63,7 @@ const useGetPartsMarketPlaceByType = (userId: string, typePart?: string) => {
           (typePart) => ({
             title: typePart,
             parts: partsByType[typePart].map((part) => ({
+              ...part,
               name: part.namePart,
               image: `/assets/bee-characters/category/${typePart.toLowerCase()}/${part.namePart.toLowerCase()}.png`, // Supongamos que las imágenes siguen este patrón de URL
               icon: `/assets/bee-characters/category/${typePart.toLowerCase()}.gif`, // Supongamos que los íconos siguen este patrón de URL

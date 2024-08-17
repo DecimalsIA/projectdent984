@@ -17,6 +17,8 @@ interface ExplorationCardGameProps {
   fromTrn: string;
   bee?: any;
   map?: any;
+  idBuy?: any;
+  iconName?: any;
 }
 
 const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
@@ -26,6 +28,8 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
   fromTrn,
   bee,
   map,
+  idBuy,
+  iconName,
 }) => {
   const { deeplink, generateDeeplink } = usePhantomDeeplink();
   const [transaction, setTransaction] = useState<string | null>(null);
@@ -68,7 +72,7 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
 
         const redirectLink = `https://pambii-front.vercel.app/api/phantom-redirect-sing?userId=${userid}&fromTrn=${fromTrn}${
           bee ? `&bee=${bee}` : ''
-        }${map ? `&map=${map}` : ''}`;
+        }${map ? `&map=${map}` : ''}${idBuy ? `&idBuy=${idBuy}` : ''}`;
 
         const dappEncryptionPublicKey = publicKey;
 
@@ -85,7 +89,7 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
     };
 
     generateLink();
-  }, [transaction, deeplinkGenerated]); // Solo se ejecuta cuando `transaction` cambie y el deeplink no ha sido generado
+  }, [transaction, deeplinkGenerated]); // Solo se ejecuta cuando `transaction` cambie y el deeplink no ha sido generado explore-icon
 
   return (
     <div className="w-full">
@@ -96,14 +100,14 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
             className="mb-2"
             icon={
               <Image
-                src="/assets/bee-characters/icons/explore-icon.svg"
+                src={'/assets/bee-characters/icons/dollar.svg'}
                 alt="Select arena"
                 width={24}
                 height={24}
               />
             }
           >
-            {textButton ? textButton : 'Select bee to explore'}
+            {textButton ? textButton : 'Select bee to explore'} {spl} PAMBII
           </ButtonPambii>{' '}
         </a>
       ) : (

@@ -14,6 +14,7 @@ type ButtonData = {
   bg: string;
   color: string;
   icon?: React.ReactNode;
+
   onClick: () => void;
 };
 
@@ -25,6 +26,7 @@ type ModalData = {
   powerTitle?: string;
   description?: string;
   buttons?: ButtonData[];
+  htmlButtom?: React.ReactNode;
   body?: React.ReactNode;
   bonus?: BadgeData[];
   onClose: () => void;
@@ -47,6 +49,7 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
     buttons,
     bonus,
     onClose,
+    htmlButtom,
   } = data;
 
   return (
@@ -142,6 +145,13 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
             </div>
           )}
         </div>
+
+        {htmlButtom && (
+          <div className="flex justify-between space-x-4 mb-1 footer-modal p-4">
+            {' '}
+            {htmlButtom}{' '}
+          </div>
+        )}
         {buttons && (
           <div className="flex justify-between space-x-4 mb-1 footer-modal p-4">
             {buttons.map((button, index) => (

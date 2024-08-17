@@ -15,6 +15,7 @@ export interface Ability {
 }
 
 export interface BeePiece {
+  userId?: any;
   idPart: string;
   namePart: string;
   typePart: BeePieceType;

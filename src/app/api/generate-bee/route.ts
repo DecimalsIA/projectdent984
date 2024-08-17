@@ -51,7 +51,8 @@ export async function POST(request: Request) {
     // Generar las partes y agregarlas al último slot disponible
     const partsPromises = partNames.map(async (namePart) => {
       const newPart = generateRandomBeePart(namePart);
-      newPart.isAssigned = true;  // Marcar la parte como asignada
+      newPart.isAssigned = true;
+      newPart.userId = userId;  // Marcar la parte como asignada
       availableSlot.parts.push(newPart);  // Agregar la parte al slot
       return newPart;  // Retornar el objeto completo
     });

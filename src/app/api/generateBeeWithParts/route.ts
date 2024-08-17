@@ -8,6 +8,9 @@ export interface Slot {
   id: string;
   partIds: string[];
   isFull: boolean;
+  userId: string;
+  createAt: number;
+  updateAt: number;
 }
 
 export async function POST(request: Request) {
@@ -41,9 +44,9 @@ export async function POST(request: Request) {
       const newPart = generateRandomBeePart(namePart);
       newPart.idPart = uuidv4();  // Generar un ID único para la parte
       newPart.isAssigned = true;  // Marcar la parte como asignada
+      newPart.userId = userId;
       parts.push(newPart);
       partIds.push(newPart.idPart);
-
       // Guardar la parte en Firestore en la colección `beeParts`
       await setDoc(doc(db, 'beeParts', newPart.idPart), newPart);
     }
@@ -51,8 +54,11 @@ export async function POST(request: Request) {
     // Crear el slot y asignar las partes
     const slot: Slot = {
       id: slotId,
+      userId: userId,
       partIds: partIds,
-      isFull: partIds.length >= 6
+      isFull: partIds.length >= 6,
+      createAt: new Date().getTime(),
+      updateAt: new Date().getTime()
     };
 
     // Guardar el slot en Firestore en la colección `slots`

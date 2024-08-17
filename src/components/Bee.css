@@ -1,0 +1,56 @@
+.bee {
+  position: relative;
+  width: 270px;
+  height: 240px;
+}
+
+.part {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+}
+
+/* Posiciones iniciales proporcionadas */
+.head {
+  top: 8px;
+  left: 55px;
+  z-index: 4;
+}
+
+.torso {
+  top: 0px;
+  left: 46px;
+  z-index: 1;
+}
+
+.frontlegs {
+  top: 9px;
+  left: 46px;
+  z-index: 12;
+}
+
+.hindlegs {
+  top: 12px;
+  left: 42px;
+  z-index: 14;
+}
+
+.stinger {
+  top: 5px;
+  left: 45px;
+}
+
+.ala1Sup {
+  top: 3px;
+  left: 70px;
+}
+
+.ala1Inf {
+  top: 19px;
+  left: 67px;
+}
+
+.ala2Sup {
+  top: 8px;
+  left: 58px;
+}

@@ -24,6 +24,7 @@ import Image from 'next/image';
 import useGetExplorer from '@/hooks/usGetExplorer';
 import ModalPambii from '@/components/ModalPambii';
 import useFetchBees from '@/hooks/useFetchBees';
+import SlidePambiiBee from '@/components/SlidePambiiBee';
 
 function formatLargeNumber(number: number) {
   const units = ['B', 'M', 'K'];
@@ -153,7 +154,7 @@ const Home = () => {
     ],
     onClose: () => setIsModalOpen(false),
   };
-  //game/inventory/bee/e8761868-1e27-49e8-a8cf-b825a5e4490b
+  //Bee
 
   return (
     <div
@@ -169,14 +170,13 @@ const Home = () => {
             className="mt-4 mb-8"
           />
           {!loading && slideData.length > 0 && (
-            <SlidePambii
+            <SlidePambiiBee
               slides={slideData}
               className="w-full mt-[10px] max-w-md mx-auto"
               onPrevSlide={handlePrevSlide}
               onNextSlide={handleNextSlide}
             />
           )}
-
           <div>
             <CardPambii className="beeCard w-full mt-2 min-w-[381px] ">
               {isModalOpen && <ModalPambii className="p-4" data={modalData} />}

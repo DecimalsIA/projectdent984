@@ -1,6 +1,7 @@
 import { FunctionComponent, useCallback } from 'react';
 import styles from './EditBee.module.css';
 import { PencilIcon } from 'pambii-devtrader-front';
+import Bee from './Bee';
 
 type BeePart = {
   imageSrc: string;
@@ -18,7 +19,7 @@ type BeeStat = {
 type BeeData = {
   name: string;
   imageSrc: string;
-  parts: BeePart[];
+  parts: any[];
   stats: BeeStat[];
 };
 
@@ -35,6 +36,11 @@ const EditBee: FunctionComponent<EditBeeProps> = ({
   onChangePart,
   onChangeName,
 }) => {
+  const partsByKey = beeData?.parts?.reduce((acc, part) => {
+    acc[part.name] = part;
+    return acc;
+  }, {});
+  console.log('partsByKey', partsByKey);
   return (
     <div className={styles.bodycontainer}>
       <div className={styles.beecardedit}>
@@ -46,7 +52,18 @@ const EditBee: FunctionComponent<EditBeeProps> = ({
           <div className={styles.name}>{beeData.name}</div>
         </div>
         <div className={styles.beecontainer}>
-          <img className={styles.fuego1Icon} alt="" src={beeData.imageSrc} />
+          <Bee
+            basePathW={partsByKey?.['WINGS']?.badgeText?.toLowerCase() || ''}
+            basePathH={partsByKey?.['HEAD']?.badgeText?.toLowerCase() || ''}
+            basePathF={
+              partsByKey?.['FRONTLEGS']?.badgeText?.toLowerCase() || ''
+            }
+            basePathHi={
+              partsByKey?.['HINDLEGS']?.badgeText?.toLowerCase() || ''
+            }
+            basePathSt={partsByKey?.['STINGER']?.badgeText?.toLowerCase() || ''}
+            basePathT={partsByKey?.['TORSO']?.badgeText?.toLowerCase() || ''}
+          />
         </div>
         {beeData.stats.length > 0 && (
           <div className={styles.powerratecontainer}>

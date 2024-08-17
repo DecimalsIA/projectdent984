@@ -21,21 +21,13 @@ const InventoryPage: React.FC = () => {
   const handleModal = (part: any, index: any) => {
     console.log('Modal', part, index);
     const modalData: any = {
-      title: part?.name + '-' + part.title,
+      title: part?.name,
       image: part?.image, // Usar el tipo para la imagen
       badges: [],
       buttons: [
         {
-          text: 'EQUIP',
-          bg: '#7F29EE',
-          color: 'white',
-          w: 'full',
-          icon: <FireAnimated />,
-          onClick: () => router.push('/game/market/public'),
-        },
-        {
-          text: 'SELL ITEM',
-          bg: '#EE9F29',
+          text: 'BUY',
+          bg: '#4caf50',
           color: 'white',
           w: 'full',
           icon: <MoneyIcon width="1.25rem" height="1.25rem" />,

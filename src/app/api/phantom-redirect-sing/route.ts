@@ -68,18 +68,27 @@ const makePostRequest = async (userId: string, bee: string, signature: any) => {
 
 const generateBee = async (userId: string, hash: string) => {
   try {
-    // Hacemos la solicitud POST al endpoint
-    const response = await axios.post('https://pambii-front.vercel.app/generateBeeWithParts', {
+    // Hacemos la solicitud POST al endpoint con userId y hash en el cuerpo de la solicitud
+    const response = await axios.post('https://pambii-front.vercel.app/api/generateBeeWithParts', {
       userId: userId,
-      hash: hash, // Enviamos el userId en el cuerpo de la solicitud
+      hash: hash,
     });
-    console.log(response)
+
+    console.log('Response status:', response.status);
     return response.status;
-  } catch (error) {
-    console.error('Error generating bee with parts:', error);
+  } catch (error: any) {
+    // Manejo más detallado del error
+    if (error.response) {
+      console.error('Server responded with an error:', error.response.status, error.response.data);
+    } else if (error.request) {
+      console.error('No response received:', error.request);
+    } else {
+      console.error('Error in request setup:', error.message);
+    }
     throw error; // Re-lanzamos el error para que pueda ser manejado por el llamador
   }
 };
+
 
 
 const addDocumentGeneric = async (dtb: string, data: any) => {
@@ -146,6 +155,7 @@ export async function GET(request: NextRequest) {
 
       if (fromTrn === 'buyBee') {
         const genBee = await generateBee(userId, decodedPayload.signature);
+        console.log('genBee', genBee)
 
         if (genBee == 200) {
           const data = {

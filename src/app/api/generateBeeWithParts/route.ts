@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs, arrayUnion } from 'firebase/firestore';
+import { doc, setDoc, getDocs, updateDoc, collection, query, where, arrayUnion } from 'firebase/firestore';
 import { db } from '@/firebase/config';
-import { BeePiece, generateRandomBeePart } from '@/utils/beeGenerator';
+import { BeePiece, generateRandomBeePart, collectStats } from '@/utils/beeGenerator';
 
 export interface Slot {
   id: string;
@@ -51,6 +51,15 @@ export async function POST(request: Request) {
       await setDoc(doc(db, 'beeParts', newPart.idPart), newPart);
     }
 
+    // Calcular la suma de las estadísticas de todas las partes
+    const totalStats = collectStats(parts);
+
+    // Transformar totalStats en un array de objetos para el campo powers
+    const powers = Object.keys(totalStats).map(statName => ({
+      name: statName,
+      value: totalStats[statName as keyof typeof totalStats],
+    }));
+
     // Crear el slot y asignar las partes
     const slot: Slot = {
       id: slotId,
@@ -81,7 +90,7 @@ export async function POST(request: Request) {
       userId,
       partIds,
       type: majorityType,
-      powers: [],
+      powers, // Asignar totalStats en el campo powers
       habilities: [],
       abilitiesData: [],
       state: true,
@@ -89,7 +98,7 @@ export async function POST(request: Request) {
       hashId: hash
     };
 
-    // Guardar la abeja en Firestore en la colección `bees`
+    // Guardar la abeja en Firestore en la colección `BEES`
     await setDoc(doc(db, 'BEES', beeId), bee);
 
     // Consultar el documento del usuario donde el campo `idUser` coincida con `userId`

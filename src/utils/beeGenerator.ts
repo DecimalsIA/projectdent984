@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { ABILITIES, Ability } from './abilitiesData';
 
 export type BeePieceType = 'Water' | 'Fire' | 'Earth' | 'Air' | 'Phantom' | 'Poison' | 'Metal' | 'Gem';
 export type StatName = 'Health' | 'Speed' | 'Attack' | 'Defense';
@@ -6,12 +7,6 @@ export type StatName = 'Health' | 'Speed' | 'Attack' | 'Defense';
 export interface Stat {
   name: StatName;
   value: number;
-}
-
-export interface Ability {
-  id: string;
-  name: string;
-  description: string;
 }
 
 export interface BeePiece {
@@ -47,17 +42,6 @@ const STAT_RANGES: Record<StatName, [number, number]> = {
   Defense: [5, 15],
 };
 
-const ABILITIES: Record<BeePieceType, Ability[]> = {
-  Water: [{ id: uuidv4(), name: 'Aqua Shield', description: 'Increases defense against water attacks.' }],
-  Fire: [{ id: uuidv4(), name: 'Flame Burst', description: 'Deals high fire damage.' }],
-  Earth: [{ id: uuidv4(), name: 'Stone Skin', description: 'Reduces physical damage received.' }],
-  Air: [{ id: uuidv4(), name: 'Wind Fury', description: 'Increases attack speed significantly.' }],
-  Phantom: [{ id: uuidv4(), name: 'Phantom Strike', description: 'Delivers a powerful ethereal attack.' }],
-  Poison: [{ id: uuidv4(), name: 'Toxic Sting', description: 'Poisons the target, dealing damage over time.' }],
-  Metal: [{ id: uuidv4(), name: 'Metal Armor', description: 'Boosts defense significantly.' }],
-  Gem: [{ id: uuidv4(), name: 'Gem Shine', description: 'Heals a small amount of health each turn.' }],
-};
-
 export const generateRandomStat = (statName: StatName): Stat => {
   const [min, max] = STAT_RANGES[statName];
   return {
@@ -70,11 +54,34 @@ export const generateRandomStats = (): Stat[] => {
   return ['Health', 'Speed', 'Attack', 'Defense'].map(statName => generateRandomStat(statName as StatName));
 };
 
-export const generateRandomAbility = (type: BeePieceType): Ability => {
-  const abilities = ABILITIES[type];
-  const selectedAbility = abilities[Math.floor(Math.random() * abilities.length)];
+export const generateRandomAbility = (typePart: BeePieceType): Ability => {
+  // Filtrar habilidades del tipo específico y tipo "(ALL)"
+  const allAbilities = ABILITIES.filter(ability => ability.Parts === '(ALL)');
+  const typeSpecificAbilities = ABILITIES.filter(ability => ability.Parts === typePart);
+
+  // Contar cuántas habilidades hay en cada conjunto
+  const totalAllAbilities = allAbilities.length;
+  const totalTypeSpecificAbilities = typeSpecificAbilities.length;
+
+  // Calcular el peso o porcentaje para habilidades "(ALL)"
+  const allWeight = totalAllAbilities / (totalAllAbilities + totalTypeSpecificAbilities);
+  const typeWeight = totalTypeSpecificAbilities / (totalAllAbilities + totalTypeSpecificAbilities);
+
+  // Generar un número aleatorio para decidir entre "(ALL)" o habilidades específicas del tipo
+  const randomValue = Math.random();
+
+  let selectedAbility;
+  if (randomValue < allWeight) {
+    // Selecciona una habilidad "(ALL)"
+    selectedAbility = allAbilities[Math.floor(Math.random() * totalAllAbilities)];
+  } else {
+    // Selecciona una habilidad específica del tipo
+    selectedAbility = typeSpecificAbilities[Math.floor(Math.random() * totalTypeSpecificAbilities)];
+  }
+
   return { ...selectedAbility, id: uuidv4() };
 };
+
 
 export const generateRandomBeePart = (namePart: string): BeePiece => {
   const idPart = uuidv4();
@@ -97,6 +104,23 @@ export const collectPowers = (parts: BeePiece[]): Power[] => {
     typePart: part.typePart,
   }));
 };
+export const collectStats = (parts: BeePiece[]): Record<StatName, number> => {
+  const initialStats: Record<StatName, number> = {
+    Health: 0,
+    Speed: 0,
+    Attack: 0,
+    Defense: 0,
+  };
+
+  parts.forEach(part => {
+    part.stats.forEach(stat => {
+      initialStats[stat.name] += stat.value;
+    });
+  });
+
+  return initialStats;
+};
+
 
 export const determineBeeType = (powers: Power[]): BeePieceType => {
   const typeCounts: Record<BeePieceType, number> = {

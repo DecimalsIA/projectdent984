@@ -82,7 +82,7 @@ const Home = () => {
 
   const slideData = data && data.length > 0 ? data : [];
 
-  console.log('slideData', slideData);
+  console.log('slideData', slideData[currentSlide].power);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -181,21 +181,21 @@ const Home = () => {
             <CardPambii className="beeCard w-full mt-2 min-w-[381px] ">
               {isModalOpen && <ModalPambii className="p-4" data={modalData} />}
               <UserHome userName={`${user?.first_name} ${user?.last_name}`} />
-              {slideData[currentSlide]?.powers &&
-              slideData[currentSlide].powers.length > 0 ? (
+              {slideData[currentSlide]?.power &&
+              slideData[currentSlide].power.length > 0 ? (
                 <div className="flex  overflow-x-auto max-w-full min-w-[320px]">
                   <div className="flex flex-wrap space-x-1 gap-2 ">
-                    {slideData[currentSlide].powers.map((power, index) => (
+                    {slideData[currentSlide].power.map((power, index) => (
                       <BadgePambii
                         key={index}
                         icon={
                           <Image
                             src={
                               '/assets/bee-characters/icons/' +
-                              power.power.toLowerCase() +
-                              '.png'
+                              power.name +
+                              '.svg'
                             }
-                            alt={power.power}
+                            alt={power.name}
                             width={20}
                             height={20}
                             id={index.toString()}

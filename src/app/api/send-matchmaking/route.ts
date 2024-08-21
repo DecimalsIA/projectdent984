@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     console.log(`Evento 'find-match' emitido para idUser=${idUser}, arena=${arena}`);
 
     // Cerrar la conexión después de emitir el evento
-    socket.disconnect();
+    // socket.disconnect();
 
     return NextResponse.json({ success: true, message: 'Matchmaking request sent successfully', transactionId: docRef.id });
   } catch (error: any) {

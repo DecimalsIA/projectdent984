@@ -7,11 +7,7 @@ interface BeePartGet {
   typePart: string;
   isAssigned: boolean;
   isForSale: boolean;
-  ability: {
-    id: string;
-    name: string;
-    description: string;
-  };
+  ability: any;
   stats: {
     name: string;
     value: number;
@@ -47,6 +43,7 @@ const useGetPartsByType = (userId: string, typePart?: string) => {
           partsByType: { [key: string]: BeePartGet[] };
         }>(url);
         const partsByType = response.data.partsByType;
+        console.log('partsByType', partsByType);
 
         // Formatear en la estructura de categorías agrupadas por `typePart`
         const formattedCategories: Category[] = Object.keys(partsByType).map(
@@ -55,6 +52,8 @@ const useGetPartsByType = (userId: string, typePart?: string) => {
             parts: partsByType[typePart].map((part) => ({
               name: part.namePart,
               title: typePart,
+              ability: part.ability,
+              stats: part.stats,
               image: `/assets/bee-characters/category/${typePart.toLowerCase()}/${part.namePart.toLowerCase()}.png`, // Supongamos que las imágenes siguen este patrón de URL
               icon: `/assets/bee-characters/category/${typePart.toLowerCase()}.gif`, // Supongamos que los íconos siguen este patrón de URL
             })),

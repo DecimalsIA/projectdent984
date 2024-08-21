@@ -26,7 +26,9 @@ const InventoryPage: React.FC = () => {
     const modalData: any = {
       title: part?.name,
       image: part?.image, // Usar el tipo para la imagen
-      badges: [],
+      description: part?.ability?.description,
+      powerTitle: part?.ability?.Parts,
+      badges: part.stats,
       htmlButtom: (
         <TransactionComponent
           textButton="Buy Item"

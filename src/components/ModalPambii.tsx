@@ -2,11 +2,13 @@
 import React from 'react';
 import classNames from 'classnames';
 import { BadgePambii, ButtonPambii, CardPambii } from 'pambii-devtrader-front';
+import Image from 'next/image';
 
 type BadgeData = {
   icon: React.ReactNode;
-  value: number;
+  value?: number;
   textBadge?: string;
+  name?: string;
 };
 
 type ButtonData = {
@@ -135,11 +137,22 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
 
           {badges && (
             <div className="flex flex-wrap gap-2 w-full items-start break-words">
-              {badges.map((badge, index) => (
+              {badges.map((badge: any, index) => (
                 <BadgePambii
                   key={index}
-                  icon={badge.icon}
+                  icon={
+                    <Image
+                      src={
+                        '/assets/bee-characters/icons/' + badge.name + '.svg'
+                      }
+                      alt={badge?.name}
+                      width={20}
+                      height={20}
+                      id={index.toString()}
+                    />
+                  }
                   number={badge.value}
+                  className="bg-border flex-grow badge"
                 />
               ))}
             </div>

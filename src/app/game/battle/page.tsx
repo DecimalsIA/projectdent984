@@ -13,6 +13,7 @@ const BattlePage: React.FC = () => {
   const { user } = useTelegram();
   const userid = user?.id.toString() ?? '792924145';
   const { data, loading, error: errorBee } = useFetchBees(userid);
+  const [imgSrc, setImgSrc] = useState('/assets/bee-characters/icons/fire.svg');
 
   const slideData = data && data.length > 0 ? data : [];
   console.log('slideData', slideData);
@@ -56,6 +57,9 @@ const BattlePage: React.FC = () => {
       return newSlide;
     });
   };
+  const handleImageError = () => {
+    setImgSrc('/assets/bee-characters/icons/fire.svg'); // Cambia esta ruta por tu imagen de placeholder
+  };
 
   if (loading) return <div>Loading...</div>;
   if (errorBee) return <div>{errorBee}</div>;
@@ -92,6 +96,7 @@ const BattlePage: React.FC = () => {
                       width={20}
                       height={20}
                       id={index.toString()}
+                      onError={handleImageError}
                     />
                   }
                   number={power.value}

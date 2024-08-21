@@ -22,13 +22,27 @@ const InventoryPage: React.FC = () => {
 
   // Obtener las partes agrupadas por `typePart`
   const { categories, loading, error } = useGetPartsByType(userid);
-
+  /*
+    title,
+    subtitle,
+    image,
+    badges,
+    powerTitle,
+    description,
+    body,
+    buttons,
+    bonus,
+    onClose,
+    htmlButtom,
+ */
   const handleModal = (part: any, index: any) => {
-    console.log('Modal', part, index);
+    console.log('Modal-->', part, index);
     const modalData: any = {
       title: part?.name + '-' + part.title,
       image: part?.image, // Usar el tipo para la imagen
-      badges: [],
+      description: part?.ability?.description,
+      powerTitle: part?.ability?.Parts,
+      badges: part.stats,
       buttons: [
         {
           text: 'EQUIP',

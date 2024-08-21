@@ -2,6 +2,7 @@
 
 import BeePartsCarousel from '@/components/BeePartsCarousel';
 import ModalPambii from '@/components/ModalPambii';
+import TransactionComponent from '@/components/TransactionComponent';
 import { useTelegram } from '@/context/TelegramContext';
 import useGetPartsMarketPlaceByType from '@/hooks/useGetPartsMarketPlaceByType';
 import { useRouter } from 'next/navigation';
@@ -12,6 +13,8 @@ const InventoryPage: React.FC = () => {
   const userid = 'System';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dataModal, setIsDataModal] = useState();
+  const { user } = useTelegram();
+  const userId = user?.id.toString() ?? '792924145';
   const router = useRouter();
 
   // Obtener las partes agrupadas por `typePart` y la función para cargar más
@@ -21,34 +24,29 @@ const InventoryPage: React.FC = () => {
   const handleModal = (part: any, index: any) => {
     console.log('Modal', part, index);
     const modalData: any = {
-      title: part?.name + '-' + part.title,
+      title: part?.name,
       image: part?.image, // Usar el tipo para la imagen
-      badges: [],
-      buttons: [
-        {
-          text: 'EQUIP',
-          bg: '#7F29EE',
-          color: 'white',
-          w: 'full',
-          icon: <FireAnimated />,
-          onClick: () => router.push('/game/market/public'),
-        },
-        {
-          text: 'SELL ITEM',
-          bg: '#EE9F29',
-          color: 'white',
-          w: 'full',
-          icon: <MoneyIcon width="1.25rem" height="1.25rem" />,
-          onClick: () => alert('Not available'),
-        },
-      ],
+      description: part?.ability?.description,
+      powerTitle: part?.ability?.Parts,
+      badges: part.stats,
+      htmlButtom: (
+        <TransactionComponent
+          textButton="Buy Item"
+          spl={30}
+          userid={userId}
+          fromTrn="buy_market_item"
+          iconName="dollar.svg"
+          idBuy={part.idPart}
+        />
+      ),
+
       bonus: [
         {
           icon: (
             <img src={part.icon} alt={part.name} width="24px" height="24px" />
           ),
           value: null,
-          textBadge: part.title,
+          textBadge: part.typePart,
         },
       ],
       onClose: () => setIsModalOpen(false),

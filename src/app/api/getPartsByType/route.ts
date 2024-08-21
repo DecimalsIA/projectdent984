@@ -58,6 +58,8 @@ export async function GET(request: Request) {
     let partsQuery;
     const partsRef = collection(db, 'beeParts');
 
+    console.log('partsRef', partsRef)
+
 
     if (typePart) {
       // Si se proporciona `typePart`, filtrar por tipo de parte y `partIds`
@@ -71,7 +73,6 @@ export async function GET(request: Request) {
 
       }
     }
-
 
 
     const partsSnapshot = await getDocs(partsQuery);

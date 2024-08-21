@@ -118,7 +118,7 @@ const SpecialMarketPage: React.FC = () => {
   if (errorBee) {
     return <div>Error: {errorBee}</div>;
   }
-
+  console.log('beeData--->', data);
   return (
     <div className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full">
       <div className="w-full">

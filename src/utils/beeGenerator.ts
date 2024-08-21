@@ -120,6 +120,25 @@ export const collectStats = (parts: BeePiece[]): Record<StatName, number> => {
 
   return initialStats;
 };
+export const groupAbilitiesByName = (parts: any[]): { id: string; name: string; icon: string }[] => {
+  const abilityGroups: Record<string, { id: string; name: string; icon: string; count: number }> = {};
+
+  parts.forEach(part => {
+    const { id, name, icon } = part.ability;
+    if (abilityGroups[name]) {
+      abilityGroups[name].count++;
+    } else {
+      abilityGroups[name] = { id, name, icon, count: 1 };
+    }
+  });
+
+  // Convertir el objeto agrupado en un array de habilidades, eliminando el campo `count`
+  return Object.values(abilityGroups).map(({ id, name, icon }) => ({
+    id,
+    name,
+    icon,
+  }));
+};
 
 
 export const determineBeeType = (powers: Power[]): BeePieceType => {

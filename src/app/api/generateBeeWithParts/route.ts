@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { doc, setDoc, getDocs, updateDoc, collection, query, where, arrayUnion } from 'firebase/firestore';
 import { db } from '@/firebase/config';
-import { BeePiece, generateRandomBeePart, collectStats } from '@/utils/beeGenerator';
+import { BeePiece, generateRandomBeePart, collectStats, groupAbilitiesByName } from '@/utils/beeGenerator';
 
 export interface Slot {
   id: string;
@@ -38,6 +38,7 @@ export async function POST(request: Request) {
     const slotId = uuidv4();
     const parts: BeePiece[] = [];
     const partIds: string[] = [];
+    const ability = []
 
     // Generar las partes de la abeja
     for (const namePart of partNames) {
@@ -47,6 +48,7 @@ export async function POST(request: Request) {
       newPart.userId = userId;
       parts.push(newPart);
       partIds.push(newPart.idPart);
+      ability.push(newPart.ability)
       // Guardar la parte en Firestore en la colección `beeParts`
       await setDoc(doc(db, 'beeParts', newPart.idPart), newPart);
     }
@@ -92,7 +94,7 @@ export async function POST(request: Request) {
       type: majorityType,
       powers, // Asignar totalStats en el campo powers
       habilities: [],
-      abilitiesData: [],
+      abilitiesData: ability,
       state: true,
       createdAt: new Date().toISOString(),
       hashId: hash

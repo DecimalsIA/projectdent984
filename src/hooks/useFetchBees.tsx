@@ -9,6 +9,7 @@ interface Bee {
   type: string;
   powers: any[];
   power: any[];
+  parts: any[];
   habilities: any[];
   abilitiesData: any[];
   state: boolean;

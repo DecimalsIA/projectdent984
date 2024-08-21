@@ -1,453 +1,48 @@
 'use client';
 
+import AbilitiesPambii from '@/components/AbilitiesPambii';
+import SlidePambiiBee from '@/components/SlidePambiiBee';
+import { useTelegram } from '@/context/TelegramContext';
+import useFetchBees from '@/hooks/useFetchBees';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import {
-  AbilitiesPambii,
-  ButtonPambii,
-  CardPambii,
-  HeartIcon,
-  SlidePambii,
-} from 'pambii-devtrader-front';
-import { useState } from 'react';
-
-const slideData = [
-  {
-    image: '/assets/bee-characters/fire.png',
-    title: 'Abejitachula',
-    type: 'fire',
-    powers: [
-      {
-        power: 'Fire',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="fire"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    habilites: [],
-    abilitiesData: [
-      {
-        id: 1,
-        name: 'Ability 1',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 1"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 2,
-        name: 'Ability 2',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 3,
-        name: 'Ability 3',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 3"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 4,
-        name: 'Ability 4',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 4"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 5,
-        name: 'Ability 5',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 5"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-  },
-
-  {
-    image: '/assets/bee-characters/rock.png',
-    title: 'Carnero',
-    type: 'rock',
-    powers: [
-      {
-        power: 'Rock',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 1"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    abilitiesData: [
-      {
-        id: 1,
-        name: 'Ability 1',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 1"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 2,
-        name: 'Ability 2',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 3,
-        name: 'Ability 3',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 3"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 4,
-        name: 'Ability 4',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 4"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 5,
-        name: 'Ability 5',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 5"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-  },
-  {
-    image: '/assets/bee-characters/poison.png',
-    title: 'Coringa',
-    type: 'poison',
-    powers: [
-      {
-        power: 'Syringe',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    abilitiesData: [
-      {
-        id: 1,
-        name: 'Ability 1',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 1"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 2,
-        name: 'Ability 2',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 3,
-        name: 'Ability 3',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 3"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 4,
-        name: 'Ability 4',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 4"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 5,
-        name: 'Ability 5',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/syringe.svg"
-            alt="Ability 5"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-  },
-  {
-    image: '/assets/bee-characters/all.png',
-    title: 'Princesa monstruo',
-    type: 'all',
-    powers: [
-      {
-        power: 'Rock',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        power: 'Fire',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        power: 'Ghost',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/ghost.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        power: 'Water',
-        powerIcon: (
-          <Image
-            src="/assets/bee-characters/icons/bottle.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    habilities: [
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        name: 'Rock',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-    abilitiesData: [
-      {
-        id: 1,
-        name: 'Ability 1',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/sledgehammer.svg"
-            alt="Ability 1"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 2,
-        name: 'Ability 2',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 2"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 3,
-        name: 'Ability 3',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/fire.png"
-            alt="Ability 3"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 4,
-        name: 'Ability 4',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/ghost.svg"
-            alt="Ability 4"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-      {
-        id: 5,
-        name: 'Ability 5',
-        icon: (
-          <Image
-            src="/assets/bee-characters/icons/bottle.svg"
-            alt="Ability 5"
-            width={18}
-            height={18}
-          />
-        ),
-      },
-    ],
-  },
-  // Añade más objetos según sea necesario
-];
+import { BadgePambii, ButtonPambii, CardPambii } from 'pambii-devtrader-front';
+import { useState, useEffect } from 'react';
 
 const BattlePage: React.FC = () => {
-  const [cardType, setCardType] = useState<string>(slideData[0].type ?? '');
-  const [abilitiesData, setAbilitiesData] = useState<any>(
-    slideData[0].abilitiesData ?? [],
-  );
-  const [habilities, setHabilities] = useState<any>(
-    slideData[0].habilities ?? [],
-  );
+  const { user } = useTelegram();
+  const userid = user?.id.toString() ?? '792924145';
+  const { data, loading, error: errorBee } = useFetchBees(userid);
+
+  const slideData = data && data.length > 0 ? data : [];
+  console.log('slideData', slideData);
+
+  // const [cardType, setCardType] = useState<string>('fire');
+  const [abilitiesData, setAbilitiesData] = useState<any>([]);
+  // const [habilities, setHabilities] = useState<any>([]);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const router = useRouter();
+
+  // Usa un efecto para actualizar los estados una vez que slideData esté disponible
+  useEffect(() => {
+    if (slideData.length > 0) {
+      //  setCardType(slideData[0].type);
+      setAbilitiesData(slideData[currentSlide].abilitiesData ?? []);
+      //setHabilities(slideData[0].habilities ?? []);
+    }
+  }, [slideData]);
+
   const handleSelectArena = () => {
-    alert(cardType);
+    // alert(cardType);
     router.push('/game/battle/select-arena');
   };
 
   const handlePrevSlide = () => {
     setCurrentSlide((prevSlide) => {
       const newSlide = prevSlide > 0 ? prevSlide - 1 : slideData.length - 1;
-      setCardType(slideData[newSlide].type);
+      //  setCardType(slideData[newSlide].type);
       setAbilitiesData(slideData[newSlide].abilitiesData ?? []);
-      setHabilities(slideData[newSlide].habilities ?? []);
+      // setHabilities(slideData[newSlide].habilities ?? []);
       return newSlide;
     });
   };
@@ -455,29 +50,89 @@ const BattlePage: React.FC = () => {
   const handleNextSlide = () => {
     setCurrentSlide((prevSlide) => {
       const newSlide = prevSlide < slideData.length - 1 ? prevSlide + 1 : 0;
-      setCardType(slideData[newSlide].type);
+      //setCardType(slideData[newSlide].type);
       setAbilitiesData(slideData[newSlide].abilitiesData ?? []);
-      setHabilities(slideData[newSlide].habilities ?? []);
+      //   setHabilities(slideData[newSlide].habilities ?? []);
       return newSlide;
     });
   };
 
+  if (loading) return <div>Loading...</div>;
+  if (errorBee) return <div>{errorBee}</div>;
+
   return (
     <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
       <CardPambii
-        type={cardType}
+        type={'fire'}
         className="bg-gray-200 w-full text-black card-pambii-b flex items-center justify-center"
       >
         <div className="w-full flex flex-row justify-center flex-wrap gap-1">
-          <SlidePambii
+          <SlidePambiiBee
             slides={slideData}
             className="w-full"
             onPrevSlide={handlePrevSlide}
             onNextSlide={handleNextSlide}
           />
         </div>
+        {slideData[currentSlide]?.parts &&
+        slideData[currentSlide].parts.length > 0 ? (
+          <div className="flex  overflow-x-auto max-w-full min-w-[320px]">
+            <div className="flex flex-wrap space-x-1 gap-2 ">
+              {slideData[currentSlide].parts.map((power, index) => (
+                <BadgePambii
+                  key={index}
+                  icon={
+                    <Image
+                      src={
+                        '/assets/bee-characters/icons/' +
+                        power.typePart.toLowerCase() +
+                        '.svg'
+                      }
+                      alt={power.typePart}
+                      width={20}
+                      height={20}
+                      id={index.toString()}
+                    />
+                  }
+                  number={power.value}
+                  className="bg-border flex-grow badge"
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div>No powers available</div>
+        )}
 
-        {abilitiesData && (
+        {slideData[currentSlide]?.power &&
+        slideData[currentSlide].power.length > 0 ? (
+          <div className="flex  overflow-x-auto max-w-full min-w-[320px]">
+            <div className="flex flex-wrap space-x-1 gap-2 ">
+              {slideData[currentSlide].power.map((power, index) => (
+                <BadgePambii
+                  key={index}
+                  icon={
+                    <Image
+                      src={
+                        '/assets/bee-characters/icons/' + power.name + '.svg'
+                      }
+                      alt={power.name}
+                      width={20}
+                      height={20}
+                      id={index.toString()}
+                    />
+                  }
+                  number={power.value}
+                  className="bg-border flex-grow badge"
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div>No powers available</div>
+        )}
+
+        {abilitiesData && abilitiesData.length > 0 && (
           <div className="w-full">
             <AbilitiesPambii abilities={abilitiesData} />
           </div>

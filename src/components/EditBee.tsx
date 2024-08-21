@@ -20,6 +20,7 @@ type BeeData = {
   name: string;
   imageSrc: string;
   parts: any[];
+  power?: any[];
   stats: BeeStat[];
 };
 
@@ -40,7 +41,7 @@ const EditBee: FunctionComponent<EditBeeProps> = ({
     acc[part.name] = part;
     return acc;
   }, {});
-
+  console.log('beeData', beeData);
   return (
     <div className={styles.bodycontainer}>
       <div className={styles.beecardedit}>
@@ -68,18 +69,7 @@ const EditBee: FunctionComponent<EditBeeProps> = ({
         {beeData.stats.length > 0 && (
           <div className={styles.powerratecontainer}>
             <div className={styles.text}>Power rate of this bee</div>
-            <div className={styles.badges}>
-              {beeData.stats.map((stat, index) => (
-                <div className={styles.badge} key={index}>
-                  <img
-                    className={styles.boldSecurityBombMinimal}
-                    alt=""
-                    src={stat.iconSrc}
-                  />
-                  <div className={styles.badgetext}>{stat.value}</div>
-                </div>
-              ))}
-            </div>
+            <div className={styles.badges}></div>
           </div>
         )}
         <div className={styles.powerratecontainer}>

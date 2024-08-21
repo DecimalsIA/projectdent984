@@ -13,8 +13,14 @@ app.prepare().then(() => {
   const expressApp = express();
   const server = createServer(expressApp);
 
-  // Inicializar Socket.IO con el servidor HTTP de Express
-  const io = new Server(server);
+  // Inicializar Socket.IO con el servidor HTTP de Express y configurar CORS
+  const io = new Server(server, {
+    cors: {
+      origin: ['http://localhost:3000', 'https://pambii-front.vercel.app'], // Permitir estos orígenes
+      methods: ['GET', 'POST'], // Métodos permitidos
+      credentials: true, // Permitir cookies si es necesario
+    },
+  });
 
   io.on('connection', (socket) => {
     console.log('Nuevo cliente conectado:', socket.id);

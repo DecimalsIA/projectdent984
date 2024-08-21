@@ -19,6 +19,7 @@ interface ExplorationCardGameProps {
   map?: any;
   idBuy?: any;
   iconName?: any;
+  onClicker?: () => void;
 }
 
 const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
@@ -30,6 +31,7 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
   map,
   idBuy,
   iconName,
+  onClicker,
 }) => {
   const { deeplink, generateDeeplink } = usePhantomDeeplink();
   const [transaction, setTransaction] = useState<string | null>(null);
@@ -98,6 +100,7 @@ const TransactionComponent: React.FC<ExplorationCardGameProps> = ({
           <ButtonPambii
             color="white"
             className="mb-2"
+            onClick={onClicker}
             icon={
               <Image
                 src={'/assets/bee-characters/icons/dollar.svg'}

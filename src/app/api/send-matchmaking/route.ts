@@ -5,13 +5,13 @@ import { io as ClientIO } from 'socket.io-client';
 
 export async function POST(req: NextRequest) {
   try {
-    const { idUser, arena } = await req.json();
+    const { idUser, arena, bee } = await req.json();
 
-    if (!idUser || !arena) {
+    if (!idUser || !arena || !bee) {
       return NextResponse.json({ success: false, message: 'Faltan datos en la solicitud' });
     }
 
-    console.log(`Registrando solicitud de matchmaking: idUser=${idUser}, arena=${arena}`);
+    console.log(`Registrando solicitud de matchmaking: idUser=${idUser}, arena=${arena}, bee=${bee}`);
 
     // Registrar la solicitud en Firestore (estado inicial en waiting)
     const docRef = await addDoc(collection(db, 'matchmaking'), {
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     // Conectar al servidor de Socket.IO como cliente y emitir el evento
     const socket = ClientIO('http://localhost:3000'); // Conéctate al servidor Express
 
-    socket.emit('find-match', { idUser, arena });
+    socket.emit('find-match', { idUser, arena, bee });
     console.log(`Evento 'find-match' emitido para idUser=${idUser}, arena=${arena}`);
 
     // Cerrar la conexión después de emitir el evento
@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, message: 'Matchmaking request sent successfully', transactionId: docRef.id });
   } catch (error: any) {
     console.error('Error al registrar la solicitud de matchmaking:', error);
+
     return NextResponse.json({ success: false, error: error.message });
   }
 }

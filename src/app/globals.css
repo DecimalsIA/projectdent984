@@ -745,6 +745,31 @@ h2 {
   font-family: Poppins
 }
 
+.bee-battle-be {
+  position: relative;
+  width: 183px;
+  height: 53px;
+}
+
+.tittle-bttle {
+  position: relative;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-family: Poppins;
+  color: #fff;
+  text-align: center;
+}
+
+
+.battle-bee {
+  transform: scale(0.7) rotateY(180deg);
+}
+
+.battle-bee-thow {
+  transform: scale(0.7);
+}
+
 .inpurModal {
   border: 1px solid #434343;
 }

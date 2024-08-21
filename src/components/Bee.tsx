@@ -9,6 +9,7 @@ interface BeeProps {
   basePathHi: string;
   basePathSt: string;
   basePathT: string;
+  classSes?: string;
 }
 
 const Bee: React.FC<BeeProps> = ({
@@ -18,9 +19,11 @@ const Bee: React.FC<BeeProps> = ({
   basePathHi,
   basePathSt,
   basePathT,
+  classSes,
 }) => {
+  const classN = classSes ? classSes : 'bee';
   return (
-    <div className="bee slide-image">
+    <div className={classN + ' slide-image'}>
       <img
         src={`/assets/bee-characters/category/${basePathH}/parts/head.png`}
         className="part head"

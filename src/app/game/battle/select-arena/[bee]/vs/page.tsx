@@ -1,5 +1,6 @@
 'use client';
 
+import MatchmakingComponent from '@/components/MatchmakingComponent';
 import TransactionComponent from '@/components/TransactionComponent';
 import { useTelegram } from '@/context/TelegramContext';
 import useSocket from '@/hooks/useSocket';
@@ -114,10 +115,6 @@ const SelectArenaPage: React.FC = () => {
       return newSlide;
     });
   };
-  const handleBatle = () => {
-    // alert(cardType);
-    router.push('/game/battle/select-arena/' + bee + '/vs');
-  };
   console.log('cardType', cardType);
   return (
     <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
@@ -125,39 +122,7 @@ const SelectArenaPage: React.FC = () => {
         type={cardType}
         className="bg-gray-200 w-full text-black card-pambii-b flex items-center justify-center"
       >
-        <div>
-          <div className="w-full flex flex-row justify-center flex-wrap gap-1">
-            <SlidePambii
-              slides={slideData}
-              className="w-full"
-              onPrevSlide={handlePrevSlide}
-              onNextSlide={handleNextSlide}
-            />
-          </div>
-          <ButtonPambii
-            color="white"
-            bg="#4e4e4e"
-            className="mb-2"
-            onClick={handleSelectArena}
-            icon={<IconPambii />}
-          >
-            {cardType == 'middle' ? 100 : cardType == 'hard' ? 200 : 50} PAMBII
-          </ButtonPambii>
-          <div className="badgetext">
-            The cost of PAMBII will depend on the difficulty, each game consumes
-            a small part of the percentage.
-          </div>
-          <TransactionComponent
-            textButton="Fight now"
-            spl={cardType == 'middle' ? 100 : cardType == 'hard' ? 200 : 50}
-            userid={userId}
-            fromTrn="buy_battle"
-            bee={bee}
-            iconName="dollar.svg"
-            idBuy={cardType}
-            onClicker={() => handleBatle()}
-          />{' '}
-        </div>
+        <MatchmakingComponent idUser={userId} arena={cardType} bee={bee} />
       </CardPambii>
     </div>
   );

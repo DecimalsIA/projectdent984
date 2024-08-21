@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  width: 100%;
 
   /* Fondo oscuro */
 }
@@ -18,6 +19,7 @@
   justify-content: center;
   align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin: 0 auto;
   /* Sombra para darle profundidad */
 }
 
@@ -31,4 +33,118 @@
   font-size: 24px;
   color: white;
   font-weight: bold;
+}
+
+.name {
+  position: relative;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: white;
+}
+
+.image4Icon {
+  width: 265px;
+  position: relative;
+  height: 240px;
+
+}
+
+.image4Wrapper {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.nameWrapper {
+  width: 130px;
+  border-radius: 500px;
+  background-color: #4e4e4e;
+  height: 130px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.box {
+  width: 100%;
+  margin: 0 !important;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  box-shadow: 0px 8px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background-color: #df444d;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  height: 42px;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 0;
+}
+
+.icon {
+  width: 24px;
+  position: relative;
+  height: 24px;
+}
+
+.label {
+  position: relative;
+  letter-spacing: 0.02em;
+  line-height: 24px;
+  text-transform: uppercase;
+  font-weight: 900;
+  text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.15);
+}
+
+.box1 {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 1;
+}
+
+.button {
+  align-self: stretch;
+  box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.25), 0px -2px 2px rgba(0, 0, 0, 0.1) inset;
+  border-radius: 10px;
+  background-color: #df444d;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px 16px;
+  box-sizing: border-box;
+  position: relative;
+  text-align: left;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.nameParent {
+  width: 100%;
+  position: relative;
+
+
+
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 16px;
+  text-align: center;
+  font-size: 16px;
+  color: #fff;
+  font-family: Poppins;
 }

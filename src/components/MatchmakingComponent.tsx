@@ -18,11 +18,11 @@ export default function MatchmakingComponent({
   idUser,
   arena,
 }: MatchmakingProps) {
-  const [timeLeft, setTimeLeft] = useState(180000); // Inicializa el temporizador en 180,000 milisegundos (3 minutos)
+  const [timeLeft, setTimeLeft] = useState(180000);
   const [isMatching, setIsMatching] = useState(false);
-  const [matchData, setMatchData] = useState<MatchData | null>(null); // Guarda los datos de la coincidencia
-  const [rejectionCount, setRejectionCount] = useState(0); // Contador de rechazos
-  const socketRef = useRef<any>(null); // Referencia para el socket
+  const [matchData, setMatchData] = useState<MatchData | null>(null);
+  const [rejectionCount, setRejectionCount] = useState(0);
+  const socketRef = useRef<any>(null);
 
   const handleSendRequest = async () => {
     try {
@@ -38,13 +38,23 @@ export default function MatchmakingComponent({
       if (data.success) {
         setIsMatching(true);
 
-        // Inicializar socket si no está ya conectado
+        // Conectar al servidor de Socket.IO
         if (!socketRef.current) {
-          socketRef.current = io({ path: '/api/socket' });
+          socketRef.current = io('https://pambii-front.vercel.app');
+
+          // Verificar la conexión
+          socketRef.current.on('connect', () => {
+            console.log('Conectado al servidor de Socket.IO');
+          });
+
+          socketRef.current.on('connect_error', (error: any) => {
+            console.error('Error al conectar a Socket.IO:', error);
+          });
 
           socketRef.current.on('match-found', (matchData: MatchData) => {
+            console.log('Match found:', matchData);
             setIsMatching(false);
-            setMatchData(matchData); // Guardar los datos de la coincidencia
+            setMatchData(matchData);
           });
 
           socketRef.current.on('waiting', () => {
@@ -53,6 +63,7 @@ export default function MatchmakingComponent({
         }
 
         // Emitir el evento de find-match
+        console.log('Emitiendo find-match:', { idUser, arena });
         socketRef.current.emit('find-match', { idUser, arena });
       }
     } catch (error) {
@@ -72,7 +83,6 @@ export default function MatchmakingComponent({
       setIsMatching(false);
       socketRef.current.emit('cancel-match');
     } else if (socketRef.current) {
-      // Buscar la siguiente coincidencia
       socketRef.current.emit('find-match', { idUser, arena });
     }
   };
@@ -86,9 +96,9 @@ export default function MatchmakingComponent({
     }
 
     return () => {
-      clearInterval(timer); // Limpiar el temporizador
+      clearInterval(timer);
       if (socketRef.current) {
-        socketRef.current.disconnect(); // Desconectar el socket al desmontar el componente
+        socketRef.current.disconnect();
         socketRef.current = null;
       }
     };

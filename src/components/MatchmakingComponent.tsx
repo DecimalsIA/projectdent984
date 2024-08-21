@@ -18,11 +18,45 @@ export default function MatchmakingComponent({
   idUser,
   arena,
 }: MatchmakingProps) {
-  const [timeLeft, setTimeLeft] = useState(180000);
+  const [timeLeft, setTimeLeft] = useState(180000); // Inicializa el temporizador en 180,000 milisegundos (3 minutos)
   const [isMatching, setIsMatching] = useState(false);
-  const [matchData, setMatchData] = useState<MatchData | null>(null);
-  const [rejectionCount, setRejectionCount] = useState(0);
-  const socketRef = useRef<any>(null);
+  const [matchData, setMatchData] = useState<MatchData | null>(null); // Guarda los datos de la coincidencia
+  const [rejectionCount, setRejectionCount] = useState(0); // Contador de rechazos
+  const socketRef = useRef<any>(null); // Referencia para el socket
+
+  useEffect(() => {
+    // Conectar al servidor de Socket.IO al montar el componente
+    socketRef.current = io('https://pambii-front.vercel.app'); // Asegúrate de usar la URL correcta
+
+    // Verificar la conexión
+    socketRef.current.on('connect', () => {
+      console.log('Conectado al servidor de Socket.IO');
+    });
+
+    socketRef.current.on('connect_error', (error: any) => {
+      console.error('Error al conectar a Socket.IO:', error);
+    });
+
+    // Escuchar el evento 'match-found'
+    socketRef.current.on('match-found', (matchData: MatchData) => {
+      console.log('Match found:', matchData);
+      setIsMatching(false);
+      setMatchData(matchData); // Actualiza el estado con los datos del match
+    });
+
+    // Escuchar el evento 'waiting'
+    socketRef.current.on('waiting', () => {
+      console.log('Still waiting for a match...');
+    });
+
+    // Desconectar el socket al desmontar el componente
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+    };
+  }, []); // Este efecto se ejecuta solo una vez al montar el componente
 
   const handleSendRequest = async () => {
     try {
@@ -37,30 +71,6 @@ export default function MatchmakingComponent({
       const data = await response.json();
       if (data.success) {
         setIsMatching(true);
-
-        // Conectar al servidor de Socket.IO
-        if (!socketRef.current) {
-          socketRef.current = io('https://pambii-front.vercel.app');
-
-          // Verificar la conexión
-          socketRef.current.on('connect', () => {
-            console.log('Conectado al servidor de Socket.IO');
-          });
-
-          socketRef.current.on('connect_error', (error: any) => {
-            console.error('Error al conectar a Socket.IO:', error);
-          });
-
-          socketRef.current.on('match-found', (matchData: MatchData) => {
-            console.log('Match found:', matchData);
-            setIsMatching(false);
-            setMatchData(matchData);
-          });
-
-          socketRef.current.on('waiting', () => {
-            console.log('Still waiting for a match...');
-          });
-        }
 
         // Emitir el evento de find-match
         console.log('Emitiendo find-match:', { idUser, arena });
@@ -97,10 +107,6 @@ export default function MatchmakingComponent({
 
     return () => {
       clearInterval(timer);
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
-      }
     };
   }, [isMatching]);
 

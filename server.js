@@ -13,12 +13,11 @@ app.prepare().then(() => {
   const expressApp = express();
   const server = createServer(expressApp);
 
-  // Inicializar Socket.IO con el servidor HTTP de Express y configurar CORS
+  // Inicializar Socket.IO con CORS que permite todos los orígenes
   const io = new Server(server, {
     cors: {
-      origin: ['http://localhost:3000', 'https://pambii-front.vercel.app'], // Permitir estos orígenes
+      origin: '*', // Permitir todos los orígenes
       methods: ['GET', 'POST'], // Métodos permitidos
-      credentials: true, // Permitir cookies si es necesario
     },
   });
 
@@ -28,13 +27,13 @@ app.prepare().then(() => {
     socket.on('find-match', ({ idUser, arena }) => {
       console.log(`Recibido find-match para ${idUser} en la arena ${arena}`);
 
-      // Lógica de matchmaking
+      // Lógica de matchmaking: buscar una coincidencia en la cola
       const match = matchQueue.find(
         (player) => player.arena === arena && player.idUser !== idUser,
       );
-
+      console.log('match->', match);
       if (match) {
-        // Coincidencia encontrada
+        // Coincidencia encontrada, enviar el evento 'match-found' a ambos jugadores
         console.log(`Coincidencia encontrada: ${idUser} vs ${match.idUser}`);
         io.to(socket.id).emit('match-found', {
           idUser1: idUser,

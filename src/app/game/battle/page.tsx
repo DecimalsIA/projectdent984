@@ -65,7 +65,7 @@ const BattlePage: React.FC = () => {
   if (errorBee) return <div>{errorBee}</div>;
 
   return (
-    <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+    <div className=" min-h-[100vh] mb-20 w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
       <CardPambii
         type={'fire'}
         className="bg-gray-200 w-full text-black card-pambii-b flex items-center justify-center"
@@ -88,9 +88,9 @@ const BattlePage: React.FC = () => {
                   icon={
                     <Image
                       src={
-                        '/assets/bee-characters/icons/' +
+                        '/assets/bee-characters/category/' +
                         power.typePart.toLowerCase() +
-                        '.svg'
+                        '.gif'
                       }
                       alt={power.typePart}
                       width={20}

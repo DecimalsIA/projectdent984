@@ -32,7 +32,7 @@ const BeePartsCategory: FunctionComponent<BeePartsCategoryProps> = ({
         className={styles.beepartcategory}
         onClick={onCategoryClick} // Category click handler
       >
-        <div className={styles.badgetext}>{category.title}</div>
+        <div className={styles.badgetext}>{category.title} bee parts</div>
         <img
           className={styles.boldArrowsAltArrowRigh}
           alt={category.title}

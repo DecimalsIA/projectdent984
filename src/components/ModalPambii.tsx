@@ -26,6 +26,7 @@ type ModalData = {
   image?: string;
   badges?: BadgeData[];
   powerTitle?: string;
+  powerBy?: any;
   description?: string;
   buttons?: ButtonData[];
   htmlButtom?: React.ReactNode;
@@ -46,6 +47,7 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
     image,
     badges,
     powerTitle,
+    powerBy,
     description,
     body,
     buttons,
@@ -106,6 +108,24 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
               <CardPambii className="bg-gray-200 text-sm flex items-center justify-center">
                 <img src={image} alt={title} className="w-32 h-32" />
               </CardPambii>
+            </div>
+          )}
+          {powerBy && (
+            <div className="flex flex-col items-start flex-grow mb-2">
+              <div className="userinfocontainer">
+                <Image
+                  className="userinfocontainerChild boder-img"
+                  alt="User"
+                  src={powerBy?.image || 'Pambii-bee.web'}
+                  width={50}
+                  height={50}
+                  placeholder="blur"
+                  blurDataURL="/Pambii-bee.webp"
+                />
+
+                <span className="text-base">{'Item by:  '}</span>
+                <div className="beenametext">{powerBy?.name}</div>
+              </div>
             </div>
           )}
           {powerTitle && (

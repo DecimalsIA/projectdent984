@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import BeePartsCarousel from '@/components/BeePartsCarousel';
@@ -21,6 +22,8 @@ const InventoryPage: React.FC = () => {
   const { categories, loading, error, loadMore, hasMore } =
     useGetPartsMarketPlaceByType(userid);
 
+  console.log('useruseruseruseruser', user);
+
   const handleModal = (part: any, index: any) => {
     console.log('Modal', part, index);
     const modalData: any = {
@@ -29,6 +32,7 @@ const InventoryPage: React.FC = () => {
       description: part?.ability?.description,
       powerTitle: part?.ability?.name,
       badges: part.stats,
+      powerBy: { name: 'Fredy', id: userId, image: '' },
       htmlButtom: (
         <TransactionComponent
           textButton="Buy Item"

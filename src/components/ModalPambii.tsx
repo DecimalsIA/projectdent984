@@ -116,7 +116,7 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
                 <Image
                   className="userinfocontainerChild boder-img"
                   alt="User"
-                  src={powerBy?.image || 'Pambii-bee.web'}
+                  src={powerBy?.image || '/Pambii-bee.web'}
                   width={50}
                   height={50}
                   placeholder="blur"

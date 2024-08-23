@@ -32,7 +32,11 @@ const InventoryPage: React.FC = () => {
       description: part?.ability?.description,
       powerTitle: part?.ability?.name,
       badges: part.stats,
-      powerBy: { name: 'Fredy', id: userId, image: '' },
+      powerBy: {
+        name: user && user?.first_name + user?.last_name,
+        id: userId,
+        image: '/Pambii-bee.webp',
+      },
       htmlButtom: (
         <TransactionComponent
           textButton="Buy Item"

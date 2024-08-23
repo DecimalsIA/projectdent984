@@ -68,6 +68,7 @@ const Home = () => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [inputValue, setInputValue] = useState<string>('');
   const [abilitiesData, setAbilitiesData] = useState<any>([]);
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -81,8 +82,6 @@ const Home = () => {
   if (errorBee) return <div>{errorBee}</div>;
 
   const slideData = data && data.length > 0 ? data : [];
-
-  console.log('slideData', slideData[currentSlide].power);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);

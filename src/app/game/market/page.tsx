@@ -27,7 +27,7 @@ const InventoryPage: React.FC = () => {
       title: part?.name,
       image: part?.image, // Usar el tipo para la imagen
       description: part?.ability?.description,
-      powerTitle: part?.ability?.Parts,
+      powerTitle: part?.ability?.name,
       badges: part.stats,
       htmlButtom: (
         <TransactionComponent

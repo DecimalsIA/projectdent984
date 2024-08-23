@@ -36,12 +36,11 @@ const InventoryPage: React.FC = () => {
     htmlButtom,
  */
   const handleModal = (part: any, index: any) => {
-    console.log('Modal-->', part, index);
     const modalData: any = {
       title: part?.name + '-' + part.title,
       image: part?.image, // Usar el tipo para la imagen
       description: part?.ability?.description,
-      powerTitle: part?.ability?.Parts,
+      powerTitle: part?.ability?.name,
       badges: part.stats,
       buttons: [
         {

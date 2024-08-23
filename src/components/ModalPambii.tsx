@@ -53,6 +53,7 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
     onClose,
     htmlButtom,
   } = data;
+  console.log('data', data);
 
   return (
     <div

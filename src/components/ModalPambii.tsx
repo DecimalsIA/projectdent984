@@ -60,7 +60,7 @@ const ModalPambii: React.FC<ModalPambiiProps> = ({ data, className }) => {
   return (
     <div
       className={classNames(
-        'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[200]',
+        'fixed inset-0 flex items-center justify-center overflow-hidden bg-black bg-opacity-50 z-[200]',
         className,
       )}
     >

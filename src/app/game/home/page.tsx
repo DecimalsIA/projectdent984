@@ -70,7 +70,7 @@ const Home = () => {
   const [abilitiesData, setAbilitiesData] = useState<any>([]);
 
   const inputRef = useRef<HTMLInputElement>(null);
-
+  console.log('user', user);
   useEffect(() => {
     if (data && data.length > 0) {
       setAbilitiesData(data[currentSlide]?.abilitiesData ?? []);

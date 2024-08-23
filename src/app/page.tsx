@@ -8,7 +8,7 @@ import { ButtonPambii } from 'pambii-devtrader-front';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/context/AuthContext';
 import VerifySession from '@/components/VerifySession';
-import usePhantomWallet from '@/hooks/usePhantomWallet';
+
 import useBase64 from '@/hooks/useBase64';
 
 const Home = () => {
@@ -16,7 +16,7 @@ const Home = () => {
   const { setShowBackButton, user } = useTelegram();
   const { isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const { isPhantomInstalled } = usePhantomWallet();
+
   const [startParam, setStartParam] = useState('');
   const { json, decodeFromBase64 } = useBase64();
 

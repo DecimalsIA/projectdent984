@@ -4,7 +4,7 @@ import { LogoGame } from 'pambii-devtrader-front';
 
 const PambiiLoader: React.FC = () => {
   return (
-    <div className="w-full h-[400px] flex flex-col items-center justify-center font-pop mt-8">
+    <div className="w-full min-h-[100vh] flex flex-col items-center justify-center font-pop mt-8">
       <div className="w-[315px] h-[341px] flex flex-col items-center justify-start gap-6">
         <div>
           {' '}

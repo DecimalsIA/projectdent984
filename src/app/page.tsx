@@ -51,10 +51,11 @@ const Home = () => {
       setIsLoading(false);
     }
   }, [isAuthenticated, isLoading]);
+  // !isMobile
   return (
     <div>
       <>
-        {!isMobile ? (
+        {true ? (
           <>
             <NotTelegramMobile />
             {!user?.id && (

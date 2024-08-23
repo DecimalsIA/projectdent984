@@ -55,7 +55,7 @@ const Home = () => {
   return (
     <div>
       <>
-        {true ? (
+        {false ? (
           <>
             <NotTelegramMobile />
             {!user?.id && (

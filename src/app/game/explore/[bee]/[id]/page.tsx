@@ -78,10 +78,10 @@ const ExplorePage: React.FC = () => {
         .filter((bee) => bee.id === id);
 
       setSlideData(mappedSlideData);
-      setCardType(mappedSlideData[0].type);
-      setAbilitiesData(mappedSlideData[0].abilitiesData);
+      setCardType(mappedSlideData[0]?.type);
+      setAbilitiesData(mappedSlideData[0]?.abilitiesData);
     }
-  }, [bees]);
+  }, [bees, id]);
 
   useEffect(() => {
     if (exists && data) {
@@ -92,7 +92,11 @@ const ExplorePage: React.FC = () => {
   }, [exists, data]);
 
   if (!bees || slideData.length === 0) {
-    return <div>Loading...</div>; // Muestra un indicador de carga mientras se inicializan los datos
+    return (
+      <div className="min-h-[100vh] flex flex-row items-center center-block">
+        Loading...
+      </div>
+    ); // Muestra un indicador de carga mientras se inicializan los datos
   }
   const tabs = [
     {

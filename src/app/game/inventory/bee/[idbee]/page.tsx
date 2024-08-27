@@ -112,7 +112,11 @@ const SpecialMarketPage: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-[100vh] flex flex-row items-center center-block">
+        Loading...
+      </div>
+    );
   }
 
   if (errorBee) {

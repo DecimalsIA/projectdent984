@@ -79,7 +79,11 @@ const InventoryPage: React.FC = () => {
       )}
       <div className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full">
         <div className="w-full mb-44">
-          {loading && categories.length === 0 && <div>Loading...</div>}
+          {loading && categories.length === 0 && (
+            <div className="min-h-[100vh] flex flex-row items-center center-block">
+              Loading...
+            </div>
+          )}
           {error && <div>{error}</div>}
           {!loading &&
             categories.length > 0 &&

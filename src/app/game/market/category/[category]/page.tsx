@@ -15,7 +15,11 @@ const SpecialMarketPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full">
       <div className="w-full mb-48">
-        {loading && <div>Loading...</div>}
+        {loading && (
+          <div className="min-h-[100vh] flex flex-row items-center center-block">
+            Loading...
+          </div>
+        )}
         {error && <div>{error}</div>}
         {!loading &&
           categories.length > 0 &&

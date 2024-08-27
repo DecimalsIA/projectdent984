@@ -70,7 +70,7 @@ const Home = () => {
   const [abilitiesData, setAbilitiesData] = useState<any>([]);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  console.log('user', user);
+  console.log('user data', data);
   useEffect(() => {
     if (data && data.length > 0) {
       setAbilitiesData(data[currentSlide]?.abilitiesData ?? []);
@@ -78,7 +78,13 @@ const Home = () => {
     }
   }, [currentSlide, data]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="min-h-[100vh] flex flex-row items-center center-block">
+        {' '}
+        Loading...
+      </div>
+    );
   if (errorBee) return <div>{errorBee}</div>;
 
   const slideData = data && data.length > 0 ? data : [];

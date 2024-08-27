@@ -84,7 +84,11 @@ const ExplorePage: React.FC = () => {
   console.log('lockState', lockState);
 
   if (!bees || slideData.length === 0) {
-    return <div>Loading...</div>; // Muestra un indicador de carga mientras se inicializan los datos
+    return (
+      <div className="min-h-[100vh] flex flex-col items-center center-block">
+        Loading...
+      </div>
+    ); // Muestra un indicador de carga mientras se inicializan los datos
   }
   console.log('bees');
   return (

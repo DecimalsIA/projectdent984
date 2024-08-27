@@ -61,7 +61,7 @@ const ExplorePage: React.FC = () => {
   const [abilitiesData, setAbilitiesData] = useState<any[]>([]);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [lockState, setLockState] = useState(false);
-
+  console.log('beesData', beesData);
   const badgesData: any = [
     {
       Icon: (
@@ -156,7 +156,7 @@ const ExplorePage: React.FC = () => {
     console.log('data---->', data);
     if (exists && data) {
       console.log('La transacción existe y los datos son:', data);
-      router.push('/game/explore/' + data?.map + '/' + data?.bee);
+      // router.push('/game/explore/' + data?.map + '/' + data?.bee);
 
       const now = Date.now();
       const difference = data.timeLock - now;
@@ -169,7 +169,7 @@ const ExplorePage: React.FC = () => {
     } else {
       console.log('No se encontraron transacciones para el usuario.');
     }
-  }, [exists, JSON.stringify(data)]);
+  }, [data, exists, router]);
   /*
   useEffect(() => {
     console.log('exists000', exists);
@@ -201,7 +201,7 @@ const ExplorePage: React.FC = () => {
   ];
   return (
     <>
-      <div className="w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+      <div className="w-full bg-cover bg-center flex flex-col justify-between p-4">
         <TabsPambii
           tabs={tabs}
           mode="background"
@@ -223,7 +223,7 @@ const ExplorePage: React.FC = () => {
             </div>
           )}
           {badgesData && <ExplorationInfo badges={badgesData} />}
-          {lockState ? (
+          {!lockState ? (
             <TransactionComponent
               spl={bee === 'easy' ? 10 : bee === 'middle' ? 20 : 35}
               userid={userId}

@@ -15,6 +15,7 @@ const BattlePage: React.FC = () => {
   const { data, loading, error: errorBee } = useFetchBees(userid);
   const [imgSrc, setImgSrc] = useState('/assets/bee-characters/icons/fire.svg');
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const slideData = data && data.length > 0 ? data : [];
   console.log('slideData', slideData);
 
@@ -22,6 +23,8 @@ const BattlePage: React.FC = () => {
   const [abilitiesData, setAbilitiesData] = useState<any>([]);
   // const [habilities, setHabilities] = useState<any>([]);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [comingSoon, setComingSoon] = useState<boolean>(true);
+
   const router = useRouter();
 
   // Usa un efecto para actualizar los estados una vez que slideData esté disponible
@@ -31,7 +34,7 @@ const BattlePage: React.FC = () => {
       setAbilitiesData(slideData[currentSlide].abilitiesData ?? []);
       //setHabilities(slideData[0].habilities ?? []);
     }
-  }, [slideData]);
+  }, [currentSlide, slideData]);
 
   const handleSelectArena = () => {
     // alert(cardType);
@@ -61,7 +64,19 @@ const BattlePage: React.FC = () => {
     setImgSrc('/assets/bee-characters/icons/fire.svg'); // Cambia esta ruta por tu imagen de placeholder
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="min-h-[100vh] flex flex-row items-center center-block">
+        Loading...
+      </div>
+    );
+  if (comingSoon)
+    return (
+      <div className="min-h-[100vh] flex flex-row items-center center-block">
+        {' '}
+        Coming soon...
+      </div>
+    );
   if (errorBee) return <div>{errorBee}</div>;
 
   return (

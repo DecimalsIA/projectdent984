@@ -61,7 +61,12 @@ const BattlePage: React.FC = () => {
     setImgSrc('/assets/bee-characters/icons/fire.svg'); // Cambia esta ruta por tu imagen de placeholder
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="min-h-[100vh] flex flex-row items-center center-block">
+        Loading...
+      </div>
+    );
   if (errorBee) return <div>{errorBee}</div>;
 
   return (

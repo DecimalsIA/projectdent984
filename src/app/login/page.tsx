@@ -40,7 +40,7 @@ const Page: React.FC = () => {
         <div className="w-[365px] space-y-4 text-center">
           <CardPambii className="text-white">
             <LogoGame className="w-100 h-100 mb-4" />
-            <h2 className="text-xl font-bold mb-4">Loading...</h2>
+            <h2 className="text-xl font-bold mb-4 center-block">Loading...</h2>
           </CardPambii>
         </div>
       </main>

@@ -110,6 +110,11 @@ h2 {
   /* Mantiene la proporción del SVG */
 }
 
+.center-block {
+  margin: 0 auto;
+  text-align: center;
+}
+
 .label-pambii {
   font-size: 13px !important;
 }

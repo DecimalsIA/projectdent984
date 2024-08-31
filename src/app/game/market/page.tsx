@@ -2,6 +2,7 @@
 'use client';
 
 import BeePartsCarousel from '@/components/BeePartsCarousel';
+import Filter from '@/components/filter';
 import ModalPambii from '@/components/ModalPambii';
 import TransactionComponent from '@/components/TransactionComponent';
 import { useTelegram } from '@/context/TelegramContext';
@@ -13,7 +14,9 @@ import { useState, useEffect } from 'react';
 const InventoryPage: React.FC = () => {
   const userid = 'System';
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenFilter, setIsModalOpenFilter] = useState(false);
   const [dataModal, setIsDataModal] = useState();
+  const [dataModalFilter, setIsDataModalFilter] = useState();
   const router = useRouter();
   const { user } = useTelegram();
   const userId = user?.id.toString() ?? '792924145';
@@ -62,6 +65,16 @@ const InventoryPage: React.FC = () => {
     setIsDataModal(modalData);
     setIsModalOpen(true);
   };
+  const handleFilterClick = () => {
+    setIsModalOpenFilter(true);
+    const modalData: any = {
+      title: 'Add filters on the marketplace',
+      // Usar el tipo para la imagen
+
+      onClose: () => setIsModalOpenFilter(false),
+    };
+    setIsDataModalFilter(modalData);
+  };
   /*
 buttons: [
         {
@@ -96,6 +109,9 @@ buttons: [
       {dataModal && isModalOpen && (
         <ModalPambii className="p-4" data={dataModal} />
       )}
+      {dataModalFilter && isModalOpenFilter && (
+        <ModalPambii className="p-4" data={dataModalFilter} />
+      )}
       <div className="min-h-screen bg-cover bg-center flex flex-col p-4 w-full">
         <div className="w-full mb-44">
           {loading && categories.length === 0 && (
@@ -104,6 +120,7 @@ buttons: [
             </div>
           )}
           {error && <div>{error}</div>}
+          {!loading && <Filter onClick={handleFilterClick} />}
           {!loading &&
             categories.length > 0 &&
             categories.map((category, index) => (

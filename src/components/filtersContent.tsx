@@ -1,38 +1,41 @@
 import { FunctionComponent, useState, useCallback } from 'react';
 import styles from './FilterBody.module.css';
 import Image from 'next/image';
+import { Select, SelectItem, Selection } from '@nextui-org/react';
 
 const FilterBody: FunctionComponent = () => {
   const [isStatOpen, setIsStatOpen] = useState(false);
-  const [abilitySuggestions, setAbilitySuggestions] = useState<string[]>([
+  const [values, setValues] = useState<Selection>(new Set(['cat', 'dog']));
+
+  const [abilitySuggestions] = useState<string[]>([
     'Frenzy',
     'Focus',
     'Fortify',
   ]);
-  const [abilityInput, setAbilityInput] = useState('');
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedAbility, setSelectedAbility] = useState('');
 
   const onCloseIconClick = useCallback(() => {
     setIsStatOpen(!isStatOpen);
   }, [isStatOpen]);
 
-  const onAbilityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAbilityInput(e.target.value);
+  const onAbilityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedAbility(e.target.value);
   };
-
-  const onAbilityClick = (ability: string) => {
-    setAbilityInput(ability);
-    setShowSuggestions(false); // Cierra las sugerencias después de seleccionar una
-  };
-
-  const onInputFocus = () => {
-    setShowSuggestions(true);
-  };
-
-  const onInputBlur = () => {
-    // Usar setTimeout para cerrar las sugerencias después de que se haga click en una sugerencia
-    setTimeout(() => setShowSuggestions(false), 100);
-  };
+  const animals = [
+    { key: 'cat', label: 'Cat' },
+    { key: 'dog', label: 'Dog' },
+    { key: 'elephant', label: 'Elephant' },
+    { key: 'lion', label: 'Lion' },
+    { key: 'tiger', label: 'Tiger' },
+    { key: 'giraffe', label: 'Giraffe' },
+    { key: 'dolphin', label: 'Dolphin' },
+    { key: 'penguin', label: 'Penguin' },
+    { key: 'zebra', label: 'Zebra' },
+    { key: 'shark', label: 'Shark' },
+    { key: 'whale', label: 'Whale' },
+    { key: 'otter', label: 'Otter' },
+    { key: 'crocodile', label: 'Crocodile' },
+  ];
 
   return (
     <div className={styles.content}>
@@ -147,39 +150,20 @@ const FilterBody: FunctionComponent = () => {
             unoptimized
             className={styles.boldAstronomyStars}
           />
-          <input
-            type="text"
-            placeholder="Write the ability..."
-            className={styles.badgetext}
-            value={abilityInput}
-            onChange={onAbilityChange}
-            onFocus={onInputFocus}
-            onBlur={onInputBlur}
-          />
-          {showSuggestions && (
-            <div className={styles.suggestions}>
-              {abilitySuggestions
-                .filter((suggestion) =>
-                  suggestion.toLowerCase().includes(abilityInput.toLowerCase()),
-                )
-                .map((suggestion, index) => (
-                  <div
-                    key={index}
-                    className={styles.suggestionItem}
-                    onClick={() => onAbilityClick(suggestion)}
-                  >
-                    <Image
-                      src="/assets/sword.svg"
-                      width={18}
-                      height={18}
-                      alt="Sword icon"
-                      unoptimized
-                    />
-                    {suggestion}
-                  </div>
-                ))}
-            </div>
-          )}
+          <Select
+            label=""
+            selectionMode="multiple"
+            placeholder="Select an ability..."
+            radius="none"
+            selectedKeys={values}
+            labelPlacement="outside"
+            className="max-w-xs"
+            onSelectionChange={setValues}
+          >
+            {animals.map((animal) => (
+              <SelectItem key={animal.key}>{animal.label}</SelectItem>
+            ))}
+          </Select>
         </div>
       </div>
       <div className={styles.typefiltercontainer}>
@@ -193,11 +177,21 @@ const FilterBody: FunctionComponent = () => {
             unoptimized
             className={styles.boldAstronomyStars}
           />
-          <input
-            type="text"
-            placeholder="bee type..."
-            className={styles.badgetext}
-          />
+
+          <select
+            className={styles.selectField}
+            value={selectedAbility}
+            onChange={onAbilityChange}
+          >
+            <option value="" disabled>
+              bee type...
+            </option>
+            {abilitySuggestions.map((ability, index) => (
+              <option key={index} value={ability}>
+                {ability}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
       <div className={styles.typefiltercontainer}>
@@ -211,11 +205,21 @@ const FilterBody: FunctionComponent = () => {
             unoptimized
             className={styles.boldAstronomyStars}
           />
-          <input
-            type="text"
-            placeholder="bee part..."
-            className={styles.badgetext}
-          />
+
+          <select
+            className={styles.selectField}
+            value={selectedAbility}
+            onChange={onAbilityChange}
+          >
+            <option value="" disabled>
+              bee part...
+            </option>
+            {abilitySuggestions.map((ability, index) => (
+              <option key={index} value={ability}>
+                {ability}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
     </div>

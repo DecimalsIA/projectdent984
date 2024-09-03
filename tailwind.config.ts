@@ -1,9 +1,12 @@
 import type { Config } from "tailwindcss";
+const { nextui } = require("@nextui-org/react");
+
 
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
@@ -15,7 +18,7 @@ const config: Config = {
       },
       colors: {
         gray: {
-          '50':  '#f4f4f5',
+          '50': '#f4f4f5',
           '100': '#e4e4e7',
           '200': '#d4d4d8',
           '300': '#a1a1aa',
@@ -27,7 +30,7 @@ const config: Config = {
           '900': '#171717',
         },
         cerise: {
-          '50':  '#fff1f2',
+          '50': '#fff1f2',
           '100': '#ffe4e6',
           '200': '#fecdd3',
           '300': '#fda4af',
@@ -39,7 +42,7 @@ const config: Config = {
           '900': '#881337',
         },
         pink: {
-          '50':  '#fdf2f8',
+          '50': '#fdf2f8',
           '100': '#fce7f3',
           '200': '#fbcfe8',
           '300': '#f9a8d4',
@@ -50,9 +53,9 @@ const config: Config = {
           '800': '#9d174d',
           '900': '#831843',
         },
-   
+
         purple: {
-          '50':  '#faf5ff',
+          '50': '#faf5ff',
           '100': '#f3e8ff',
           '200': '#e9d5ff',
           '300': '#d8b4fe',
@@ -64,7 +67,7 @@ const config: Config = {
           '900': '#581c87',
         },
         indigo: {
-          '50':  '#f5f3ff',
+          '50': '#f5f3ff',
           '100': '#ede9fe',
           '200': '#ddd6fe',
           '300': '#c4b5fd',
@@ -76,7 +79,7 @@ const config: Config = {
           '900': '#4c1d95',
         },
         blue: {
-          '50':  '#eef2ff',
+          '50': '#eef2ff',
           '100': '#e0e7ff',
           '200': '#c7d2fe',
           '300': '#a5b4fc',
@@ -88,7 +91,7 @@ const config: Config = {
           '900': '#312e81',
         },
         azure: {
-          '50':  '#eff6ff',
+          '50': '#eff6ff',
           '100': '#dbeafe',
           '200': '#bfdbfe',
           '300': '#93c5fd',
@@ -99,9 +102,9 @@ const config: Config = {
           '800': '#1e40af',
           '900': '#1e3a8a',
         },
-     
+
         teal: {
-          '50':  '#effdfd',
+          '50': '#effdfd',
           '100': '#d2f7f9',
           '200': '#aaf0f4',
           '300': '#76e4ec',
@@ -112,9 +115,9 @@ const config: Config = {
           '800': '#0b5e6b',
           '900': '#0d4f5a',
         },
-     
+
         island: {
-          '50':  '#f0fdfa',
+          '50': '#f0fdfa',
           '100': '#ccfbf1',
           '200': '#99f6e4',
           '300': '#5eead4',
@@ -126,7 +129,7 @@ const config: Config = {
           '900': '#134e4a',
         },
         submarine: {
-          '50':  '#ecfdf5',
+          '50': '#ecfdf5',
           '100': '#d1fae5',
           '200': '#a7f3d0',
           '300': '#6ee7b7',
@@ -138,7 +141,7 @@ const config: Config = {
           '900': '#064e3b',
         },
         emerald: {
-          '50':  '#f0fdf4',
+          '50': '#f0fdf4',
           '100': '#dcfce7',
           '200': '#bbf7d0',
           '300': '#86efac',
@@ -150,7 +153,7 @@ const config: Config = {
           '900': '#14532d',
         },
         chartreuse: {
-          '50':  '#f7fee7',
+          '50': '#f7fee7',
           '100': '#ecfccb',
           '200': '#d9f99d',
           '300': '#bef264',
@@ -162,7 +165,7 @@ const config: Config = {
           '900': '#365314',
         },
         saffron: {
-          '50':  '#fefce8',
+          '50': '#fefce8',
           '100': '#fef9c3',
           '200': '#fef08a',
           '300': '#fde047',
@@ -174,7 +177,7 @@ const config: Config = {
           '900': '#713f12',
         },
         tangerine: {
-          '50':  '#fffbeb',
+          '50': '#fffbeb',
           '100': '#fef3c7',
           '200': '#fde68a',
           '300': '#fcd34d',
@@ -186,7 +189,7 @@ const config: Config = {
           '900': '#78350f',
         },
         pumpkin: {
-          '50':  '#fff7ed',
+          '50': '#fff7ed',
           '100': '#ffedd5',
           '200': '#fed7aa',
           '300': '#fdba74',
@@ -198,7 +201,7 @@ const config: Config = {
           '900': '#7c2d12',
         },
         coral: {
-          '50':  '#fef2f2',
+          '50': '#fef2f2',
           '100': '#fee2e2',
           '200': '#fecaca',
           '300': '#fca5a5',
@@ -209,11 +212,12 @@ const config: Config = {
           '800': '#991b1b',
           '900': '#7f1d1d',
         },
-        
+
       }
     },
   },
-  plugins: [],
+  darkMode: "class",
+  plugins: [nextui()],
 };
 export default config;
 

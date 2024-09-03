@@ -11,6 +11,8 @@ import PambiiLoader from '@/components/PambiiLoader';
 import { AuthProvider } from '@/context/AuthContext';
 const inter = Inter({ subsets: ['latin'] });
 import { Toaster } from 'react-hot-toast';
+import { NextUIProvider } from '@nextui-org/react';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -47,18 +49,20 @@ export default function RootLayout({
   }, [isScriptLoaded]);
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="dark">
       <body className={inter.className}>
-        <NextIntlClientProvider locale="en" messages={messages}>
-          {isScriptLoaded ? (
-            <AuthProvider>
-              <Toaster position="bottom-center" />
-              <WalletContext>{children}</WalletContext>
-            </AuthProvider>
-          ) : (
-            <PambiiLoader />
-          )}
-        </NextIntlClientProvider>
+        <NextUIProvider>
+          <NextIntlClientProvider locale="en" messages={messages}>
+            {isScriptLoaded ? (
+              <AuthProvider>
+                <Toaster position="bottom-center" />
+                <WalletContext>{children}</WalletContext>
+              </AuthProvider>
+            ) : (
+              <PambiiLoader />
+            )}
+          </NextIntlClientProvider>{' '}
+        </NextUIProvider>
       </body>
     </html>
   );

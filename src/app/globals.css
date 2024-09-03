@@ -804,3 +804,7 @@ h2 {
     text-wrap: balance;
   }
 }
+
+.data-\[hover\=true\]\:bg-default-200[data-hover=true] {
+  background-color: #2a2a2a !important;
+}

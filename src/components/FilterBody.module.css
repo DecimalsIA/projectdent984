@@ -271,3 +271,20 @@
 .suggestionItem img {
   margin-right: 10px;
 }
+
+.selectField {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.selectField:focus {
+  outline: none;
+  background-color: transparent;
+}

@@ -3,6 +3,7 @@
 
 import BeePartsCarousel from '@/components/BeePartsCarousel';
 import Filter from '@/components/filter';
+import FilterBody from '@/components/filtersContent';
 import ModalPambii from '@/components/ModalPambii';
 import TransactionComponent from '@/components/TransactionComponent';
 import { useTelegram } from '@/context/TelegramContext';
@@ -69,6 +70,25 @@ const InventoryPage: React.FC = () => {
     setIsModalOpenFilter(true);
     const modalData: any = {
       title: 'Add filters on the marketplace',
+      body: <FilterBody />,
+      buttons: [
+        {
+          text: 'Cancel',
+          bg: '#4e4e4e',
+          color: 'white',
+          w: 'full',
+          icon: <MoneyIcon width="1.25rem" height="1.25rem" />,
+          onClick: () => alert('Not available'),
+        },
+        {
+          text: 'Save',
+          bg: '#4caf50',
+          color: 'white',
+          w: 'full',
+          icon: <MoneyIcon width="1.25rem" height="1.25rem" />,
+          onClick: () => alert('Not available'),
+        },
+      ],
       // Usar el tipo para la imagen
 
       onClose: () => setIsModalOpenFilter(false),

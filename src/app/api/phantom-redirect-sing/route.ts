@@ -4,6 +4,24 @@ import bs58 from 'bs58';
 import { db } from '@/firebase/config';
 import { collection, query, where, getDocs, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
 import axios from 'axios';
+const API = process.env.NEXT_PUBLIC_API_URL
+const BOT = process.env.NEXT_PUBLIC_BOT_URL || "https://t.me/PambiiGameBot"
+
+
+const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Página Renderizada</title>
+    </head>
+    <body>
+      <h1>¡Hola, este es un HTML renderizado desde Next.js!</h1>
+      <p>Este contenido se genera utilizando NextRequest y NextResponse.</p>
+    </body>
+    </html>
+  `;
 
 function decryptPayload(data: string, nonce: string, sharedSecret: Uint8Array) {
   const dataBytes = bs58.decode(data);
@@ -50,7 +68,7 @@ const makePostRequest = async (userId: string, bee: string, signature: any) => {
 
     const config = {
       method: 'post',
-      url: 'https://pambii-front.vercel.app/api/gexplore',
+      url: `${API}gexplore`,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -69,7 +87,7 @@ const makePostRequest = async (userId: string, bee: string, signature: any) => {
 const generateBee = async (userId: string, hash: string) => {
   try {
     // Hacemos la solicitud POST al endpoint con userId y hash en el cuerpo de la solicitud
-    const response = await axios.post('https://pambii-front.vercel.app/api/generateBeeWithParts', {
+    const response = await axios.post(`${API}generateBeeWithParts`, {
       userId: userId,
       hash: hash,
     });
@@ -128,7 +146,7 @@ export async function GET(request: NextRequest) {
   const bee = searchParams.get('bee');
   const map = searchParams.get('map');
 
-  if (!nonce || !payload || !userId || !fromTrn) {
+  if (!nonce || !payload || !userId) {
     return NextResponse.json({ message: 'Invalid parameters' }, { status: 400 });
   }
 
@@ -153,7 +171,7 @@ export async function GET(request: NextRequest) {
 
     if (decodedPayload.signature) {
 
-      if (fromTrn === 'buyBee') {
+      if (fromTrn === 'buyBee' || fromTrn === null) {
         const genBee = await generateBee(userId, decodedPayload.signature);
         console.log('genBee', genBee)
 
@@ -169,7 +187,7 @@ export async function GET(request: NextRequest) {
 
           await addDocumentGeneric('beee_transactions', data);
         }
-
+        return NextResponse.redirect(BOT);
       }
 
       if (fromTrn === 'explore' && map) {
@@ -193,10 +211,10 @@ export async function GET(request: NextRequest) {
           console.log('explore', dta);
 
         }
-
+        return NextResponse.redirect(BOT);
       }
-      return NextResponse.redirect('https://t.me/PambiiGameBot');
-      //  return NextResponse.json('https://t.me/PambiiGameBot');
+
+      return new NextResponse(htmlContent, { headers: { 'Content-Type': 'text/html' }, });
     }
 
 

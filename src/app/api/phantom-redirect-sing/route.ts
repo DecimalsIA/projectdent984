@@ -220,6 +220,6 @@ export async function GET(request: NextRequest) {
 
   } catch (error: any) {
     console.error('Error decrypting payload:', error.message);
-    return NextResponse.json({ error: 'Failure to decrypt payload', message: error.message }, { status: 500 });
+    return NextResponse.json({ error: 'Failure to decrypt payload', message: error.message, API, BOT }, { status: 500 });
   }
 }

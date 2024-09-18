@@ -4,6 +4,7 @@ import bs58 from 'bs58';
 import { db } from '@/firebase/config';
 import { collection, query, where, getDocs, addDoc, updateDoc, doc, serverTimestamp, limit } from 'firebase/firestore';
 import axios from 'axios';
+import { createBeeParts } from '@/utils/generateRandomBeePart';
 const API = process.env.NEXT_PUBLIC_API_URL
 const BOT = process.env.NEXT_PUBLIC_BOT_URL || "https://t.me/PambiiGameBot"
 
@@ -95,12 +96,12 @@ const generateBee = async (userId: string, hash: string) => {
 
     const config = {
       method: 'post',
-      url: `${API}generateBeeWithParts`,
+      url: `https://pambii-front.vercel.app/generateBeeWithParts`,
       headers: {
         'Content-Type': 'application/json',
       },
       data: data,
-      timeout: 15000,
+      timeout: 25000,
     };
 
     const response = await axios(config);
@@ -185,10 +186,10 @@ export async function GET(request: NextRequest) {
     if (decodedPayload.signature) {
 
       if (fromTrn === 'buyBee' || fromTrn === null) {
-        const genBee = await generateBee(userId, decodedPayload.signature);
+        const genBee = await createBeeParts(userId, decodedPayload.signature);
         console.log('genBee', genBee)
 
-        if (genBee == 200) {
+        if (genBee) {
           const data = {
             userId: userId,
             state: true,

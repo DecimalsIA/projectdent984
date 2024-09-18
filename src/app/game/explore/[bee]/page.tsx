@@ -20,6 +20,7 @@ import ExplorationPlay from '@/components/ExplorationPlay';
 import useGetBee from '@/hooks/useGetBee';
 import useGetExplorer from '@/hooks/usGetExplorer';
 import useFetchBees from '@/hooks/useFetchBees';
+import SlidePambiiBee from '@/components/SlidePambiiBee';
 
 type Power = {
   power: string;
@@ -56,7 +57,7 @@ const ExplorePage: React.FC = () => {
   const { data: beesData } = useFetchBees(userId);
   const { totalRecords, totalPayout, experience, win, loss } =
     useGetExplorer(userId);
-  const [slideData, setSlideData] = useState<BeeData[]>([]);
+  const [slideData, setSlideData] = useState<any[]>([]);
   const [cardType, setCardType] = useState<string>('');
   const [abilitiesData, setAbilitiesData] = useState<any[]>([]);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
@@ -116,21 +117,13 @@ const ExplorePage: React.FC = () => {
 
   useEffect(() => {
     if (beesData && bees && bees.length > 0) {
-      const mappedSlideData: any[] = beesData.map((bee, index) => ({
-        image: bee.image,
-        title: bee.title ? bee.title.toUpperCase() : 'UNKNOWN',
-        abilitiesData: bee?.abilitiesData,
-        power: bee.powers && bee.powers.length > 0 ? bee.powers : null,
-        type: bee.type,
-        id: bee.id,
-        index: index,
-      }));
-
-      setSlideData(mappedSlideData);
-      setCardType(mappedSlideData[0]?.type || '');
-      setAbilitiesData(mappedSlideData[0]?.abilitiesData || []);
+      setSlideData(beesData);
+      setCardType(beesData[0]?.type || '');
+      setAbilitiesData(beesData[0]?.abilitiesData || []);
     }
   }, [bees, beesData]);
+
+  const slideDataw = beesData && beesData.length > 0 ? beesData : [];
 
   const { bee } = useParams();
 
@@ -212,10 +205,10 @@ const ExplorePage: React.FC = () => {
           type={cardType}
           className="bg-gray-200 w-full card-pambii-b text-black flex items-center justify-center"
         >
-          {slideData.length > 0 && (
+          {slideDataw.length > 0 && (
             <div className="w-full flex flex-row justify-center flex-wrap gap-1">
-              <SlidePambii
-                slides={slideData}
+              <SlidePambiiBee
+                slides={slideDataw}
                 className="w-full max-w-md mx-auto"
                 onPrevSlide={handlePrevSlide}
                 onNextSlide={handleNextSlide}

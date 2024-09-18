@@ -24,7 +24,7 @@ export async function createBeeParts(userId: string, hash: string) {
     const slotId = uuidv4();
     const parts: BeePiece[] = [];
     const partIds: string[] = [];
-    const abilities: string[] = [];
+    const abilities: any[] = [];
 
     // Generar las partes de la abeja
     for (const namePart of partNames) {
@@ -34,7 +34,7 @@ export async function createBeeParts(userId: string, hash: string) {
       newPart.userId = userId;
       parts.push(newPart);
       partIds.push(newPart.idPart);
-      abilities.push(newPart.ability.toString());
+      abilities.push(newPart.ability);
 
       // Guardar la parte en Firestore en la colección `beeParts`
       await setDoc(doc(db, 'beeParts', newPart.idPart), newPart);

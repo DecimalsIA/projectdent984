@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { FunctionComponent, useCallback } from 'react';
 import styles from './EditBee.module.css';
 import { PencilIcon } from 'pambii-devtrader-front';

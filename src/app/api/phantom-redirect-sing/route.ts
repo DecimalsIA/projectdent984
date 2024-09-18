@@ -87,13 +87,22 @@ const makePostRequest = async (userId: string, bee: string, signature: any) => {
 
 const generateBee = async (userId: string, hash: string) => {
   try {
-    // Hacemos la solicitud POST al endpoint con userId y hash en el cuerpo de la solicitud
-    const response = await axios.post(`${API}generateBeeWithParts`, {
+
+    const data = JSON.stringify({
       userId: userId,
       hash: hash,
     });
 
-    console.log('Response status:', response.status);
+    const config = {
+      method: 'post',
+      url: `${API}generateBeeWithParts`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: data,
+    };
+
+    const response = await axios(config);
     return response.status;
   } catch (error: any) {
     console.error('generateBeeWithParts:', error);

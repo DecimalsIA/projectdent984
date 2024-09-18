@@ -62,7 +62,7 @@ const ExplorePage: React.FC = () => {
   const [abilitiesData, setAbilitiesData] = useState<any[]>([]);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [lockState, setLockState] = useState(false);
-  console.log('beesData', beesData);
+
   const badgesData: any = [
     {
       Icon: (

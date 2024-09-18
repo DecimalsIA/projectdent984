@@ -11,12 +11,14 @@ interface ExplorationPlayProps {
   userId: string;
   slideData: any;
   data: any;
+  type: any;
 }
 
 const ExplorationPlay: React.FC<ExplorationPlayProps> = ({
   bee,
   slideData,
   data,
+  type,
 }) => {
   const [slideType, setSlideType] = useState<string>('');
   const [dificultad, setDificultad] = useState<any>('');
@@ -41,13 +43,13 @@ const ExplorationPlay: React.FC<ExplorationPlayProps> = ({
   return (
     <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
       <CardPambii
-        type={data.map}
+        type={type}
         className="bg-gray-200 w-full card-pambii-b text-black flex items-center justify-center"
       >
         <div className="w-full flex flex-row justify-center flex-wrap gap-1">
           <ExplorationCardGame
             bee={slideType}
-            dificultad={data.map}
+            dificultad={type}
             payout={data.explorationPlay.payout}
             multiplier={data.explorationPlay.multiplier}
             timeLock={data.timeLock}

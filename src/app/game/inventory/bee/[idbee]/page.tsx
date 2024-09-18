@@ -22,6 +22,7 @@ const SpecialMarketPage: React.FC = () => {
 
   // Hooks de datos
   const { data, loading, error: errorBee } = useFetchBees(userid, idBee);
+  console.log('data', data);
 
   const handleViewInfo = (part: any) => {
     console.log('View info clicked for:', part.name);

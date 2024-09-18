@@ -18,6 +18,7 @@ import useVerifyPayment from '@/hooks/useVerifyPayment';
 import ExplorationPlay from '@/components/ExplorationPlay';
 import useGetBee from '@/hooks/useGetBee';
 import useGetExplorer from '@/hooks/usGetExplorer';
+import useFetchBees from '@/hooks/useFetchBees';
 
 type Power = {
   power: string;
@@ -51,20 +52,21 @@ const ExplorePage: React.FC = () => {
   const userId = user?.id?.toString() ?? '792924145';
 
   const { bees } = useGetBee(userId);
+  const { data: beesData } = useFetchBees(userId);
   const { totalRecords, totalPayout, experience, win, loss } =
     useGetExplorer(userId);
   const [slideData, setSlideData] = useState<BeeData[]>([]);
-  const [cardType, setCardType] = useState<string>('');
-  const [abilitiesData, setAbilitiesData] = useState<any[]>([]);
+
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [lockState, setLockState] = useState(false);
   const { bee, id } = useParams();
   const router = useRouter();
-
+  console.log('beesData', beesData);
   const { exists, data } = useVerifyPayment(userId);
+  console.log(data);
   useEffect(() => {
-    if (bees && bees.length > 0) {
-      const mappedSlideData: any[] = bees
+    if (beesData && bees.length > 0) {
+      const mappedSlideData: any[] = beesData
         .map((bee, index) => ({
           image: '/assets/bee-characters/' + bee.image + '.png',
           title: bee.title ? bee.title.toUpperCase() : 'UNKNOWN',
@@ -78,10 +80,8 @@ const ExplorePage: React.FC = () => {
         .filter((bee) => bee.id === id);
 
       setSlideData(mappedSlideData);
-      setCardType(mappedSlideData[0]?.type);
-      setAbilitiesData(mappedSlideData[0]?.abilitiesData);
     }
-  }, [bees, id]);
+  }, [bees, beesData, id]);
 
   useEffect(() => {
     if (exists && data) {
@@ -120,7 +120,8 @@ const ExplorePage: React.FC = () => {
         className="space-x-2"
       />
       <ExplorationPlay
-        bee={bee}
+        bee={beesData}
+        type={bee}
         data={data}
         slideData={slideData[currentSlide]}
         userId={userId}

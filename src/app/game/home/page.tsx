@@ -242,7 +242,7 @@ const Home = () => {
                   <ButtonPambii
                     onClick={() =>
                       router.push(
-                        '/game/inventory/bee/' + slideData[currentSlide].id,
+                        '/game/inventory/bee/' + slideData[currentSlide]?.id,
                       )
                     }
                     color="#fff"

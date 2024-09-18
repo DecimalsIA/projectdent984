@@ -35,7 +35,7 @@ const BattlePage: React.FC = () => {
 
   const handleSelectArena = () => {
     // alert(cardType);
-    router.push('/game/battle/select-arena/' + slideData[currentSlide].id);
+    router.push('/game/battle/select-arena/' + slideData[currentSlide]?.id);
   };
 
   const handlePrevSlide = () => {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
 import { db } from '@/firebase/config';
-import { collection, query, where, getDocs, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, serverTimestamp, limit } from 'firebase/firestore';
 import axios from 'axios';
 const API = process.env.NEXT_PUBLIC_API_URL
 const BOT = process.env.NEXT_PUBLIC_BOT_URL || "https://t.me/PambiiGameBot"
@@ -165,7 +165,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const phantomConnectionsRef = collection(db, 'phantomConnections');
-    const q = query(phantomConnectionsRef, where('userId', '==', userId));
+    const q = query(phantomConnectionsRef, where('userId', '==', userId), limit(1));
     const querySnapshot = await getDocs(q);
     const ip = request.ip || request.headers.get('x-forwarded-for') || 'IP no disponible';
     const userAgent = request.headers.get('user-agent') || 'User-Agent no disponible';

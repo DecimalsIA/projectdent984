@@ -100,6 +100,7 @@ const generateBee = async (userId: string, hash: string) => {
         'Content-Type': 'application/json',
       },
       data: data,
+      timeout: 15000,
     };
 
     const response = await axios(config);

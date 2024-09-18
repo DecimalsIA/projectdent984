@@ -149,7 +149,7 @@ const ExplorePage: React.FC = () => {
     console.log('data---->', data);
     if (exists && data) {
       console.log('La transacción existe y los datos son:', data);
-      // router.push('/game/explore/' + data?.map + '/' + data?.bee);
+      router.push('/game/explore/' + data?.map + '/' + data?.bee);
 
       const now = Date.now();
       const difference = data.timeLock - now;

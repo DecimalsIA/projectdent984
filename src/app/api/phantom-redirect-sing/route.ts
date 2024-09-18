@@ -78,6 +78,7 @@ const makePostRequest = async (userId: string, bee: string, signature: any) => {
     const response = await axios(config);
     return { status: response.statusText, data: response.data }
   } catch (error) {
+    console.error('gexplore:', error);
     console.error('Error making POST request:', error);
     return error
   }
@@ -95,8 +96,10 @@ const generateBee = async (userId: string, hash: string) => {
     console.log('Response status:', response.status);
     return response.status;
   } catch (error: any) {
+    console.error('generateBeeWithParts:', error);
     // Manejo más detallado del error
     if (error.response) {
+      console.error('error:', error);
       console.error('Server responded with an error:', error.response.status, error.response.data);
     } else if (error.request) {
       console.error('No response received:', error.request);

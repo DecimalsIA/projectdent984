@@ -149,15 +149,12 @@ const ExplorePage: React.FC = () => {
     console.log('data---->', data);
     if (exists && data) {
       console.log('La transacción existe y los datos son:', data);
-      router.push('/game/explore/' + data?.map + '/' + data?.bee);
-
       const now = Date.now();
       const difference = data.timeLock - now;
-
       if (difference <= 0) {
         console.log('La transacción ha expirado.');
-
-        // Aquí puedes realizar alguna acción adicional si la transacción ha expirado
+      } else {
+        router.push('/game/explore/' + data?.map + '/' + data?.bee);
       }
     } else {
       console.log('No se encontraron transacciones para el usuario.');

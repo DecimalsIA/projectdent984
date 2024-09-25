@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import ExplorationInfo from '@/components/Exploration';
@@ -159,7 +160,7 @@ const ExplorePage: React.FC = () => {
     } else {
       console.log('No se encontraron transacciones para el usuario.');
     }
-  }, [data, exists, router]);
+  }, []);
   /*
   useEffect(() => {
     console.log('exists000', exists);

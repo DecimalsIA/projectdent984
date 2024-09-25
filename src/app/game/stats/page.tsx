@@ -2,6 +2,8 @@
 
 import { useTelegram } from '@/context/TelegramContext';
 import useGetBee from '@/hooks/useGetBee';
+
+import useGroupedExplorationResults from '@/hooks/useGroupedExplorationResults'; // Importamos el nuevo hook
 import useGetExplorer from '@/hooks/usGetExplorer';
 import { useRouter } from 'next/navigation';
 import {
@@ -17,6 +19,10 @@ const StatsPage: React.FC = () => {
   const userid = user?.id.toString() ?? '792924145';
   const { bees, loading } = useGetBee(userid);
   const { totalPayout, experience } = useGetExplorer(userid);
+
+  // Usamos el nuevo hook para obtener los resultados agrupados de exploración
+  const explorationResults = useGroupedExplorationResults();
+
   const beeData: any = bees.map((bee, index) => ({
     image: '/assets/bee-characters/' + bee.image + '.png',
     name: bee.title ? bee.title.toUpperCase() : 'UNKNOWN',
@@ -27,6 +33,17 @@ const StatsPage: React.FC = () => {
     id: bee.id,
     level: 1,
     icon: <BeeIcon className="text-orange-500" />,
+  }));
+
+  // Mapear los resultados de exploración agrupados al formato esperado por TablePambii
+  const explorationData: any = explorationResults.map((result, index) => ({
+    name: `User: ${result.userId}`, // Puedes cambiar esto si tienes el nombre de usuario
+    level: result.wins, // Mostrar las victorias como nivel
+    icon: <BeeIcon className="text-orange-500" />, // Icono de abeja
+    progress: result.wins, // Puedes mostrar el progreso como las victorias
+    losses: result.losses, // Mostrar el número de derrotas
+    index: index,
+    onClick: () => alert(`Clicked on User: ${result.userId}`), // Acción de clic
   }));
 
   const tabs = [
@@ -54,7 +71,15 @@ const StatsPage: React.FC = () => {
           className="mt-4 mb-3"
         />
       </div>
-      {beeData && <TablePambii className="w-full" data={beeData} />}
+      {/* Mostrar datos de las abejas 
+      {beeData && <TablePambii className="w-full" data={beeData} />}*/}
+
+      {/* Mostrar los resultados de las exploraciones agrupadas */}
+      {explorationData && (
+        <div>
+          <TablePambii className="w-full" data={explorationData} />
+        </div>
+      )}
     </div>
   );
 };

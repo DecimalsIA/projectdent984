@@ -41,7 +41,7 @@ const ExplorationPlay: React.FC<ExplorationPlayProps> = ({
   }, [handleSelectArena, memoizedSlideData, memoizedBee]);
 
   return (
-    <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+    <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4 pb-52">
       <CardPambii
         type={type}
         className="bg-gray-200 w-full card-pambii-b text-black flex items-center justify-center"

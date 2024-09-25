@@ -21,7 +21,7 @@ const useVerifyPayment = (userId: string): PaymentData => {
   });
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) return; // Si no hay userId, no hacemos la suscripción
 
     // Crear la consulta para obtener el pago más reciente
     const q = query(
@@ -31,46 +31,58 @@ const useVerifyPayment = (userId: string): PaymentData => {
       limit(1), // Solo queremos el más reciente
     );
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      if (!querySnapshot.empty) {
-        const doc = querySnapshot.docs[0];
-        const data = doc.data();
+    // Escuchar cambios en tiempo real
+    const unsubscribe = onSnapshot(
+      q,
+      (querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const doc = querySnapshot.docs[0];
+          const data = doc.data();
 
-        // Verificar y manejar el valor de 'timeLock'
-        let timeLock;
-        if (data.timeLock instanceof Date) {
-          timeLock = data.timeLock.getTime(); // Si es un objeto Date
-        } else if (
-          data.timeLock &&
-          typeof data.timeLock.toMillis === 'function'
-        ) {
-          timeLock = data.timeLock.toMillis(); // Si es un Firestore Timestamp
+          // Verificar y manejar el valor de 'timeLock'
+          let timeLock;
+          if (data.timeLock instanceof Date) {
+            timeLock = data.timeLock.getTime(); // Si es un objeto Date
+          } else if (
+            data.timeLock &&
+            typeof data.timeLock.toMillis === 'function'
+          ) {
+            timeLock = data.timeLock.toMillis(); // Si es un Firestore Timestamp
+          } else {
+            console.warn('timeLock no es ni Date ni Timestamp:', data.timeLock);
+            timeLock = 0; // Si el campo no existe o es un formato no esperado, manejarlo
+          }
+
+          const now = Date.now();
+          const difference = timeLock - now;
+
+          // Actualizar el estado del pago
+          setPaymentData({
+            exists: data.state === true,
+            data: data,
+          });
+
+          // Puedes decidir qué hacer si la diferencia de tiempo es negativa
+          if (difference <= 0) {
+            console.warn('El timeLock ha expirado.');
+            // Si no quieres desuscribirte, elimina esta parte
+            // unsubscribe();
+          }
         } else {
-          console.warn('timeLock no es ni Date ni Timestamp:', data.timeLock);
-          timeLock = 0; // Si el campo no existe o es un formato no esperado, manejarlo
+          setPaymentData({
+            exists: false,
+            data: null,
+          });
         }
-
-        const now = Date.now();
-        const difference = timeLock - now;
-
-        // Actualizar el estado del pago
-        setPaymentData({
-          exists: data.state === true,
-          data: data,
-        });
-
-        // Si la diferencia de tiempo es negativa, puedes decidir qué hacer
-        if (difference <= 0) {
-          // Desuscribirse si la diferencia es negativa
-          unsubscribe();
-        }
-      } else {
+      },
+      (error) => {
+        console.error('Error al obtener datos de pago:', error);
         setPaymentData({
           exists: false,
           data: null,
         });
-      }
-    });
+      },
+    );
 
     // Limpieza en caso de desmontaje del componente
     return () => unsubscribe();

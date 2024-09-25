@@ -19,6 +19,7 @@ import ExplorationPlay from '@/components/ExplorationPlay';
 import useGetBee from '@/hooks/useGetBee';
 import useGetExplorer from '@/hooks/usGetExplorer';
 import './myexplorer.css';
+import Countdown from '@/components/Countdown';
 
 type Power = {
   power: string;
@@ -118,7 +119,7 @@ const ExplorePage: React.FC = () => {
   return (
     <>
       <>
-        <div className=" w-full bg-cover bg-center flex flex-col items-center justify-between p-4 full-h ">
+        <div className=" w-full bg-cover bg-center flex flex-col items-center justify-between p-4 full-h pb-52">
           {slideData &&
             slideData.map((data, index) => {
               console.log('------', data);
@@ -174,6 +175,7 @@ const ExplorePage: React.FC = () => {
                           {data.bee.map}
                         </div>
                       </div>
+
                       <div className="badge anchototal">
                         <div className="badgetext text-cyan-100 ">
                           {
@@ -183,23 +185,60 @@ const ExplorePage: React.FC = () => {
                           }
                         </div>
                       </div>
+                      {data.bee.updateAt - data.bee.timeLock > 0 && (
+                        <div className="badge anchototal">
+                          <div className="badgetext text-cyan-100 ">
+                            UnLock in{' '}
+                            <Countdown
+                              stopCounting={false}
+                              startTime={data.bee.updateAt}
+                              endTime={data.bee.timeLock}
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <ButtonPambii
-                    color="white"
-                    className="mb-2"
-                    onClick={() => router.push('/game/explore/' + data.bee.map)}
-                    icon={
-                      <Image
-                        src="/assets/bee-characters/icons/explore-icon.svg"
-                        alt="Select arena"
-                        width={24}
-                        height={24}
-                      />
-                    }
-                  >
-                    Repeat Exploration
-                  </ButtonPambii>
+                  {data.bee.updateAt - data.bee.timeLock < 0 && (
+                    <ButtonPambii
+                      color="white"
+                      className="mb-2"
+                      onClick={() =>
+                        router.push('/game/explore/' + data.bee.map)
+                      }
+                      icon={
+                        <Image
+                          src="/assets/bee-characters/icons/explore-icon.svg"
+                          alt="Select arena"
+                          width={24}
+                          height={24}
+                        />
+                      }
+                    >
+                      Repeat Exploration
+                    </ButtonPambii>
+                  )}
+                  {data.bee.updateAt - data.bee.timeLock > 0 && (
+                    <ButtonPambii
+                      color="white"
+                      className="mb-2"
+                      onClick={() =>
+                        router.push(
+                          '/game/explore/' + data.bee.map + '/' + data.bee.id,
+                        )
+                      }
+                      icon={
+                        <Image
+                          src="/assets/bee-characters/icons/explore-icon.svg"
+                          alt="Select arena"
+                          width={24}
+                          height={24}
+                        />
+                      }
+                    >
+                      View my exploration
+                    </ButtonPambii>
+                  )}
                 </CardPambii>
               ) : (
                 <div key={index}>Bee with id {data.id} not found</div>

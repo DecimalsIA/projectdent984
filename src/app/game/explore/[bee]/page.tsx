@@ -1,53 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
-
-import ExplorationInfo from '@/components/Exploration';
-import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation';
-import {
-  ButtonPambii,
-  CardPambii,
-  RankingIcon,
-  SlidePambii,
-  StatsIcon,
-  TabsPambii,
-} from 'pambii-devtrader-front';
 import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import TransactionComponent from '@/components/TransactionComponent';
 import { useTelegram } from '@/context/TelegramContext';
 import useVerifyPayment from '@/hooks/useVerifyPayment';
-import ExplorationPlay from '@/components/ExplorationPlay';
 import useGetBee from '@/hooks/useGetBee';
 import useGetExplorer from '@/hooks/usGetExplorer';
 import useFetchBees from '@/hooks/useFetchBees';
+import TransactionComponent from '@/components/TransactionComponent';
 import SlidePambiiBee from '@/components/SlidePambiiBee';
-
-type Power = {
-  power: string;
-  powerIcon: JSX.Element;
-};
-
-type Ability = {
-  id: number;
-  name: string;
-  icon: JSX.Element;
-};
-
-type Progress = {
-  percentage: number;
-};
-
-type BeeData = {
-  image: string;
-  title: string;
-  abilitiesData: Ability[];
-  power: Power[] | null;
-  progress: Progress;
-  type: string;
-  id: string;
-  index: number;
-};
+import ExplorationInfo from '@/components/Exploration';
+import {
+  ButtonPambii,
+  CardPambii,
+  TabsPambii,
+  RankingIcon,
+  StatsIcon,
+} from 'pambii-devtrader-front';
+import Image from 'next/image';
 
 const ExplorePage: React.FC = () => {
   const { user } = useTelegram();
@@ -63,6 +34,8 @@ const ExplorePage: React.FC = () => {
   const [abilitiesData, setAbilitiesData] = useState<any[]>([]);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [lockState, setLockState] = useState(false);
+
+  const { exists, data } = useVerifyPayment(userId);
 
   const badgesData: any = [
     {
@@ -114,7 +87,22 @@ const ExplorePage: React.FC = () => {
       value: totalPayout,
     },
   ];
-  const { exists, data } = useVerifyPayment(userId);
+
+  useEffect(() => {
+    // Este useEffect solo se ejecutará cuando `exists` o `data` cambien
+    if (exists && data) {
+      console.log('La transacción existe y los datos son:', data);
+      const now = Date.now();
+      const difference = data.timeLock - now;
+      if (difference <= 0) {
+        console.log('La transacción ha expirado.');
+      } else {
+        router.push('/game/explore/' + data?.map + '/' + data?.bee);
+      }
+    } else {
+      console.log('No se encontraron transacciones para el usuario.');
+    }
+  }, [exists, data, router]);
 
   useEffect(() => {
     if (beesData && bees && bees.length > 0) {
@@ -123,10 +111,6 @@ const ExplorePage: React.FC = () => {
       setAbilitiesData(beesData[0]?.abilitiesData || []);
     }
   }, [bees, beesData]);
-
-  const slideDataw = beesData && beesData.length > 0 ? beesData : [];
-
-  const { bee } = useParams();
 
   const handlePrevSlide = () => {
     setCurrentSlide((prevSlide) => {
@@ -145,22 +129,8 @@ const ExplorePage: React.FC = () => {
       return newSlide;
     });
   };
-  useEffect(() => {
-    console.log('exists000', exists);
-    console.log('data---->', data);
-    if (exists && data) {
-      console.log('La transacción existe y los datos son:', data);
-      const now = Date.now();
-      const difference = data.timeLock - now;
-      if (difference <= 0) {
-        console.log('La transacción ha expirado.');
-      } else {
-        router.push('/game/explore/' + data?.map + '/' + data?.bee);
-      }
-    } else {
-      console.log('No se encontraron transacciones para el usuario.');
-    }
-  });
+
+  const { bee } = useParams();
 
   const tabs = [
     {
@@ -174,6 +144,7 @@ const ExplorePage: React.FC = () => {
       onClick: () => router.push('/game/explore/my-explorations'),
     },
   ];
+
   return (
     <>
       <div className="w-full bg-cover bg-center flex flex-col justify-start flex-nowrap p-4 full-h">
@@ -187,10 +158,10 @@ const ExplorePage: React.FC = () => {
           type={cardType}
           className="bg-gray-200 w-full card-pambii-b text-black flex items-center justify-center"
         >
-          {slideDataw.length > 0 && (
+          {slideData.length > 0 && (
             <div className="w-full flex flex-row justify-center flex-wrap gap-1">
               <SlidePambiiBee
-                slides={slideDataw}
+                slides={slideData}
                 className="w-full max-w-md mx-auto"
                 onPrevSlide={handlePrevSlide}
                 onNextSlide={handleNextSlide}

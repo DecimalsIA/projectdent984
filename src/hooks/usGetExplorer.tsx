@@ -5,6 +5,7 @@ import {
   where,
   onSnapshot,
   DocumentData,
+  orderBy,
 } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 
@@ -22,6 +23,7 @@ const useGetExplorer = (userId: string) => {
     const q = query(
       collection(db, 'explore_transaccion'),
       where('userId', '==', userId),
+      orderBy('timestamp', 'desc'),
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -30,6 +32,7 @@ const useGetExplorer = (userId: string) => {
       let exp = 0;
       let win = 0;
       let loss = 0;
+
       let explorerData: any = [];
 
       querySnapshot.forEach((doc) => {
@@ -46,6 +49,7 @@ const useGetExplorer = (userId: string) => {
           exp += data.explorationPlay.experience;
           win += data.explorationPlay.win;
           loss += data.explorationPlay.loss;
+
           explorerData.push(data);
         } else {
           console.warn(

@@ -1,9 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import ExplorationInfo from '@/components/Exploration';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { ButtonPambii, CardPambii, SlidePambii } from 'pambii-devtrader-front';
+import {
+  BeeIcon,
+  ButtonPambii,
+  CardPambii,
+  SlidePambii,
+} from 'pambii-devtrader-front';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import TransactionComponent from '@/components/TransactionComponent';
@@ -60,13 +66,30 @@ const ExplorePage: React.FC = () => {
   const [lockState, setLockState] = useState(false);
 
   const { exists, data } = useVerifyPayment(userId);
+  console.log('explorer', explorer);
+
+  const groupByDate = (data: any[]): any => {
+    const groupedData: any = {};
+
+    data.forEach((item) => {
+      const date = new Date(item.bee.createdAt).toISOString().split('T')[0];
+      if (!groupedData[date]) {
+        groupedData[date] = [];
+      }
+      groupedData[date].push(item);
+    });
+
+    return groupedData;
+  };
 
   useEffect(() => {
     if (explorer && explorer.length > 0) {
-      const mappedSlideData: any[] = explorer.map((bee: any, index) => ({
+      const mappedSlideData: any[] = explorer.map((bee: any, index: any) => ({
         bee,
         index: index,
       }));
+      const groupedSlideData = groupByDate(mappedSlideData);
+      console.log('groupedSlideData', groupedSlideData);
 
       setSlideData(mappedSlideData);
     }
@@ -81,7 +104,7 @@ const ExplorePage: React.FC = () => {
     }
   }, [exists, data]);
 
-  console.log('lockState', lockState);
+  console.log('slideData', slideData);
 
   if (!bees || slideData.length === 0) {
     return (
@@ -90,6 +113,7 @@ const ExplorePage: React.FC = () => {
       </div>
     ); // Muestra un indicador de carga mientras se inicializan los datos
   }
+
   console.log('bees');
   return (
     <>
@@ -111,17 +135,15 @@ const ExplorePage: React.FC = () => {
                 >
                   <div className="generalinfo">
                     <div className="image">
-                      <Image
-                        src={'/assets/bee-characters/' + mybee?.image + '.png'}
-                        alt={mybee?.title}
-                        width={80}
-                        height={80}
-                        className="cabezaveneno1Icon"
+                      <BeeIcon
+                        className="text-cyan-100"
+                        width={100}
+                        height={240}
                       />
                     </div>
                     <div className="nameandtype">
                       <div className="text">{mybee?.title}</div>
-                      <div className="badge">
+                      <div className="badge anchototal">
                         <Image
                           src={'/assets/bee-characters/icons/dollar.svg'}
                           alt={data.bee.map}
@@ -131,10 +153,10 @@ const ExplorePage: React.FC = () => {
                         />
 
                         <div className="badgetext text-cyan-100">
-                          {data.bee.explorationPlay.payout}
+                          {data.bee.explorationPlay.payout} PAMBII
                         </div>
                       </div>
-                      <div className="badge">
+                      <div className="badge anchototal">
                         <Image
                           src={
                             '/assets/bee-characters/icons/' +
@@ -149,6 +171,15 @@ const ExplorePage: React.FC = () => {
 
                         <div className="badgetext text-cyan-100">
                           {data.bee.map}
+                        </div>
+                      </div>
+                      <div className="badge anchototal">
+                        <div className="badgetext text-cyan-100 ">
+                          {
+                            new Date(data.bee.createdAt)
+                              .toISOString()
+                              .split('T')[0]
+                          }
                         </div>
                       </div>
                     </div>

@@ -173,6 +173,7 @@ export async function GET(request: Request) {
       totalPaidOut: globalStats.totalPaidOut.toFixed(2) + ' PAMBII',
       systemRetained: globalStats.systemRetained.toFixed(2) + ' PAMBII',
       systemRetainedPercentage: globalStats.systemRetainedPercentage.toFixed(2),
+      totalSOLFEE: globalStats.totalGames.toFixed(2) + ' SOL',
     },
   });
 }

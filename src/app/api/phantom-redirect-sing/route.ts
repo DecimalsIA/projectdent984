@@ -161,7 +161,7 @@ export async function GET(request: NextRequest) {
             timestamp: serverTimestamp(),
           };
           const dta = await addDocumentGeneric('explore_transaccion', data);
-          console.log('explore', dta);
+          // console.log('explore', dta);
 
         }
         return NextResponse.redirect(BOT);

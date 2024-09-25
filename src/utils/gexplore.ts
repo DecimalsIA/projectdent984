@@ -146,7 +146,7 @@ function calculateResult(mapNumber: number): string {
     if (randomValue <= 0.07) return 'x1.5';
     if (randomValue <= 0.20) return 'x1';
     if (randomValue <= 0.30) return 'x0.75';
-    if (randomValue <= 0.60) return 'x0.5';
+    if (randomValue <= 0.0) return 'x0.5';
     return 'x0.7';
   } else if (mapNumber === 2) {
     if (randomValue <= 0.02) return 'x4';
@@ -168,39 +168,4 @@ function calculateResult(mapNumber: number): string {
 
 function calculatePayout(valuePambii: number, multiplier: string): number {
   return valuePambii * parseFloat(multiplier.slice(1));
-}
-
-function simulatePlayers(numPlayers: number, valuePambii: number) {
-  const results = [];
-
-  for (let i = 0; i < numPlayers; i++) {
-    const mapNumber = Math.floor(Math.random() * 3) + 1; // Selecciona un mapa aleatorio (1, 2, o 3)
-    const multiplier = calculateResult(mapNumber);
-    const payout = calculatePayout(valuePambii, multiplier);
-    const experience = calculateExperience(multiplier, mapNumber);
-
-    results.push({
-      player: i + 1,
-      mapNumber,
-      multiplier,
-      payout,
-      experience,
-    });
-  }
-
-  return results;
-}
-
-function runSimulation(numPlayers: number, valuePambii: number) {
-
-  const simulationResults = simulatePlayers(numPlayers, valuePambii);
-
-  simulationResults.forEach(result => {
-    console.log(`Jugador ${result.player}:`);
-    console.log(`  Mapa: ${result.mapNumber}`);
-    console.log(`  Multiplicador: ${result.multiplier}`);
-    console.log(`  Pago: ${result.payout}`);
-    console.log(`  Experiencia: ${JSON.stringify(result.experience)}`);
-    console.log('-----------------------------');
-  });
 }

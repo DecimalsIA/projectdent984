@@ -119,13 +119,13 @@ function calculateExperience(multiplier: string, mapNumber: number): any {
       }
       break;
     case 2:
-      if (multiplier == 'x4' || multiplier == 'x2') {
+      if (multiplier == 'x4' || multiplier == 'x2' || multiplier == 'x1.5') {
         exp = 12500;
         win = 1;
       }
       break;
     case 3:
-      if (multiplier == 'x10' || multiplier == 'x5') {
+      if (multiplier == 'x10' || multiplier == 'x5' || multiplier == 'x2') {
         exp = 18500;
         win = 1;
       }

@@ -169,3 +169,38 @@ function calculateResult(mapNumber: number): string {
 function calculatePayout(valuePambii: number, multiplier: string): number {
   return valuePambii * parseFloat(multiplier.slice(1));
 }
+
+function simulatePlayers(numPlayers: number, valuePambii: number) {
+  const results = [];
+
+  for (let i = 0; i < numPlayers; i++) {
+    const mapNumber = Math.floor(Math.random() * 3) + 1; // Selecciona un mapa aleatorio (1, 2, o 3)
+    const multiplier = calculateResult(mapNumber);
+    const payout = calculatePayout(valuePambii, multiplier);
+    const experience = calculateExperience(multiplier, mapNumber);
+
+    results.push({
+      player: i + 1,
+      mapNumber,
+      multiplier,
+      payout,
+      experience,
+    });
+  }
+
+  return results;
+}
+
+function runSimulation(numPlayers: number, valuePambii: number) {
+
+  const simulationResults = simulatePlayers(numPlayers, valuePambii);
+
+  simulationResults.forEach(result => {
+    console.log(`Jugador ${result.player}:`);
+    console.log(`  Mapa: ${result.mapNumber}`);
+    console.log(`  Multiplicador: ${result.multiplier}`);
+    console.log(`  Pago: ${result.payout}`);
+    console.log(`  Experiencia: ${JSON.stringify(result.experience)}`);
+    console.log('-----------------------------');
+  });
+}

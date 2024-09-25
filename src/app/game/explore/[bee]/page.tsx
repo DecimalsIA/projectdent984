@@ -160,23 +160,7 @@ const ExplorePage: React.FC = () => {
     } else {
       console.log('No se encontraron transacciones para el usuario.');
     }
-  }, []);
-  /*
-  useEffect(() => {
-    console.log('exists000', exists);
-    console.log('data---->', data);
-    if (exists && data) {
-      const now = Date.now();
-      const difference = data.timeLock - now;
-      if (difference <= 0 && !exists) {
-        router.push('/game/explore/' + data?.map + '/' + data?.bee);
-      }
-
-      console.log('difference--->', difference, difference <= 0);
-
-      setLockState(difference <= 0 && !exists);
-    }
-  }, [exists, data, router]); */
+  });
 
   const tabs = [
     {

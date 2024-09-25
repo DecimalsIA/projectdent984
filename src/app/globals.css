@@ -818,5 +818,6 @@ h2 {
 }
 
 .full-h {
-  height: 100vh;
+  min-height: 100vh;
+  padding-bottom: 180px;
 }

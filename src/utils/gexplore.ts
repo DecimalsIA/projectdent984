@@ -147,21 +147,21 @@ function calculateResult(mapNumber: number): string {
     if (randomValue <= 0.20) return 'x1';
     if (randomValue <= 0.30) return 'x0.75';
     if (randomValue <= 0.80) return 'x0.5';
-    return 'x0.1';
+    return 'x0.7';
   } else if (mapNumber === 2) {
     if (randomValue <= 0.005) return 'x4';
     if (randomValue <= 0.07) return 'x2';
     if (randomValue <= 0.12) return 'x1.5';
     if (randomValue <= 0.15) return 'x1';
     if (randomValue <= 0.65) return 'x0.5';
-    return 'x0.1';
+    return 'x0.7';
   } else if (mapNumber === 3) {
     if (randomValue <= 0.001) return 'x10';
     if (randomValue <= 0.01) return 'x5';
     if (randomValue <= 0.05) return 'x2';
     if (randomValue <= 0.10) return 'x1';
     if (randomValue <= 0.50) return 'x0.5';
-    return 'x0.1';
+    return 'x0.7';
   }
   throw new Error('Invalid map number');
 }

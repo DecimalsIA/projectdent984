@@ -1,6 +1,6 @@
 import { getDocumentById, createDocument, updateDocument, getDocuments, getAllDocuments } from '@/utils/firebase';
 import * as crypto from 'crypto';
-
+const WIN_RATIO = parseFloat(process.env.WIN_RATIO || '0.4');
 interface GameSettings {
   MAX_CONSECUTIVE_WINS: number;
   ADJUSTED_LOSS_PROBABILITY: number;
@@ -141,26 +141,29 @@ function calculateExperience(multiplier: string, mapNumber: number): any {
 
 function calculateResult(mapNumber: number): string {
   const randomValue = secureRandom();
+  const winThreshold = WIN_RATIO; // Variable de entorno para ajustar el porcentaje de ganadores
+  const lossThreshold = 1 - winThreshold; // Porcentaje de perdedores
+
   if (mapNumber === 1) {
-    if (randomValue <= 0.01) return 'x2';
-    if (randomValue <= 0.07) return 'x1.5';
-    if (randomValue <= 0.20) return 'x1';
-    if (randomValue <= 0.30) return 'x0.75';
-    if (randomValue <= 0.0) return 'x0.5';
+    if (randomValue <= winThreshold * 0.3) return 'x2'; // 30% de ganadores
+    if (randomValue <= winThreshold * 0.6) return 'x1.5'; // 60% de ganadores
+    if (randomValue <= lossThreshold * 0.2) return 'x1';
+    if (randomValue <= lossThreshold * 0.4) return 'x0.75';
+    if (randomValue <= lossThreshold * 0.8) return 'x0.5';
     return 'x0.7';
   } else if (mapNumber === 2) {
-    if (randomValue <= 0.02) return 'x4';
-    if (randomValue <= 0.03) return 'x2';
-    if (randomValue <= 0.12) return 'x1.5';
-    if (randomValue <= 0.15) return 'x1';
-    if (randomValue <= 0.35) return 'x0.5';
+    if (randomValue <= winThreshold * 0.3) return 'x4';
+    if (randomValue <= winThreshold * 0.6) return 'x2';
+    if (randomValue <= lossThreshold * 0.2) return 'x1.5';
+    if (randomValue <= lossThreshold * 0.4) return 'x1';
+    if (randomValue <= lossThreshold * 0.8) return 'x0.5';
     return 'x0.7';
   } else if (mapNumber === 3) {
-    if (randomValue <= 0.02) return 'x10';
-    if (randomValue <= 0.03) return 'x5';
-    if (randomValue <= 0.05) return 'x2';
-    if (randomValue <= 0.10) return 'x1';
-    if (randomValue <= 0.30) return 'x0.5';
+    if (randomValue <= winThreshold * 0.2) return 'x10';
+    if (randomValue <= winThreshold * 0.4) return 'x5';
+    if (randomValue <= lossThreshold * 0.2) return 'x2';
+    if (randomValue <= lossThreshold * 0.4) return 'x1';
+    if (randomValue <= lossThreshold * 0.8) return 'x0.5';
     return 'x0.7';
   }
   throw new Error('Invalid map number');

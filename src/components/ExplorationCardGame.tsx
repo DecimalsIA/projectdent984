@@ -24,6 +24,10 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
   updateAt,
 }) => {
   const router = useRouter();
+  console.log(timeLock);
+  const endp: any = new Date();
+  const statePay = timeLock - endp < 0 ? true : false;
+  console.log(statePay);
 
   return (
     <div className={styles.explorationcard}>
@@ -58,7 +62,7 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
           Your selected bee is exploring this area, come back when the
           exploration time is over.
         </div>
-        {multiplier && (
+        {!statePay ? (
           <div>
             <div className={styles.name4}>
               This bee will be available in{' '}
@@ -69,12 +73,14 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
               />
             </div>
           </div>
+        ) : (
+          <div>
+            <div className={styles.name4}>Exploration Finish </div>
+          </div>
         )}
         <div className={styles.badgeMinibuttonTooltip}>
-          {multiplier && (
-            <div className={styles.name4}>
-              Exploration Reward: {payout} PAMBII
-            </div>
+          {statePay && (
+            <div className={styles.name4}>Reward: {payout} PAMBII</div>
           )}
           {!multiplier && (
             <div className={styles.name4}>

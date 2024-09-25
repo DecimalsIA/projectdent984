@@ -62,23 +62,24 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
           Your selected bee is exploring this area, come back when the
           exploration time is over.
         </div>
-        {!statePay ? (
-          <div>
-            <div className={styles.name4}>
-              This bee will be available in{' '}
-              <Countdown
-                stopCounting={false}
-                startTime={updateAt}
-                endTime={timeLock}
-              />
-            </div>
-          </div>
-        ) : (
-          <div>
-            <div className={styles.name4}>Exploration Finish </div>
-          </div>
-        )}
+
         <div className={styles.badgeMinibuttonTooltip}>
+          {!statePay ? (
+            <div>
+              <div className={styles.name4}>
+                This bee will be available in{' '}
+                <Countdown
+                  stopCounting={false}
+                  startTime={updateAt}
+                  endTime={timeLock}
+                />
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className={styles.name4}>Exploration Finish </div>
+            </div>
+          )}
           {statePay && (
             <div className={styles.name4}>Reward: {payout} PAMBII</div>
           )}

@@ -812,3 +812,11 @@ h2 {
 .card-type-water {
   background: radial-gradient(98.04% 98.04% at 50.14% -17.65%, #2f8af6, rgba(255, 112, 55, 0)), #303030 !important;
 }
+
+.text-button {
+  font-size: 13px !important;
+}
+
+.full-h {
+  height: 100vh;
+}

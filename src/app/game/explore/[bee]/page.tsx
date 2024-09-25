@@ -192,7 +192,7 @@ const ExplorePage: React.FC = () => {
   ];
   return (
     <>
-      <div className="w-full bg-cover bg-center flex flex-col justify-between p-4">
+      <div className="w-full bg-cover bg-center flex flex-col justify-start flex-nowrap p-4 full-h">
         <TabsPambii
           tabs={tabs}
           mode="background"

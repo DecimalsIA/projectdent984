@@ -53,14 +53,6 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
         <div className={styles.badgetext}>{dificultad}</div>
       </div>
       <div className={styles.fuego1Parent}>
-        <Image
-          src={'/assets/bee-characters/' + bee + '.png'}
-          width={120}
-          height={120}
-          alt="Picture of the author"
-          className={styles.fuego1Icon}
-          unoptimized
-        />
         <div className={styles.name}>Currently under exploration</div>
         <div className={styles.name3}>
           Your selected bee is exploring this area, come back when the
@@ -79,14 +71,6 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
           </div>
         )}
         <div className={styles.badgeMinibuttonTooltip}>
-          <Image
-            src={'/assets/bee-characters/icons/' + dificultad + '.svg'}
-            width={120}
-            height={120}
-            alt="Picture of the author"
-            className={styles.boldTimeWatchRound}
-            unoptimized
-          />
           {multiplier && (
             <div className={styles.name4}>
               Exploration Reward: {payout} PAMBII
@@ -109,13 +93,7 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
           You can buy another one from here or see which ones you have
           available.
         </div>
-        <TransactionComponent
-          textButton="Buy new BEE"
-          spl={100}
-          userid={data.userId}
-          fromTrn="buyBee"
-        />
-        or
+
         <ButtonPambii
           color="white"
           bg="#196620"

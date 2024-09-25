@@ -139,6 +139,7 @@ const ExplorePage: React.FC = () => {
                         className="text-cyan-100"
                         width={100}
                         height={240}
+                        fill="#ffffff"
                       />
                     </div>
                     <div className="nameandtype">

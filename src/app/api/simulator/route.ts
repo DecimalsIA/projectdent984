@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-
-// Importar las funciones necesarias para la simulación
 const crypto = require('crypto');
 
-// Tipos personalizados para los resultados
+// Obtener la variable de entorno para ajustar el porcentaje de ganadores
+const WIN_RATIO = parseFloat(process.env.WIN_RATIO || '0.4'); // Por defecto, 40% ganan
+
 type Experience = {
   exp: number;
   win: number;
@@ -60,26 +60,29 @@ function calculateExperience(multiplier: string, mapNumber: number): Experience 
 
 function calculateResult(mapNumber: number): string {
   const randomValue = secureRandom();
+  const winThreshold = WIN_RATIO; // Variable de entorno para ajustar el porcentaje de ganadores
+  const lossThreshold = 1 - winThreshold; // Porcentaje de perdedores
+
   if (mapNumber === 1) {
-    if (randomValue <= 0.01) return 'x2';
-    if (randomValue <= 0.07) return 'x1.5';
-    if (randomValue <= 0.20) return 'x1';
-    if (randomValue <= 0.30) return 'x0.75';
-    if (randomValue <= 0.60) return 'x0.5';
+    if (randomValue <= winThreshold * 0.3) return 'x2'; // 30% de ganadores
+    if (randomValue <= winThreshold * 0.6) return 'x1.5'; // 60% de ganadores
+    if (randomValue <= lossThreshold * 0.2) return 'x1';
+    if (randomValue <= lossThreshold * 0.4) return 'x0.75';
+    if (randomValue <= lossThreshold * 0.8) return 'x0.5';
     return 'x0.7';
   } else if (mapNumber === 2) {
-    if (randomValue <= 0.02) return 'x4';
-    if (randomValue <= 0.03) return 'x2';
-    if (randomValue <= 0.12) return 'x1.5';
-    if (randomValue <= 0.15) return 'x1';
-    if (randomValue <= 0.35) return 'x0.5';
+    if (randomValue <= winThreshold * 0.3) return 'x4';
+    if (randomValue <= winThreshold * 0.6) return 'x2';
+    if (randomValue <= lossThreshold * 0.2) return 'x1.5';
+    if (randomValue <= lossThreshold * 0.4) return 'x1';
+    if (randomValue <= lossThreshold * 0.8) return 'x0.5';
     return 'x0.7';
   } else if (mapNumber === 3) {
-    if (randomValue <= 0.02) return 'x10';
-    if (randomValue <= 0.03) return 'x5';
-    if (randomValue <= 0.05) return 'x2';
-    if (randomValue <= 0.10) return 'x1';
-    if (randomValue <= 0.30) return 'x0.5';
+    if (randomValue <= winThreshold * 0.2) return 'x10';
+    if (randomValue <= winThreshold * 0.4) return 'x5';
+    if (randomValue <= lossThreshold * 0.2) return 'x2';
+    if (randomValue <= lossThreshold * 0.4) return 'x1';
+    if (randomValue <= lossThreshold * 0.8) return 'x0.5';
     return 'x0.7';
   }
   throw new Error('Invalid map number');
@@ -93,7 +96,6 @@ function simulatePlayers(numPlayers: number, valuePambii: number, mapNumber: num
   const results: PlayerResult[] = [];
 
   for (let i = 0; i < numPlayers; i++) {
-    // const mapNumber = Math.floor(Math.random() * 3) + 1; // Selecciona un mapa aleatorio (1, 2, o 3)
     const multiplier = calculateResult(mapNumber);
     const payout = calculatePayout(valuePambii, multiplier);
     const experience = calculateExperience(multiplier, mapNumber);
@@ -115,13 +117,13 @@ function calculateGlobalStats(results: PlayerResult[], valuePambii: number) {
   const totalGames = results.length;
   let wins = 0;
   let losses = 0;
-  let totalPaidOut = 0; // Cantidad total pagada a los ganadores
-  const totalBet = totalGames * valuePambii; // Cantidad total apostada
+  let totalPaidOut = 0;
+  const totalBet = totalGames * valuePambii;
 
   results.forEach((result) => {
     if (result.experience.win === 1) {
       wins++;
-      totalPaidOut += result.payout; // Sumar lo pagado a los ganadores
+      totalPaidOut += result.payout;
     } else {
       losses++;
     }
@@ -130,7 +132,6 @@ function calculateGlobalStats(results: PlayerResult[], valuePambii: number) {
   const winPercentage = (wins / totalGames) * 100;
   const lossPercentage = (losses / totalGames) * 100;
 
-  // Calcular el porcentaje de dinero que se quedó en el sistema
   const systemRetained = totalBet - totalPaidOut;
   const systemRetainedPercentage = (systemRetained / totalBet) * 100;
 
@@ -147,30 +148,21 @@ function calculateGlobalStats(results: PlayerResult[], valuePambii: number) {
   };
 }
 
-// Endpoint GET que ejecuta la simulación
 export async function GET(request: Request) {
-  // Obtener los parámetros de la URL
   const { searchParams } = new URL(request.url);
+  const numPlayers = parseInt(searchParams.get('numPlayers') || '10', 10);
+  const valuePambii = parseFloat(searchParams.get('valuePambii') || '100');
+  const map = parseFloat(searchParams.get('map') || '1');
 
-  // Obtener los valores de numPlayers y valuePambii
-  const numPlayers = parseInt(searchParams.get('numPlayers') || '10', 10); // Valor por defecto: 10
-  const valuePambii = parseFloat(searchParams.get('valuePambii') || '100'); // 
-  const map = parseFloat(searchParams.get('map') || '100'); // Valor por defecto: 100
-
-  // Validar los parámetros
   if (isNaN(numPlayers) || isNaN(valuePambii) || numPlayers <= 0 || valuePambii <= 0) {
     return NextResponse.json({ error: 'Invalid parameters' }, { status: 400 });
   }
 
-  // Ejecutar la simulación
   const simulationResults = simulatePlayers(numPlayers, valuePambii, map);
 
-  // Calcular las estadísticas globales
   const globalStats = calculateGlobalStats(simulationResults, valuePambii);
 
-  // Respuesta en formato JSON
   return NextResponse.json({
-
     stats: {
       totalGames: globalStats.totalGames,
       wins: globalStats.wins,
@@ -178,8 +170,8 @@ export async function GET(request: Request) {
       winPercentage: globalStats.winPercentage.toFixed(2),
       lossPercentage: globalStats.lossPercentage.toFixed(2),
       totalBet: globalStats.totalBet,
-      totalPaidOut: globalStats.totalPaidOut.toFixed(2),
-      systemRetained: globalStats.systemRetained.toFixed(2),
+      totalPaidOut: globalStats.totalPaidOut.toFixed(2) + ' PAMBII',
+      systemRetained: globalStats.systemRetained.toFixed(2) + ' PAMBII',
       systemRetainedPercentage: globalStats.systemRetainedPercentage.toFixed(2),
     },
   });

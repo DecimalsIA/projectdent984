@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import Bee from './Bee';
 import useFetchBees from '@/hooks/useFetchBees';
+import useGetUser from '@/hooks/useGetUsers';
 
 const WS =
   process.env.NEXT_PUBLIC_WS_URL || 'https://ws-server-pambii.onrender.com';
@@ -34,9 +35,11 @@ export default function MatchmakingComponent({
 }: MatchmakingProps) {
   const [timeLeft, setTimeLeft] = useState(180000); // Temporizador de 3 minutos
   const { data: dataBee, loading, error: errorBee } = useFetchBees(idUser, bee);
+  const { user } = useGetUser(idUser);
+
   const [acceptTimeLeft, setAcceptTimeLeft] = useState<number | null>(0); // Tiempo restante para aceptar el match
   const [isMatching, setIsMatching] = useState(false);
-  const [matchData, setMatchData] = useState<MatchData | null>(null); // Datos de la coincidencia
+  const [matchData, setMatchData] = useState<any | null>(null); // Datos de la coincidencia
   const [rejectionCount, setRejectionCount] = useState(0); // Contador de rechazos
   const socketRef = useRef<any>(null); // Referencia para el socket
   const retryIntervalRef = useRef<NodeJS.Timeout | null>(null); // Referencia para el intervalo de reintento
@@ -90,6 +93,7 @@ export default function MatchmakingComponent({
             arena,
             idbee: bee,
             bee: dataBee,
+            user,
           });
         }, 5000); // Reintentar cada 5 segundos
       }
@@ -106,10 +110,10 @@ export default function MatchmakingComponent({
         retryIntervalRef.current = null;
       }
     };
-  }, [idUser, arena, bee, dataBee]);
+  }, [idUser, arena, bee, dataBee, user]);
 
   // Procesamiento de los datos de las abejas de ambos jugadores
-  const dataUser1: any = matchData?.data?.bees[0]?.parts?.reduce(
+  const dataUser1: any = matchData?.bee1[0]?.parts?.reduce(
     (acc: any, part: any) => {
       acc[part.namePart] = part;
       return acc;
@@ -117,7 +121,7 @@ export default function MatchmakingComponent({
     {},
   );
 
-  const dataUser2: any = matchData?.data?.bees[1]?.parts?.reduce(
+  const dataUser2: any = matchData?.bee2[0]?.parts?.reduce(
     (acc: any, part: any) => {
       acc[part.namePart] = part;
       return acc;
@@ -144,12 +148,14 @@ export default function MatchmakingComponent({
           idUser,
           arena,
           idbee: bee,
+          user,
           bee: dataBee,
         });
         socketRef.current.emit('find-match', {
           idUser,
           arena,
           idbee: bee,
+          user,
           bee: dataBee,
         });
       }
@@ -160,9 +166,10 @@ export default function MatchmakingComponent({
 
   // Aceptar el match
   const handleAccept = () => {
-    if (matchData && socketRef.current) {
+    console.log('Match found:', matchData);
+    /* if (matchData && socketRef.current) {
       socketRef.current.emit('accept-match', matchData);
-    }
+    }*/
   };
 
   // Rechazar el match
@@ -176,6 +183,7 @@ export default function MatchmakingComponent({
         idUser,
         arena,
         dataBee,
+        user,
         idbee: bee,
       });
     }
@@ -238,6 +246,7 @@ export default function MatchmakingComponent({
           <div className="center text-center">
             <div className="flex">
               <div className="battle-bee">
+                <div className="flex">ddd</div>
                 <Bee
                   basePathW={
                     dataUser1?.['wings']?.typePart?.toLowerCase() || ''
@@ -259,6 +268,7 @@ export default function MatchmakingComponent({
                 />
               </div>
               <div className="battle-bee-thow">
+                <div className="flex">ddd</div>
                 <Bee
                   basePathW={
                     dataUser2?.['wings']?.typePart?.toLowerCase() || ''
@@ -281,8 +291,16 @@ export default function MatchmakingComponent({
               </div>
             </div>
             <div className="tittle-bttle">VS</div>
+            <div className="center text-center tittle-bttle">MATCH FOUND</div>
+            <div className={styles.image4Wrapper}>
+              <img
+                className={styles.image4Icon}
+                alt=""
+                src={`/assets/bee-characters/arena/${arena}.png`}
+              />
+            </div>
           </div>
-          <div className="center text-center tittle-bttle">MATCH FOUND</div>
+          <div className="center text-center tittle-bttle">ARENA : {arena}</div>
 
           {acceptTimeLeft !== null && (
             <div className={styles.timerCircle}>

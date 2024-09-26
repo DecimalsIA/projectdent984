@@ -5,7 +5,7 @@ import { io as ClientIO } from 'socket.io-client';
 const WS = process.env.NEXT_PUBLIC_WS_URL;
 export async function POST(req: NextRequest) {
   try {
-    const { idUser, arena, bee } = await req.json();
+    const { idUser, arena, bee, idbee, user } = await req.json();
 
     if (!idUser || !arena || !bee) {
       return NextResponse.json({ success: false, message: 'Faltan datos en la solicitud' });
@@ -18,6 +18,8 @@ export async function POST(req: NextRequest) {
       idUser,
       arena,
       bee,
+      idbee,
+      user,
       status: 'waiting',
       createdAt: serverTimestamp(),
     });
@@ -30,7 +32,7 @@ export async function POST(req: NextRequest) {
     }
     const socket = ClientIO(WS); // Conéctate al servidor Express
 
-    socket.emit('find-match', { idUser, arena, bee });
+    socket.emit('find-match', { idUser, arena, bee, idbee, user });
     console.log(`Evento 'find-match' emitido para idUser=${idUser}, arena=${arena}`);
 
     // Cerrar la conexión después de emitir el evento

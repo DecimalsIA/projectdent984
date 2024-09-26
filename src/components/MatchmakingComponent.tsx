@@ -128,15 +128,25 @@ export default function MatchmakingComponent({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ idUser, arena, dataBee }),
+        body: JSON.stringify({ idUser, arena, idbee: bee, bee: dataBee }),
       });
 
       const data = await response.json();
       if (data.success) {
         setIsMatching(true);
         // Emitir el evento de find-match
-        console.log('Emitiendo find-match:', { idUser, arena, dataBee });
-        socketRef.current.emit('find-match', { idUser, arena, dataBee });
+        console.log('Emitiendo find-match:', {
+          idUser,
+          arena,
+          idbee: bee,
+          dataBee,
+        });
+        socketRef.current.emit('find-match', {
+          idUser,
+          arena,
+          idbee: bee,
+          dataBee,
+        });
       }
     } catch (error) {
       console.error('Request failed:', error);
@@ -157,7 +167,12 @@ export default function MatchmakingComponent({
       setIsMatching(false);
       socketRef.current.emit('cancel-match');
     } else if (socketRef.current) {
-      socketRef.current.emit('find-match', { idUser, arena, dataBee });
+      socketRef.current.emit('find-match', {
+        idUser,
+        arena,
+        dataBee,
+        idbee: bee,
+      });
     }
   };
 

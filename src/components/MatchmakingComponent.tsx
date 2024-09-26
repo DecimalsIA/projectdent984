@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import Bee from './Bee';
 import useFetchBees from '@/hooks/useFetchBees';
-import useGetUser from '@/hooks/useGetUsers';
+import UserComponent from './UserComponent';
 
 const WS =
   process.env.NEXT_PUBLIC_WS_URL || 'https://ws-server-pambii.onrender.com';
@@ -35,7 +35,6 @@ export default function MatchmakingComponent({
 }: MatchmakingProps) {
   const [timeLeft, setTimeLeft] = useState(180000); // Temporizador de 3 minutos
   const { data: dataBee, loading, error: errorBee } = useFetchBees(idUser, bee);
-  const { user } = useGetUser(idUser);
 
   const [acceptTimeLeft, setAcceptTimeLeft] = useState<number | null>(0); // Tiempo restante para aceptar el match
   const [isMatching, setIsMatching] = useState(false);
@@ -64,8 +63,9 @@ export default function MatchmakingComponent({
     });
 
     // Escuchar el evento 'match-found'
-    socketRef.current.on('match-found', (matchData: MatchData) => {
+    socketRef.current.on('match-found', async (matchData: MatchData) => {
       console.log('Match found:', matchData);
+
       setIsMatching(false);
       setMatchData(matchData);
       if (retryIntervalRef.current) clearInterval(retryIntervalRef.current); // Detener reintento
@@ -93,7 +93,6 @@ export default function MatchmakingComponent({
             arena,
             idbee: bee,
             bee: dataBee,
-            user,
           });
         }, 5000); // Reintentar cada 5 segundos
       }
@@ -110,9 +109,10 @@ export default function MatchmakingComponent({
         retryIntervalRef.current = null;
       }
     };
-  }, [idUser, arena, bee, dataBee, user]);
+  }, [idUser, arena, bee, dataBee]);
 
   // Procesamiento de los datos de las abejas de ambos jugadores
+  const dataIdUser1 = matchData?.idUser1;
   const dataUser1: any = matchData?.bee1[0]?.parts?.reduce(
     (acc: any, part: any) => {
       acc[part.namePart] = part;
@@ -120,7 +120,7 @@ export default function MatchmakingComponent({
     },
     {},
   );
-
+  const dataIdUser2 = matchData?.idUser2;
   const dataUser2: any = matchData?.bee2[0]?.parts?.reduce(
     (acc: any, part: any) => {
       acc[part.namePart] = part;
@@ -148,14 +148,13 @@ export default function MatchmakingComponent({
           idUser,
           arena,
           idbee: bee,
-          user,
+
           bee: dataBee,
         });
         socketRef.current.emit('find-match', {
           idUser,
           arena,
           idbee: bee,
-          user,
           bee: dataBee,
         });
       }
@@ -183,7 +182,6 @@ export default function MatchmakingComponent({
         idUser,
         arena,
         dataBee,
-        user,
         idbee: bee,
       });
     }
@@ -246,7 +244,12 @@ export default function MatchmakingComponent({
           <div className="center text-center">
             <div className="flex">
               <div className="battle-bee">
-                <div className="flex">ddd</div>
+                <div className="flex">
+                  {' '}
+                  <div className="name-battle">
+                    <UserComponent userId2={dataIdUser1} />
+                  </div>
+                </div>
                 <Bee
                   basePathW={
                     dataUser1?.['wings']?.typePart?.toLowerCase() || ''
@@ -267,8 +270,13 @@ export default function MatchmakingComponent({
                   classSes="bee-battle-be"
                 />
               </div>
+
               <div className="battle-bee-thow">
-                <div className="flex">ddd</div>
+                <div>
+                  <div className="flex name-battle-thow">
+                    <UserComponent userId2={dataIdUser2} />
+                  </div>
+                </div>
                 <Bee
                   basePathW={
                     dataUser2?.['wings']?.typePart?.toLowerCase() || ''

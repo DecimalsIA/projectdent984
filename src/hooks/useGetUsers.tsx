@@ -1,39 +1,42 @@
-import { useState, useEffect } from 'react';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { useState } from 'react';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 
 interface User {
   idUser: string;
+  nomTlram: string; // El campo que estás buscando en el usuario
   // Otros campos que pueda tener el usuario
 }
 
-const useGetUser = (userId: string) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [exists, setExists] = useState(false);
+const useGetUserById = () => {
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!userId) return;
+  // Función que buscará el usuario en Firestore
+  const getUserById = async (userId: string): Promise<User | null> => {
+    if (!userId) return null;
 
-    // Crear una referencia a la colección 'USERS' y filtrar por 'userId'
-    const q = query(collection(db, 'USERS'), where('idUser', '==', userId));
+    setLoading(true);
+    try {
+      // Crear una referencia a la colección 'USERS' y filtrar por 'idUser'
+      const q = query(collection(db, 'USERS'), where('idUser', '==', userId));
+      const querySnapshot = await getDocs(q);
 
-    // Suscribirse a los cambios en la colección
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
       if (!querySnapshot.empty) {
-        const firstUser = querySnapshot.docs[0].data() as User; // Tomar el primer usuario que coincida
-        setUser(firstUser);
-        setExists(true);
+        // Devolver el primer usuario encontrado
+        const userDoc = querySnapshot.docs[0].data() as User;
+        return userDoc;
       } else {
-        setUser(null);
-        setExists(false);
+        return null; // No se encontró el usuario
       }
-    });
+    } catch (error) {
+      console.error('Error al obtener el usuario:', error);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    // Limpiar la suscripción cuando el componente se desmonte
-    return () => unsubscribe();
-  }, [userId]);
-
-  return { exists, user };
+  return { getUserById, loading };
 };
 
-export default useGetUser;
+export default useGetUserById;

@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'Faltan datos en la solicitud' });
     }
 
-    console.log(`Registrando solicitud de matchmaking: idUser=${idUser}, arena=${arena}, bee=${bee}`);
+    console.log(`Registrando solicitud de matchmaking: idUser=${idUser}, arena=${arena}, bee=${bee},${user}`);
 
     // Registrar la solicitud en Firestore (estado inicial en waiting)
     const docRef = await addDoc(collection(db, 'matchmaking'), {
@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
       arena,
       bee,
       idbee,
+      user: "d",
       status: 'waiting',
       createdAt: serverTimestamp(),
     });

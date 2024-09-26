@@ -771,6 +771,10 @@ h2 {
   transform: scale(0.7) rotateY(180deg);
 }
 
+.battle-bee>.flex {
+  transform: scale(0.7) rotateY(0) !important;
+}
+
 .battle-bee-thow {
   transform: scale(0.7);
 }
@@ -820,4 +824,16 @@ h2 {
 .full-h {
   min-height: 100vh;
   padding-bottom: 180px;
+}
+
+.name-battle {
+
+  color: #fff !important;
+  font-weight: bold;
+
+}
+
+.name-battle-thow {
+  color: #fff !important;
+  font-weight: bold;
 }

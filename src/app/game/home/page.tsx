@@ -249,7 +249,7 @@ const Home = () => {
                     className="fz15"
                     icon={<PencilIcon />}
                   >
-                    EDIT BEE
+                    EDIT
                   </ButtonPambii>
                 </div>
 

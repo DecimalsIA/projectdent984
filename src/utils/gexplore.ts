@@ -119,13 +119,13 @@ function calculateExperience(multiplier: string, mapNumber: number): any {
       }
       break;
     case 2:
-      if (multiplier == 'x4' || multiplier == 'x2' || multiplier == 'x1.5') {
+      if (multiplier == 'x4' || multiplier == 'x2') {
         exp = 12500;
         win = 1;
       }
       break;
     case 3:
-      if (multiplier == 'x10' || multiplier == 'x5' || multiplier == 'x2') {
+      if (multiplier == 'x10' || multiplier == 'x5') {
         exp = 18500;
         win = 1;
       }
@@ -146,21 +146,21 @@ function calculateResult(mapNumber: number): string {
 
   if (mapNumber === 1) {
     if (randomValue <= winThreshold * 0.3) return 'x2'; // 30% de ganadores
-    if (randomValue <= winThreshold * 0.6) return 'x1.5'; // 60% de ganadores
+    if (randomValue <= winThreshold * 0.4) return 'x1.5'; // 60% de ganadores
     if (randomValue <= lossThreshold * 0.2) return 'x1';
     if (randomValue <= lossThreshold * 0.4) return 'x0.75';
     if (randomValue <= lossThreshold * 0.8) return 'x0.5';
     return 'x0.7';
   } else if (mapNumber === 2) {
     if (randomValue <= winThreshold * 0.3) return 'x4';
-    if (randomValue <= winThreshold * 0.6) return 'x2';
+    if (randomValue <= winThreshold * 0.4) return 'x2';
     if (randomValue <= lossThreshold * 0.2) return 'x1.5';
     if (randomValue <= lossThreshold * 0.4) return 'x1';
     if (randomValue <= lossThreshold * 0.8) return 'x0.5';
     return 'x0.7';
   } else if (mapNumber === 3) {
     if (randomValue <= winThreshold * 0.2) return 'x10';
-    if (randomValue <= winThreshold * 0.4) return 'x5';
+    if (randomValue <= winThreshold * 0.3) return 'x5';
     if (randomValue <= lossThreshold * 0.2) return 'x2';
     if (randomValue <= lossThreshold * 0.4) return 'x1';
     if (randomValue <= lossThreshold * 0.8) return 'x0.5';

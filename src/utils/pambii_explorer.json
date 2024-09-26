@@ -32,6 +32,54 @@
           "type": "u64"
         }
       ]
+    },
+    {
+      "name": "withdraw",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "userToken",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "contractToken",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "contractSigner",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "getContractBalance",
+      "accounts": [
+        {
+          "name": "contractToken",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [],
+      "returns": "u64"
     }
   ],
   "metadata": {

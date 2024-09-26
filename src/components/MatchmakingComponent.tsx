@@ -85,7 +85,12 @@ export default function MatchmakingComponent({
       if (!retryIntervalRef.current) {
         retryIntervalRef.current = setInterval(() => {
           console.log('Reintentando búsqueda de coincidencia...');
-          socketRef.current.emit('find-match', { idUser, arena });
+          socketRef.current.emit('find-match', {
+            idUser,
+            arena,
+            idbee: bee,
+            bee: dataBee,
+          });
         }, 5000); // Reintentar cada 5 segundos
       }
     });
@@ -101,7 +106,7 @@ export default function MatchmakingComponent({
         retryIntervalRef.current = null;
       }
     };
-  }, [idUser, arena]);
+  }, [idUser, arena, bee, dataBee]);
 
   // Procesamiento de los datos de las abejas de ambos jugadores
   const dataUser1: any = matchData?.data?.bees[0]?.parts?.reduce(
@@ -139,13 +144,13 @@ export default function MatchmakingComponent({
           idUser,
           arena,
           idbee: bee,
-          dataBee,
+          bee: dataBee,
         });
         socketRef.current.emit('find-match', {
           idUser,
           arena,
           idbee: bee,
-          dataBee,
+          bee: dataBee,
         });
       }
     } catch (error) {

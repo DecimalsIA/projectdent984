@@ -19,7 +19,6 @@ export async function POST(req: NextRequest) {
       arena,
       bee,
       idbee,
-      user,
       status: 'waiting',
       createdAt: serverTimestamp(),
     });

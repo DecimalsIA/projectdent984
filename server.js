@@ -5,6 +5,8 @@ const { Server } = require('socket.io');
 const axios = require('axios');
 
 const dev = process.env.NODE_ENV !== 'production';
+const WS = process.env.NEXT_PUBLIC_WS_URL;
+console.log('WS', WS);
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -14,7 +16,7 @@ const fetchBees = async (userIds, idbees) => {
     const queryParams = userIds
       .map((userId, index) => `userId=${userId}&idbee=${idbees[index]}`)
       .join('&');
-    const url = `http://localhost:3000/api/getBeeVSbattle?${queryParams}`;
+    const url = `${WS}/api/getBeeVSbattle?${queryParams}`;
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
@@ -137,6 +139,6 @@ app.prepare().then(() => {
 
   server.listen(3000, (err) => {
     if (err) throw err;
-    console.log('> Ready on http://localhost:3000');
+    console.log('> Ready on http://localhost:3000', WS);
   });
 });

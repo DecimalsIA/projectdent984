@@ -13,6 +13,8 @@ import {
   SlidePambii,
 } from 'pambii-devtrader-front';
 import { useState } from 'react';
+const WS = process.env.NEXT_PUBLIC_WS_URL;
+console.log('WS', WS);
 
 const slideData = [
   {

@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react';
 import io, { Socket } from 'socket.io-client';
-
+const WS = process.env.NEXT_PUBLIC_WS_URL;
+console.log('WS', WS);
 const useSocket = (eventName: string) => {
   const [eventReceived, setEventReceived] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socketInstance = io('http://localhost:3000'); // Cambia esto por la URL de tu servidor de Socket.IO
+    if (!WS) {
+      console.error('WebSocket URL is not defined');
+      return;
+    }
+
+    const socketInstance = io(WS); // Cambia esto por la URL de tu servidor de Socket.IO
 
     setSocket(socketInstance);
 

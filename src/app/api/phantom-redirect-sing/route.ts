@@ -169,6 +169,24 @@ export async function GET(request: NextRequest) {
       if (fromTrn === 'retiro') {
         return NextResponse.json({ sms: 'Failure to decrypt payload', hash: decodedPayload.signature }, { status: 200 });
       }
+      if (fromTrn === 'buy_battle') {
+        const data = {
+          userId: userId,
+          state: true,
+          map: map,
+          bee: bee,
+          reward: '',
+          Host,
+          hash: decodedPayload.signature,
+          ip,
+          dispositivo: userAgent,
+          Battlelay: 0,
+          timeLock: addMinutesToTimestamp(map === 'easy' ? 5 : map === 'middle' ? 10 : 20),
+          timestamp: serverTimestamp(),
+        };
+        await addDocumentGeneric('explore_transaccion', data);
+        return NextResponse.redirect(BOT);
+      }
 
       return new NextResponse(htmlContent, { headers: { 'Content-Type': 'text/html' }, });
     }

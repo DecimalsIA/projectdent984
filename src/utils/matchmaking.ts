@@ -31,6 +31,8 @@ export async function findMatch({ idUser, arena }: { idUser: string; arena: stri
       idUser1: matchData.idUser, // Usuario original en espera
       idUser2: idUser, // Usuario que coincidió
       arena: matchData.arena,
+      bee1: matchData.arena,
+      bee2: matchData.arena,
     };
   } else {
     // Si no hay coincidencia, regresar un estado de espera

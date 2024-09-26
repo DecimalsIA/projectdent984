@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 import { io as ClientIO } from 'socket.io-client';
-
+const WS = process.env.NEXT_PUBLIC_WS_URL;
 export async function POST(req: NextRequest) {
   try {
     const { idUser, arena, bee } = await req.json();
@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
     const docRef = await addDoc(collection(db, 'matchmaking'), {
       idUser,
       arena,
+      bee,
       status: 'waiting',
       createdAt: serverTimestamp(),
     });
@@ -24,7 +25,10 @@ export async function POST(req: NextRequest) {
     console.log(`Solicitud registrada con éxito: ${docRef.id}`);
 
     // Conectar al servidor de Socket.IO como cliente y emitir el evento
-    const socket = ClientIO('http://localhost:3000'); // Conéctate al servidor Express
+    if (!WS) {
+      throw new Error('WebSocket URL is not defined');
+    }
+    const socket = ClientIO(WS); // Conéctate al servidor Express
 
     socket.emit('find-match', { idUser, arena, bee });
     console.log(`Evento 'find-match' emitido para idUser=${idUser}, arena=${arena}`);

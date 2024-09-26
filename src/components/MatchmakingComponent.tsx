@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import styles from './MatchmakingComponent.module.css';
@@ -133,7 +134,9 @@ export default function MatchmakingComponent({
   };
 
   const handleAccept = () => {
-    console.log(matchData);
+    console.log('matchData', matchData);
+    console.log('dataUser1', dataUser1);
+    console.log('dataUser2', dataUser2);
     console.log(socketRef.current);
     if (matchData && socketRef.current) {
       socketRef.current.emit('accept-match', matchData);

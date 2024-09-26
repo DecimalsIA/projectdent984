@@ -9,6 +9,7 @@ const buildWithdrawTransaction = async (
   senderPublicKey: PublicKey, // Dirección pública del usuario
   tokenMintAddress: PublicKey,
   contractPublicKey: PublicKey,
+  contractAuthorityPublicKey: PublicKey, // La autoridad de la cuenta de tokens del contrato
   amount: number,
   connection: Connection,
   programId: PublicKey
@@ -22,25 +23,18 @@ const buildWithdrawTransaction = async (
   // Configurar el proveedor y el programa en Anchor
   const program = new Program(idl as Idl, programId, new AnchorProvider(connection, {} as any, {}));
 
-  // Derivar la PDA del contract_signer en el frontend usando la misma semilla y programa
-  const [contractSigner] = await PublicKey.findProgramAddress(
-    [Buffer.from("authority")], // Semilla utilizada en el contrato para derivar la PDA
-    programId
-  );
-
-  // Ajustar `9` al número de decimales de tu token
-  const amountToWithdraw = BigInt(amount) * BigInt(Math.pow(10, 9));
+  const amountToWithdraw = BigInt(amount) * BigInt(Math.pow(10, 9)); // Ajustar a la precisión del token
   const amountToWithdrawBN = new anchor.BN(amountToWithdraw.toString());
 
   // Crear la transacción de retiro
   const transaction = new Transaction().add(
     await program.methods
-      .withdraw(amountToWithdrawBN) // Usamos anchor.BN para manejar el monto
+      .withdraw(amountToWithdrawBN) // La cantidad que se desea retirar
       .accounts({
-        user: senderPublicKey, // La cuenta del usuario
-        userToken: userTokenAccount, // Cuenta de tokens SPL del usuario
-        contractToken: contractTokenAccount, // Cuenta de tokens SPL del contrato
-        contractSigner: contractSigner, // PDA calculada del contract signer
+        user: senderPublicKey, // El usuario que solicita el retiro
+        userToken: userTokenAccount, // La cuenta de tokens del usuario
+        contractToken: contractTokenAccount, // La cuenta de tokens del contrato
+        contractAuthority: contractAuthorityPublicKey, // La autoridad del contrato que firma la transferencia
         tokenProgram: TOKEN_PROGRAM_ID, // Programa de tokens SPL
       })
       .instruction()
@@ -56,7 +50,6 @@ const buildWithdrawTransaction = async (
     requireAllSignatures: false
   });
 
-  // Codificar la transacción serializada en Base58 y devolverla
   return bs58.encode(serializedTransaction);
 };
 

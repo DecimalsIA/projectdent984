@@ -37,7 +37,11 @@ export default function MatchmakingComponent({
 
   useEffect(() => {
     // Conectar al servidor de Socket.IO al montar el componente
-    socketRef.current = io(WS); // Asegúrate de usar la URL correcta
+    if (WS) {
+      socketRef.current = io(WS); // Asegúrate de usar la URL correcta
+    } else {
+      console.error('WebSocket URL is not defined');
+    }
 
     // Verificar la conexión
     socketRef.current.on('connect', () => {

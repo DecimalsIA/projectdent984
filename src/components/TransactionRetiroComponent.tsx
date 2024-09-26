@@ -49,6 +49,7 @@ const TransactionRetiroComponent: React.FC<ExplorationCardGameProps> = ({
         'HPsGKmcQqtsT7ts6AAeDPFZRuSDfU4QaLWAyztrY5UzJ',
       );
 
+      // Obtener la clave pública del usuario desde un servicio
       const { publicKey: publicKeyString } = await getDocumentByUserId(userid);
       const senderPublicKey = new PublicKey(publicKeyString);
 
@@ -66,21 +67,25 @@ const TransactionRetiroComponent: React.FC<ExplorationCardGameProps> = ({
       const amount = spl; // Cantidad de tokens SPL (en la mínima unidad)
 
       // Construcción de la transacción de retiro
-      const serializedTransaction = await buildWithdrawTransaction(
-        senderPublicKey,
-        tokenMintAddress,
-        contractPublicKey,
-        contractSigner, // El contractSigner generado
-        amount,
-        connection,
-        programId,
-      );
+      try {
+        const serializedTransaction = await buildWithdrawTransaction(
+          senderPublicKey,
+          tokenMintAddress,
+          contractPublicKey,
+          contractSigner, // El contractSigner generado
+          amount,
+          connection,
+          programId,
+        );
 
-      setTransaction(serializedTransaction);
+        setTransaction(serializedTransaction);
+      } catch (error) {
+        console.error('Error al construir la transacción de retiro:', error);
+      }
     };
 
     createTransaction();
-  }, []); // Dependencia vacía para asegurar que solo se ejecute una vez
+  }, [userid, spl]); // Se asegura de ejecutar la transacción cuando cambian `userid` o `spl`
 
   // Este useEffect se ejecutará solo cuando `transaction` cambie y si el deeplink no ha sido generado
   useEffect(() => {
@@ -95,6 +100,7 @@ const TransactionRetiroComponent: React.FC<ExplorationCardGameProps> = ({
 
         const dappEncryptionPublicKey = publicKey;
 
+        // Generar el deeplink para Phantom
         generateDeeplink({
           transaction,
           session,
@@ -108,7 +114,7 @@ const TransactionRetiroComponent: React.FC<ExplorationCardGameProps> = ({
     };
 
     generateLink();
-  }, [transaction, deeplinkGenerated]); // Solo se ejecuta cuando `transaction` cambie y el deeplink no ha sido generado explore-icon
+  }, [transaction, deeplinkGenerated, userid]); // Solo se ejecuta cuando `transaction` o `deeplinkGenerated` cambien
 
   return (
     <div className="w-full">
@@ -128,7 +134,7 @@ const TransactionRetiroComponent: React.FC<ExplorationCardGameProps> = ({
             }
           >
             {textButton ? textButton : 'Select bee to explore'} {spl} PAMBII
-          </ButtonPambii>{' '}
+          </ButtonPambii>
         </a>
       ) : (
         <p className="center text-cyan-50"></p>

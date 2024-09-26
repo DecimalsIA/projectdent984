@@ -54,7 +54,10 @@
         {
           "name": "contractSigner",
           "isMut": false,
-          "isSigner": false
+          "isSigner": false,
+          "docs": [
+            "La validación se realiza mediante las seeds y el bump derivado del programa."
+          ]
         },
         {
           "name": "tokenProgram",

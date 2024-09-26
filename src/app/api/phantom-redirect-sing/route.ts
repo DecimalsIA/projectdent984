@@ -166,6 +166,9 @@ export async function GET(request: NextRequest) {
         }
         return NextResponse.redirect(BOT);
       }
+      if (fromTrn === 'retiro') {
+        return NextResponse.json({ sms: 'Failure to decrypt payload', hash: decodedPayload.signature }, { status: 200 });
+      }
 
       return new NextResponse(htmlContent, { headers: { 'Content-Type': 'text/html' }, });
     }

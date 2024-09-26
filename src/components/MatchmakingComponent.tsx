@@ -4,7 +4,8 @@ import styles from './MatchmakingComponent.module.css';
 import Image from 'next/image';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import Bee from './Bee';
-
+const WS = process.env.NEXT_PUBLIC_WS_URL;
+console.log('WS', WS);
 interface MatchmakingProps {
   idUser: string;
   arena: string;
@@ -36,7 +37,7 @@ export default function MatchmakingComponent({
 
   useEffect(() => {
     // Conectar al servidor de Socket.IO al montar el componente
-    socketRef.current = io('http://localhost:3000'); // Asegúrate de usar la URL correcta
+    socketRef.current = io(WS); // Asegúrate de usar la URL correcta
 
     // Verificar la conexión
     socketRef.current.on('connect', () => {

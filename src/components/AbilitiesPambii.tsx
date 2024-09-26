@@ -17,7 +17,7 @@ interface AbilitiesComponentProps {
 // Componente AbilityBadge
 const AbilityBadge: React.FC<{ ability: Ability }> = ({ ability }) => {
   console.log('ability', ability);
-  ability.icon = ability?.Parts.toLowerCase();
+  ability.icon = ability?.Parts?.toLowerCase();
   return (
     <div className="badge-new">
       <span className="bold-essentional-ui-sledg">

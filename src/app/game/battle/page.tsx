@@ -23,7 +23,7 @@ const BattlePage: React.FC = () => {
   const [abilitiesData, setAbilitiesData] = useState<any>([]);
   // const [habilities, setHabilities] = useState<any>([]);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
-  const [comingSoon, setComingSoon] = useState<boolean>(true);
+  const [comingSoon, setComingSoon] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -104,7 +104,7 @@ const BattlePage: React.FC = () => {
                     <Image
                       src={
                         '/assets/bee-characters/category/' +
-                        power.typePart.toLowerCase() +
+                        power.typePart?.toLowerCase() +
                         '.gif'
                       }
                       alt={power.typePart}

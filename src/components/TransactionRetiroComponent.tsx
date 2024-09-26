@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Connection, PublicKey } from '@solana/web3.js';
 import usePhantomDeeplink from '../hooks/usePhantomDeeplink';
 import { buildWithdrawTransaction } from '../utils/buildWithdrawTransaction'; // Cambiado a buildWithdrawTransaction
-
 import {
   getDappKeyPair,
   getDocumentByUserId,
@@ -38,7 +37,7 @@ const TransactionRetiroComponent: React.FC<ExplorationCardGameProps> = ({
   const [transaction, setTransaction] = useState<string | null>(null);
   const [deeplinkGenerated, setDeeplinkGenerated] = useState(false);
 
-  // Este useEffect solo se ejecutará una vez cuando el componente se monte
+  // Este useEffect se ejecutará solo una vez cuando el componente se monte
   useEffect(() => {
     const createTransaction = async () => {
       const connection = new Connection('https://api.devnet.solana.com');
@@ -53,26 +52,17 @@ const TransactionRetiroComponent: React.FC<ExplorationCardGameProps> = ({
       const { publicKey: publicKeyString } = await getDocumentByUserId(userid);
       const senderPublicKey = new PublicKey(publicKeyString);
 
-      // Derivar el contractSigner (PDA)
-      const [contractSigner] = await PublicKey.findProgramAddress(
-        [Buffer.from('authority')], // Semilla definida en tu programa Solana
-        programId,
-      );
-
-      console.log('Contract Signer:', contractSigner.toBase58());
-
       const contractPublicKey = new PublicKey(
         '3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe',
       );
-      const amount = spl; // Cantidad de tokens SPL (en la mínima unidad)
+      const amount = spl; // Cantidad de tokens SPL en la mínima unidad
 
-      // Construcción de la transacción de retiro
       try {
+        // Construcción de la transacción de retiro
         const serializedTransaction = await buildWithdrawTransaction(
           senderPublicKey,
           tokenMintAddress,
           contractPublicKey,
-          contractSigner, // El contractSigner generado
           amount,
           connection,
           programId,
@@ -133,11 +123,11 @@ const TransactionRetiroComponent: React.FC<ExplorationCardGameProps> = ({
               />
             }
           >
-            {textButton ? textButton : 'Select bee to explore'} {spl} PAMBII
+            {textButton ? textButton : 'Retirar'} {spl} PAMBII
           </ButtonPambii>
         </a>
       ) : (
-        <p className="center text-cyan-50"></p>
+        <p className="center text-cyan-50">Generando transacción...</p>
       )}
     </div>
   );

@@ -2,7 +2,7 @@
 
 import ExplorationInfo from '@/components/Exploration';
 import TransactionRetiroComponent from '@/components/TransactionRetiroComponent';
-import useContractBalance from '@/hooks/useContractBalance';
+
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -11,8 +11,6 @@ import { useState } from 'react';
 
 const ExplorePage: React.FC = () => {
   const t = useTranslations('EXPLORE');
-  const { balance } = useContractBalance();
-  console.log('balance', balance);
   const slideData = [
     {
       image: '/assets/bee-characters/arena/easy.png',
@@ -275,7 +273,6 @@ const ExplorePage: React.FC = () => {
           textButton="Retirar Tokens" // Texto del botón
           fromTrn="retiro" // Identificador del origen de la
         />
-        <p>{balance} tokens</p>
       </CardPambii>
     </div>
   );

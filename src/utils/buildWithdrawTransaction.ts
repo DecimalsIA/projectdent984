@@ -34,7 +34,7 @@ const buildWithdrawTransaction = async (
         user: senderPublicKey, // El usuario que solicita el retiro
         userToken: userTokenAccount, // La cuenta de tokens del usuario
         contractToken: contractTokenAccount, // La cuenta de tokens del contrato
-        contractAuthority: contractAuthorityPublicKey, // La autoridad del contrato que firma la transferencia
+        contractAuthority: contractTokenAccount, // La autoridad del contrato que firma la transferencia
         tokenProgram: TOKEN_PROGRAM_ID, // Programa de tokens SPL
       })
       .instruction()

@@ -1,7 +1,7 @@
 'use client';
 
 import ExplorationInfo from '@/components/Exploration';
-import TransactionRetiroComponent from '@/components/TransactionRetiroComponent';
+//import TransactionRetiroComponent from '@/components/TransactionRetiroComponent';
 
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -267,12 +267,6 @@ const ExplorePage: React.FC = () => {
         >
           {t('EXPLORE')}
         </ButtonPambii>
-        <TransactionRetiroComponent
-          spl={100} // Cantidad de SPL tokens
-          userid="792924145" // ID del usuario
-          textButton="Retirar Tokens" // Texto del botón
-          fromTrn="retiro" // Identificador del origen de la
-        />
       </CardPambii>
     </div>
   );

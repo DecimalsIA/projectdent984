@@ -5,8 +5,12 @@ import styles from './MatchmakingComponent.module.css';
 import Image from 'next/image';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import Bee from './Bee';
-const WS = process.env.NEXT_PUBLIC_WS_URL;
+import useFetchBees from '@/hooks/useFetchBees';
+
+const WS =
+  process.env.NEXT_PUBLIC_WS_URL || 'https://ws-server-pambii.onrender.com';
 console.log('WS', WS);
+
 interface MatchmakingProps {
   idUser: string;
   arena: string;
@@ -28,21 +32,24 @@ export default function MatchmakingComponent({
   arena,
   bee,
 }: MatchmakingProps) {
-  const [timeLeft, setTimeLeft] = useState(180000); // Inicializa el temporizador en 180,000 milisegundos (3 minutos)
+  const [timeLeft, setTimeLeft] = useState(180000); // Temporizador de 3 minutos
+  const { data: dataBee, loading, error: errorBee } = useFetchBees(idUser, bee);
   const [acceptTimeLeft, setAcceptTimeLeft] = useState<number | null>(0); // Tiempo restante para aceptar el match
   const [isMatching, setIsMatching] = useState(false);
-  const [matchData, setMatchData] = useState<MatchData | null>(null); // Guarda los datos de la coincidencia
+  const [matchData, setMatchData] = useState<MatchData | null>(null); // Datos de la coincidencia
   const [rejectionCount, setRejectionCount] = useState(0); // Contador de rechazos
   const socketRef = useRef<any>(null); // Referencia para el socket
   const retryIntervalRef = useRef<NodeJS.Timeout | null>(null); // Referencia para el intervalo de reintento
 
+  // Inicialización de socket y conexión
   useEffect(() => {
-    // Conectar al servidor de Socket.IO al montar el componente
-    if (WS) {
-      socketRef.current = io(WS); // Asegúrate de usar la URL correcta
-    } else {
+    if (!WS) {
       console.error('WebSocket URL is not defined');
+      return;
     }
+
+    // Conectar al servidor de Socket.IO
+    socketRef.current = io(WS);
 
     // Verificar la conexión
     socketRef.current.on('connect', () => {
@@ -57,8 +64,8 @@ export default function MatchmakingComponent({
     socketRef.current.on('match-found', (matchData: MatchData) => {
       console.log('Match found:', matchData);
       setIsMatching(false);
-      setMatchData(matchData); // Actualiza el estado con los datos del match
-      if (retryIntervalRef.current) clearInterval(retryIntervalRef.current); // Detener el reintento
+      setMatchData(matchData);
+      if (retryIntervalRef.current) clearInterval(retryIntervalRef.current); // Detener reintento
 
       // Iniciar el temporizador de 10 segundos para aceptar el match
       setAcceptTimeLeft(100);
@@ -68,13 +75,13 @@ export default function MatchmakingComponent({
           clearInterval(acceptTimer);
           return null;
         });
-      }, 10000);
+      }, 1000); // Temporizador de 1 segundo por intervalo
     });
 
     // Escuchar el evento 'waiting'
     socketRef.current.on('waiting', () => {
-      console.log('Still waiting for a match...');
-      // Reintentar después de un tiempo si no se encuentra una coincidencia
+      console.log('Esperando coincidencia...');
+      // Reintentar después de un tiempo si no se encuentra coincidencia
       if (!retryIntervalRef.current) {
         retryIntervalRef.current = setInterval(() => {
           console.log('Reintentando búsqueda de coincidencia...');
@@ -83,7 +90,7 @@ export default function MatchmakingComponent({
       }
     });
 
-    // Desconectar el socket al desmontar el componente
+    // Limpiar cuando el componente se desmonte
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -94,8 +101,9 @@ export default function MatchmakingComponent({
         retryIntervalRef.current = null;
       }
     };
-  }, [idUser, arena]); // Ejecutar solo una vez cuando el componente se monta
+  }, [idUser, arena]);
 
+  // Procesamiento de los datos de las abejas de ambos jugadores
   const dataUser1: any = matchData?.data?.bees[0]?.parts?.reduce(
     (acc: any, part: any) => {
       acc[part.namePart] = part;
@@ -103,6 +111,7 @@ export default function MatchmakingComponent({
     },
     {},
   );
+
   const dataUser2: any = matchData?.data?.bees[1]?.parts?.reduce(
     (acc: any, part: any) => {
       acc[part.namePart] = part;
@@ -111,6 +120,7 @@ export default function MatchmakingComponent({
     {},
   );
 
+  // Solicitar matchmaking
   const handleSendRequest = async () => {
     try {
       const response = await fetch('/api/send-matchmaking', {
@@ -118,48 +128,46 @@ export default function MatchmakingComponent({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ idUser, arena, bee }),
+        body: JSON.stringify({ idUser, arena, dataBee }),
       });
 
       const data = await response.json();
       if (data.success) {
         setIsMatching(true);
         // Emitir el evento de find-match
-        console.log('Emitiendo find-match:', { idUser, arena, bee });
-        socketRef.current.emit('find-match', { idUser, arena, bee });
+        console.log('Emitiendo find-match:', { idUser, arena, dataBee });
+        socketRef.current.emit('find-match', { idUser, arena, dataBee });
       }
     } catch (error) {
       console.error('Request failed:', error);
     }
   };
 
+  // Aceptar el match
   const handleAccept = () => {
-    console.log('matchData', matchData);
-    console.log('dataUser1', dataUser1);
-    console.log('dataUser2', dataUser2);
-    console.log(socketRef.current);
     if (matchData && socketRef.current) {
       socketRef.current.emit('accept-match', matchData);
-      console.log(socketRef.current);
     }
   };
 
+  // Rechazar el match
   const handleReject = () => {
     setRejectionCount((prevCount) => prevCount + 1);
     if (rejectionCount >= 1 && socketRef.current) {
       setIsMatching(false);
       socketRef.current.emit('cancel-match');
     } else if (socketRef.current) {
-      socketRef.current.emit('find-match', { idUser, arena, bee });
+      socketRef.current.emit('find-match', { idUser, arena, dataBee });
     }
   };
 
+  // Temporizador para el matchmaking
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isMatching) {
       timer = setInterval(() => {
         setTimeLeft((prev) => (prev > 0 ? prev - 1000 : 0));
-      }, 1000);
+      }, 1000); // Disminuir el tiempo cada 1 segundo
     }
 
     return () => {
@@ -180,13 +188,12 @@ export default function MatchmakingComponent({
               <img
                 className={styles.image4Icon}
                 alt=""
-                src={'/assets/bee-characters/arena/' + arena + '.png'}
+                src={`/assets/bee-characters/arena/${arena}.png`}
               />
             </div>
-            <div className={styles.name}>Waiting the match</div>
+            <div className={styles.name}>Waiting for the match</div>
             <div className={styles.nameWrapper}>
               <div className={styles.name}>
-                {' '}
                 <span className={styles.timerText}>
                   {minutes < 10 ? `0${minutes}` : minutes}:
                   {seconds < 10 ? `0${seconds}` : seconds}
@@ -231,9 +238,7 @@ export default function MatchmakingComponent({
                   classSes="bee-battle-be"
                 />
               </div>
-
               <div className="battle-bee-thow">
-                {' '}
                 <Bee
                   basePathW={
                     dataUser2?.['wings']?.typePart?.toLowerCase() || ''
@@ -259,12 +264,12 @@ export default function MatchmakingComponent({
           </div>
           <div className="center text-center tittle-bttle">MATCH FOUND</div>
 
-          {acceptTimeLeft !== null && <></>}
-          <div className={styles.timerCircle}>
-            <span className={styles.timerText}>{acceptTimeLeft}</span>
-          </div>
+          {acceptTimeLeft !== null && (
+            <div className={styles.timerCircle}>
+              <span className={styles.timerText}>{acceptTimeLeft}</span>
+            </div>
+          )}
           <div className="flex gap-2">
-            {' '}
             <ButtonPambii
               color="white"
               bg="#52be97"
@@ -293,7 +298,7 @@ export default function MatchmakingComponent({
                 />
               }
             >
-              decline
+              Decline
             </ButtonPambii>
           </div>
         </div>

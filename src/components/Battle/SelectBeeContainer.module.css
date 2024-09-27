@@ -1,0 +1,22 @@
+.fuego1Icon {
+  width: 125px;
+  position: relative;
+  height: 125px;
+  object-fit: contain;
+}
+
+.fuego2Icon {
+  width: 125px;
+  position: relative;
+  height: 125px;
+  object-fit: cover;
+}
+
+.selectbeecontainer {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}

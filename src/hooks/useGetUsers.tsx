@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 
@@ -9,11 +9,12 @@ interface User {
 }
 
 const useGetUserById = () => {
+  const [user, setUser] = useState<User | null>(null); // Almacena el usuario recuperado
   const [loading, setLoading] = useState(false);
 
-  // Función que buscará el usuario en Firestore
+  // Función que buscará el usuario en Firestore, pero solo si no ha sido cargado ya
   const getUserById = async (userId: string): Promise<User | null> => {
-    if (!userId) return null;
+    if (!userId || user) return user; // Si ya hay un usuario cargado o no hay userId, no hacer la consulta
 
     setLoading(true);
     try {
@@ -22,8 +23,9 @@ const useGetUserById = () => {
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
-        // Devolver el primer usuario encontrado
+        // Devolver y guardar el primer usuario encontrado
         const userDoc = querySnapshot.docs[0].data() as User;
+        setUser(userDoc);
         return userDoc;
       } else {
         return null; // No se encontró el usuario
@@ -36,7 +38,7 @@ const useGetUserById = () => {
     }
   };
 
-  return { getUserById, loading };
+  return { getUserById, user, loading };
 };
 
 export default useGetUserById;

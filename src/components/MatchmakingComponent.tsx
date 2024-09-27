@@ -7,6 +7,8 @@ import { ButtonPambii } from 'pambii-devtrader-front';
 import Bee from './Bee';
 import useFetchBees from '@/hooks/useFetchBees';
 import UserComponent from './UserComponent';
+import BattleComponent from './BattleComponent';
+import { useRouter } from 'next/navigation';
 
 const WS =
   process.env.NEXT_PUBLIC_WS_URL || 'https://ws-server-pambii.onrender.com';
@@ -35,9 +37,11 @@ export default function MatchmakingComponent({
 }: MatchmakingProps) {
   const [timeLeft, setTimeLeft] = useState(180000); // Temporizador de 3 minutos
   const { data: dataBee, loading, error: errorBee } = useFetchBees(idUser, bee);
+  const router = useRouter();
 
   const [acceptTimeLeft, setAcceptTimeLeft] = useState<number | null>(0); // Tiempo restante para aceptar el match
   const [isMatching, setIsMatching] = useState(false);
+  const [isBattle, setIsisBattle] = useState(true);
   const [matchData, setMatchData] = useState<any | null>(null); // Datos de la coincidencia
   const [rejectionCount, setRejectionCount] = useState(0); // Contador de rechazos
   const socketRef = useRef<any>(null); // Referencia para el socket
@@ -98,6 +102,14 @@ export default function MatchmakingComponent({
       }
     });
 
+    // Escuchar el evento 'start-battle' y mostrar la alerta
+    socketRef.current.on('start-battle', (data: any) => {
+      console.log('La batalla ha comenzado:', data);
+      setIsisBattle(true);
+      router.push('/game/battle/select-arena/' + bee + '/vs/' + data.roomId);
+      alert('La batalla ha comenzado!');
+    });
+
     // Limpiar cuando el componente se desmonte
     return () => {
       if (socketRef.current) {
@@ -148,7 +160,6 @@ export default function MatchmakingComponent({
           idUser,
           arena,
           idbee: bee,
-
           bee: dataBee,
         });
         socketRef.current.emit('find-match', {
@@ -166,9 +177,9 @@ export default function MatchmakingComponent({
   // Aceptar el match
   const handleAccept = () => {
     console.log('Match found:', matchData);
-    /* if (matchData && socketRef.current) {
+    if (matchData && socketRef.current) {
       socketRef.current.emit('accept-match', matchData);
-    }*/
+    } // start-battle
   };
 
   // Rechazar el match

@@ -1,0 +1,223 @@
+.boldNatureTravelBee {
+  width: 24px;
+  position: relative;
+  height: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.beenametext {
+  position: relative;
+  font-weight: 600;
+}
+
+.userinfocontainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.extraoptionscontainer {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.beeLife {
+  position: relative;
+  letter-spacing: 0.02em;
+  line-height: 100%;
+  text-transform: uppercase;
+}
+
+.levelindicator {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.start {
+  align-self: stretch;
+  width: 8px;
+  position: relative;
+  border-radius: 100px;
+}
+
+.progress {
+  border-radius: 2px;
+  background-color: #52be97;
+  height: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 329px;
+}
+
+.progresbar {
+  align-self: stretch;
+  border-radius: 6px;
+  background-color: #4e4e4e;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.levelbar {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.box {
+  width: 100%;
+  margin: 0 !important;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  box-shadow: 0px 6px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background-color: #484848;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  height: 36px;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 0;
+}
+
+.label {
+  position: relative;
+  letter-spacing: 0.02em;
+  line-height: 20px;
+  text-transform: uppercase;
+  font-weight: 900;
+  text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.15);
+}
+
+.box1 {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.button {
+  flex: 1;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25), 0px -2px 2px rgba(0, 0, 0, 0.1) inset;
+  border-radius: 10px;
+  background-color: #484848;
+  height: 42px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 12px 13px;
+  box-sizing: border-box;
+  position: relative;
+  opacity: 0.3;
+}
+
+.box2 {
+  width: 100%;
+  margin: 0 !important;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  box-shadow: 0px 6px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background-color: #48af7e;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  height: 36px;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 0;
+}
+
+.icon {
+  width: 20px;
+  position: relative;
+  height: 20px;
+}
+
+.box3 {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 1;
+}
+
+.button1 {
+  flex: 1;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25), 0px -2px 2px rgba(0, 0, 0, 0.1) inset;
+  border-radius: 10px;
+  background-color: #48af7e;
+  height: 42px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 12px 13px;
+  box-sizing: border-box;
+  position: relative;
+  opacity: 0.3;
+}
+
+.buttonParent {
+  align-self: stretch;
+  border-top: 1px solid #434343;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 12px 0px 0px;
+  gap: 11px;
+  font-size: 18px;
+}
+
+.beestats {
+  align-self: stretch;
+  border-radius: 20px;
+  background-color: #292929;
+  border: 1px solid #434343;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12px;
+  gap: 12px;
+}
+
+.primaryoptions {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  font-size: 16px;
+  color: #fff;
+  font-family: Poppins;
+}

@@ -1,0 +1,26 @@
+.beenametext {
+  position: relative;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+.extraoptionscontainer {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.bodycontainer {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+  color: #fff;
+  font-family: Poppins;
+}

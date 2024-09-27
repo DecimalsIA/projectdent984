@@ -84,7 +84,7 @@ export default function MatchmakingComponent({
     // Escuchar el evento 'waiting'
     socketRef.current.on('waiting', () => {
       console.log('Esperando coincidencia...');
-      // Reintentar después de un tiempo si no se encuentra coincidencia
+      // Reintentar después de un tiempo si no se encuentra coincidenciasss
       if (!retryIntervalRef.current) {
         retryIntervalRef.current = setInterval(() => {
           console.log('Reintentando búsqueda de coincidencia...');

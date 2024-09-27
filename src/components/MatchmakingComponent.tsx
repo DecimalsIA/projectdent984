@@ -242,60 +242,67 @@ export default function MatchmakingComponent({
       ) : matchData ? (
         <div>
           <div className="center text-center">
-            <div className="flex">
-              <div className="battle-bee">
-                <div className="flex">
+            <div className="flex flex-row flex-nowrap w-full">
+              <div>
+                <div className="">
                   {' '}
                   <div className="name-battle">
                     <UserComponent userId2={dataIdUser1} />
                   </div>
                 </div>
-                <Bee
-                  basePathW={
-                    dataUser1?.['wings']?.typePart?.toLowerCase() || ''
-                  }
-                  basePathH={dataUser1?.['head']?.typePart?.toLowerCase() || ''}
-                  basePathF={
-                    dataUser1?.['frontLegs']?.typePart?.toLowerCase() || ''
-                  }
-                  basePathHi={
-                    dataUser1?.['hindLegs']?.typePart?.toLowerCase() || ''
-                  }
-                  basePathSt={
-                    dataUser1?.['stinger']?.typePart?.toLowerCase() || ''
-                  }
-                  basePathT={
-                    dataUser1?.['torso']?.typePart?.toLowerCase() || ''
-                  }
-                  classSes="bee-battle-be"
-                />
+                <div className="battle-bee">
+                  <Bee
+                    basePathW={
+                      dataUser1?.['wings']?.typePart?.toLowerCase() || ''
+                    }
+                    basePathH={
+                      dataUser1?.['head']?.typePart?.toLowerCase() || ''
+                    }
+                    basePathF={
+                      dataUser1?.['frontLegs']?.typePart?.toLowerCase() || ''
+                    }
+                    basePathHi={
+                      dataUser1?.['hindLegs']?.typePart?.toLowerCase() || ''
+                    }
+                    basePathSt={
+                      dataUser1?.['stinger']?.typePart?.toLowerCase() || ''
+                    }
+                    basePathT={
+                      dataUser1?.['torso']?.typePart?.toLowerCase() || ''
+                    }
+                    classSes="bee-battle-be"
+                  />
+                </div>
               </div>
-
-              <div className="battle-bee-thow">
+              <div>
                 <div>
                   <div className="flex name-battle-thow">
                     <UserComponent userId2={dataIdUser2} />
                   </div>
                 </div>
-                <Bee
-                  basePathW={
-                    dataUser2?.['wings']?.typePart?.toLowerCase() || ''
-                  }
-                  basePathH={dataUser2?.['head']?.typePart?.toLowerCase() || ''}
-                  basePathF={
-                    dataUser2?.['frontLegs']?.typePart?.toLowerCase() || ''
-                  }
-                  basePathHi={
-                    dataUser2?.['hindLegs']?.typePart?.toLowerCase() || ''
-                  }
-                  basePathSt={
-                    dataUser2?.['stinger']?.typePart?.toLowerCase() || ''
-                  }
-                  basePathT={
-                    dataUser2?.['torso']?.typePart?.toLowerCase() || ''
-                  }
-                  classSes="bee-battle-be"
-                />
+                <div className="battle-bee-thow">
+                  <Bee
+                    basePathW={
+                      dataUser2?.['wings']?.typePart?.toLowerCase() || ''
+                    }
+                    basePathH={
+                      dataUser2?.['head']?.typePart?.toLowerCase() || ''
+                    }
+                    basePathF={
+                      dataUser2?.['frontLegs']?.typePart?.toLowerCase() || ''
+                    }
+                    basePathHi={
+                      dataUser2?.['hindLegs']?.typePart?.toLowerCase() || ''
+                    }
+                    basePathSt={
+                      dataUser2?.['stinger']?.typePart?.toLowerCase() || ''
+                    }
+                    basePathT={
+                      dataUser2?.['torso']?.typePart?.toLowerCase() || ''
+                    }
+                    classSes="bee-battle-be"
+                  />
+                </div>
               </div>
             </div>
             <div className="tittle-bttle">VS</div>
@@ -315,7 +322,7 @@ export default function MatchmakingComponent({
               <span className={styles.timerText}>{acceptTimeLeft}</span>
             </div>
           )}
-          <div className="flex gap-2">
+          <div className="flex gap-2 p-2">
             <ButtonPambii
               color="white"
               bg="#52be97"

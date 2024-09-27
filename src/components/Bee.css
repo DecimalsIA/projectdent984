@@ -6,8 +6,8 @@
 
 .part {
   position: absolute;
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: auto;
 }
 
 /* Posiciones iniciales proporcionadas */

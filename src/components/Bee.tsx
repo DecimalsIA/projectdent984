@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import './Bee.css';
 
@@ -21,7 +22,7 @@ const Bee: React.FC<BeeProps> = ({
   basePathT,
   classSes,
 }) => {
-  const classN = classSes ? classSes : 'bee';
+  const classN = classSes ? classSes : 'bee ';
   return (
     <div className={classN + ' slide-image'}>
       <img

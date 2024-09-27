@@ -7,11 +7,11 @@ export async function POST(req: NextRequest) {
   try {
     const { idUser, arena, bee, idbee, user } = await req.json();
 
-    if (!idUser || !arena || !bee) {
+    if (!idUser || !arena || !bee || !idbee) {
       return NextResponse.json({ success: false, message: 'Faltan datos en la solicitud' });
     }
 
-    console.log(`Registrando solicitud de matchmaking: idUser=${idUser}, arena=${arena}, bee=${bee},${user}`);
+    console.log(`Registrando solicitud de matchmaking: idUser=${idUser}, arena=${arena}, bee=${bee},${idbee}`);
 
     // Registrar la solicitud en Firestore (estado inicial en waiting)
     const docRef = await addDoc(collection(db, 'matchmaking'), {
@@ -19,7 +19,6 @@ export async function POST(req: NextRequest) {
       arena,
       bee,
       idbee,
-      user: "d",
       status: 'waiting',
       createdAt: serverTimestamp(),
     });
@@ -32,7 +31,7 @@ export async function POST(req: NextRequest) {
     }
     const socket = ClientIO(WS); // Conéctate al servidor Express
 
-    socket.emit('find-match', { idUser, arena, bee, idbee, user });
+    socket.emit('find-match', { idUser, arena, bee, idbee });
     console.log(`Evento 'find-match' emitido para idUser=${idUser}, arena=${arena}`);
 
     // Cerrar la conexión después de emitir el evento

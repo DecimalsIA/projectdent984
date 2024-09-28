@@ -3,10 +3,12 @@ import styles from './PrimaryOptionsOff.module.css';
 
 interface PrimaryOptionsOffProps {
   timeLeft: number;
+  dataBee: any;
 }
 
 const PrimaryOptionsOff: FunctionComponent<PrimaryOptionsOffProps> = ({
   timeLeft,
+  dataBee,
 }) => {
   return (
     <div className={styles.primaryoptions}>
@@ -16,9 +18,9 @@ const PrimaryOptionsOff: FunctionComponent<PrimaryOptionsOffProps> = ({
             <img
               className={styles.boldNatureTravelBee}
               alt=""
-              src="Bold / Nature, Travel / Bee.svg"
+              src="/assets/Bee.png"
             />
-            <div className={styles.beenametext}>PRINCESA MONSTRUO</div>
+            <div className={styles.beenametext}>Opponent's</div>
           </div>
           <img
             className={styles.boldNatureTravelBee}

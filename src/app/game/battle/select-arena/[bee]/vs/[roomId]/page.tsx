@@ -5,6 +5,7 @@ import BattleComponent from '@/components/BattleComponent';
 import { useTelegram } from '@/context/TelegramContext';
 import { useParams } from 'next/navigation';
 import useGetBattleByRoomId from '@/hooks/useGetBattleByRoomId';
+import SelectBeeContainer from '@/components/SelectBeeContainer';
 const WS =
   process.env.NEXT_PUBLIC_WS_URL || 'https://ws-server-pambii.onrender.com';
 const SelectArenaPage: React.FC = () => {
@@ -28,7 +29,11 @@ const SelectArenaPage: React.FC = () => {
   }, [roomId, getBattleByRoomId]);
 
   if (loading) {
-    return <div>Cargando la batalla...</div>;
+    return (
+      <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-center p-4">
+        <SelectBeeContainer />{' '}
+      </div>
+    );
   }
 
   if (!battle) {

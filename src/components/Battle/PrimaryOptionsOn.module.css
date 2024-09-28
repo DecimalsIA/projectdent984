@@ -519,3 +519,7 @@
   overflow: hidden;
 
 }
+
+.abilityItem :hover {
+  border: 1px solid #fff;
+}

@@ -4,12 +4,16 @@ import Image from 'next/image';
 
 interface PrimaryOptionsOnProps {
   timeLeft: number;
-  dataBee: any; // Adjust the type as necessary
+  dataBee: any; // Ajustar el tipo según sea necesario
+  onAttack: (selectedAbility: any) => void; // Nueva prop para manejar el ataque
+  life: any;
 }
 
 const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
   timeLeft,
   dataBee,
+  onAttack,
+  life,
 }) => {
   interface Ability {
     id: number;
@@ -18,11 +22,20 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
   }
 
   const [selectedAbility, setSelectedAbility] = useState<Ability | null>(null);
+
   const handleSelectAbility = (ability: any) => {
     setSelectedAbility(ability); // Almacenar la habilidad seleccionada
     console.log('ability', ability);
   };
 
+  const handleAttackClick = () => {
+    if (selectedAbility) {
+      onAttack(selectedAbility); // Llama a la función onAttack con la habilidad seleccionada
+    } else {
+      console.log('No ability selected');
+    }
+  };
+  const lifePercentage = (life / 500) * 100;
   return (
     <div className={styles.primaryoptions}>
       <div className={styles.beestats}>
@@ -65,7 +78,7 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
         )}
         <div className={styles.abilitiescontainer}>
           <b className={styles.beenametext1}>Abilities of this bee:</b>
-          {dataBee?.abilitiesData && dataBee.power.length > 0 ? (
+          {dataBee?.abilitiesData && dataBee.abilitiesData.length > 0 ? (
             <div className={styles.abilitiesGrid}>
               {dataBee.abilitiesData.map((ability: any, index: any) => (
                 <div
@@ -91,10 +104,13 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
         <div className={styles.levelbar}>
           <div className={styles.levelindicator}>
             <b className={styles.beeLife}>BEE LIFE</b>
-            <b className={styles.beeLife}>359 - 500</b>
+            <b className={styles.beeLife}>{life} - 500</b>
           </div>
           <div className={styles.progresbar}>
-            <div className={styles.progress}>
+            <div
+              className={styles.progress}
+              style={{ width: `${lifePercentage}%` }}
+            >
               <div className={styles.start} />
               <div className={styles.start} />
             </div>
@@ -155,7 +171,7 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
               <div className={styles.label}>{timeLeft} seconds</div>
             </div>
           </div>
-          <div className={styles.button4}>
+          <div className={styles.button4} onClick={handleAttackClick}>
             <div className={styles.box8} />
             <div className={styles.box1}>
               <Image

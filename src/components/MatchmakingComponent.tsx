@@ -185,6 +185,7 @@ export default function MatchmakingComponent({
       let newMatchData = {};
       if (matchData.idUser1 == idUser) {
         newMatchData = {
+          roomId: matchData.roomId,
           nameuser: foundUser?.nomTlram,
           player: '1',
           bee: matchData.bee1,
@@ -194,6 +195,7 @@ export default function MatchmakingComponent({
       }
       if (matchData.idUser2 == idUser) {
         newMatchData = {
+          roomId: matchData.roomId,
           nameuser: foundUser?.nomTlram,
           player: '2',
           bee: matchData.bee2,
@@ -201,7 +203,7 @@ export default function MatchmakingComponent({
           nameBee: matchData.bee2[0].title,
         };
       }
-      console.log(newMatchData);
+      console.log('newMatchData', newMatchData);
       socketRef.current.emit('accept-match', newMatchData);
     } // start-battle
   };

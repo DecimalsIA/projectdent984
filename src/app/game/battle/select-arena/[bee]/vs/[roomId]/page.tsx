@@ -87,7 +87,7 @@ const SelectArenaPage: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
-      <BattleComponent isMyTurnInitially={isMyTurn} battleData={battleData} />
+      <BattleComponent userId={userId} battleData={battleData} />
     </div>
   );
 };

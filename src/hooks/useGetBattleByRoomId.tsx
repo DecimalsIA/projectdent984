@@ -12,10 +12,12 @@ interface Battle {
 const useGetBattleByRoomId = () => {
   const [battle, setBattle] = useState<Battle | null>(null); // Almacena la batalla recuperada
   const [loading, setLoading] = useState(false);
+  const [currentRoomId, setCurrentRoomId] = useState<string | null>(null); // Para almacenar el roomId actual
 
   // Función que buscará la batalla en Firestore por roomId
   const getBattleByRoomId = async (roomId: string): Promise<Battle | null> => {
-    if (!roomId || battle) return battle; // Si ya hay una batalla cargada o no hay roomId, no hacer la consulta
+    // Verificar si ya se ha cargado una batalla para este roomId o si el roomId no ha cambiado
+    if (roomId === currentRoomId && battle) return battle;
 
     setLoading(true);
     try {
@@ -27,6 +29,7 @@ const useGetBattleByRoomId = () => {
         // Devolver y guardar la batalla encontrada
         const battleDoc = docSnap.data() as Battle;
         setBattle(battleDoc);
+        setCurrentRoomId(roomId); // Actualizar el roomId actual
         return battleDoc;
       } else {
         return null; // No se encontró el documento con ese roomId

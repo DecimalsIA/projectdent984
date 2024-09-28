@@ -88,7 +88,7 @@ const BattleComponent = ({
             userId1={battleData?.acceptances?.idUser1}
           />
           <div className="foter-g">
-            {true ? (
+            {isMyTurn ? (
               <PrimaryOptionsOn dataBee={dataBee} timeLeft={timeLeft} />
             ) : (
               <PrimaryOptionsOff timeLeft={timeLeft} />

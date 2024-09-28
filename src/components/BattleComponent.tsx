@@ -18,7 +18,7 @@ const BattleComponent = ({
   userId: any;
   battleData: any;
 }) => {
-  const [isMyTurn, setIsMyTurn] = useState(false); // Inicialmente no es el turno del jugador
+  const [isMyTurn, setIsMyTurn] = useState(battleData?.inicialTurn === userId); // Inicialmente no es el turno del jugador
   const [timeLeft, setTimeLeft] = useState(TURN_DURATION / 1000); // Estado para el temporizador de cada turno
   const [roomId, setRoomId] = useState<string | null>(null);
 

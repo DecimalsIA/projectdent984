@@ -520,6 +520,9 @@
 
 }
 
-.abilityItem :hover {
+
+.abilityItem.selected {
   border: 1px solid #fff;
+  background-color: #e6f7ff;
+  /* Color de fondo */
 }

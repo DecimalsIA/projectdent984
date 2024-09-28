@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 import styles from './PrimaryOptionsOn.module.css';
 import Image from 'next/image';
 
@@ -11,6 +11,17 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
   timeLeft,
   dataBee,
 }) => {
+  interface Ability {
+    id: number;
+    name: string;
+    type_habilities: string;
+  }
+
+  const [selectedAbility, setSelectedAbility] = useState<Ability | null>(null);
+  const handleSelectAbility = (ability: any) => {
+    setSelectedAbility(ability); // Almacenar la habilidad seleccionada
+    console.log('ability', ability);
+  };
   console.log('dataBee', dataBee?.abilitiesData);
   return (
     <div className={styles.primaryoptions}>
@@ -53,7 +64,13 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
           {dataBee?.abilitiesData && dataBee.power.length > 0 ? (
             <div className={styles.abilitiesGrid}>
               {dataBee.abilitiesData.map((ability: any, index: any) => (
-                <div key={index} className={styles.abilityItem}>
+                <div
+                  key={index}
+                  className={`${styles.abilityItem} ${
+                    selectedAbility?.id === ability.id ? styles.selected : ''
+                  }`}
+                  onClick={() => handleSelectAbility(ability)}
+                >
                   <div className={styles.badge + ' h-33px'}>
                     <div className={styles.badgetext}>{ability.name}</div> |
                     <div className={styles.badgetext}>

@@ -182,27 +182,16 @@ export default function MatchmakingComponent({
     console.log('Match found:', matchData);
     if (matchData && socketRef.current) {
       const foundUser = await getUserById(idUser);
-      let newMatchData = {};
-      if (matchData.idUser1 == idUser) {
-        newMatchData = {
-          roomId: matchData.roomId,
-          nameuser: foundUser?.nomTlram,
-          player: '1',
-          bee: matchData.bee1,
-          idUser1: idUser,
-          nameBee: matchData.bee1[0].title,
-        };
-      }
-      if (matchData.idUser2 == idUser) {
-        newMatchData = {
-          roomId: matchData.roomId,
-          nameuser: foundUser?.nomTlram,
-          player: '2',
-          bee: matchData.bee2,
-          idUser2: idUser,
-          nameBee: matchData.bee2[0].title,
-        };
-      }
+      let newMatchData = {
+        nameuser: foundUser?.nomTlram,
+        roomId: matchData.roomId,
+        bee1: matchData.bee1,
+        bee2: matchData.bee2,
+        idUser2: matchData.idUser2,
+        idUser1: matchData.idUser1,
+        nameBee: matchData.bee1[0].title,
+      };
+
       console.log('newMatchData', newMatchData);
       socketRef.current.emit('accept-match', newMatchData);
     } // start-battle

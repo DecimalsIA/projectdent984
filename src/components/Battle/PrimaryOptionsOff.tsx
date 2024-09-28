@@ -1,5 +1,6 @@
 import { FunctionComponent } from 'react';
 import styles from './PrimaryOptionsOff.module.css';
+import Image from 'next/image';
 
 interface PrimaryOptionsOffProps {
   timeLeft: number;
@@ -15,16 +16,20 @@ const PrimaryOptionsOff: FunctionComponent<PrimaryOptionsOffProps> = ({
       <div className={styles.beestats}>
         <div className={styles.extraoptionscontainer}>
           <div className={styles.userinfocontainer}>
-            <img
+            <Image
               className={styles.boldNatureTravelBee}
               alt=""
+              width={20}
+              height={20}
               src="/assets/Bee.png"
             />
             <div className={styles.beenametext}>Opponent's</div>
           </div>
-          <img
+          <Image
             className={styles.boldNatureTravelBee}
             alt=""
+            width={20}
+            height={20}
             src="Bold / Arrows / Alt Arrow Up.svg"
           />
         </div>
@@ -50,7 +55,13 @@ const PrimaryOptionsOff: FunctionComponent<PrimaryOptionsOffProps> = ({
           <div className={styles.button1}>
             <div className={styles.box2} />
             <div className={styles.box3}>
-              <img className={styles.icon} alt="" src="/assets/attack.svg" />
+              <Image
+                className={styles.icon}
+                width={20}
+                height={20}
+                alt=""
+                src="/assets/attack.svg"
+              />
               <div className={styles.label}>attack</div>
             </div>
           </div>

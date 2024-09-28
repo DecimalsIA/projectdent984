@@ -28,16 +28,20 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
       <div className={styles.beestats}>
         <div className={styles.extraoptionscontainer}>
           <div className={styles.userinfocontainer}>
-            <img
+            <Image
               className={styles.boldNatureTravelBee}
-              alt=""
+              alt="boldNatureTravelBee"
+              width={20}
+              height={20}
               src="/assets/Bee.png"
             />
             <div className={styles.beenametext}>{dataBee.title}</div>
           </div>
-          <img
+          <Image
             className={styles.boldNatureTravelBee}
-            alt=""
+            alt="boldNatureTravelBee"
+            width={20}
+            height={20}
             src="/assets/arrowDown.svg"
           />
         </div>
@@ -102,7 +106,13 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
             <div className={styles.button}>
               <div className={styles.box} />
               <div className={styles.box1}>
-                <img className={styles.icon} alt="" src="/assets/healhp.svg" />
+                <img
+                  className={styles.icon}
+                  alt=""
+                  width={20}
+                  height={20}
+                  src="/assets/healhp.svg"
+                />
                 <div className={styles.label}>457</div>
               </div>
             </div>
@@ -126,7 +136,13 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
             <div className={styles.button2}>
               <div className={styles.box4} />
               <div className={styles.box1}>
-                <img className={styles.icon} alt="" src="/assets/incdef.svg" />
+                <Image
+                  className={styles.icon}
+                  alt=""
+                  width={20}
+                  height={20}
+                  src="/assets/incdef.svg"
+                />
                 <div className={styles.label}>457</div>
               </div>
             </div>
@@ -142,7 +158,13 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
           <div className={styles.button4}>
             <div className={styles.box8} />
             <div className={styles.box1}>
-              <img className={styles.icon} alt="" src="/assets/attack.svg" />
+              <Image
+                className={styles.icon}
+                width={20}
+                height={20}
+                alt=""
+                src="/assets/attack.svg"
+              />
               <div className={styles.label}>attack</div>
             </div>
           </div>

@@ -6,12 +6,7 @@ import { useTelegram } from '@/context/TelegramContext';
 import useSocket from '@/hooks/useSocket';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import {
-  ButtonPambii,
-  CardPambii,
-  IconPambii,
-  SlidePambii,
-} from 'pambii-devtrader-front';
+import { CardPambii } from 'pambii-devtrader-front';
 import { useState } from 'react';
 const WS = process.env.NEXT_PUBLIC_WS_URL;
 console.log('WS', WS);

@@ -491,3 +491,23 @@
   color: #fff;
   font-family: Poppins;
 }
+
+.abilitiesGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  /* Espacio entre las columnas y filas */
+}
+
+.abilityItem {
+  flex: 1 1 calc(50% - 20px);
+  /* Dos columnas, ocupan el 50% del contenedor */
+
+  border-radius: 24px;
+  background-color: #292929;
+  border: 1px solid #434343;
+  box-sizing: border-box;
+  height: 35px;
+  overflow: hidden;
+
+}

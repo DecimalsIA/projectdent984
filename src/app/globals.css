@@ -830,7 +830,8 @@ h2 {
 
   color: #fff !important;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 13px;
+  text-align: center;
 
 }
 
@@ -849,4 +850,18 @@ h2 {
   align-items: flex-end;
   left: 10px;
   right: 10px;
+}
+
+.abildy {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.h-33px {
+  height: 33px !important;
+  cursor: pointer;
 }

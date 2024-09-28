@@ -21,11 +21,18 @@ const BattleComponent = ({
   const [isMyTurn, setIsMyTurn] = useState(battleData?.inicialTurn === userId); // Inicialmente no es el turno del jugador
   const [timeLeft, setTimeLeft] = useState(TURN_DURATION / 1000); // Estado para el temporizador de cada turno
   const [roomId, setRoomId] = useState<string | null>(null);
+  const [dataBee, setDataBee] = useState<any>({});
 
   useEffect(() => {
     // Establecer roomId a partir de battleData cuando se cargue la batalla
     setRoomId(battleData?.roomId);
     setIsMyTurn(battleData?.inicialTurn === userId);
+    if (battleData?.acceptances?.idUser1 === userId) {
+      setDataBee(battleData?.acceptances?.bee1[0]);
+    }
+    if (battleData?.acceptances?.idUser2 === userId) {
+      setDataBee(battleData?.acceptances?.bee2[0]);
+    }
 
     // Escuchar el cambio de turno desde el servidor
     socket.on('turn-change', ({ turn }) => {
@@ -82,7 +89,7 @@ const BattleComponent = ({
           />
           <div className="foter-g">
             {true ? (
-              <PrimaryOptionsOn timeLeft={timeLeft} />
+              <PrimaryOptionsOn dataBee={dataBee} timeLeft={timeLeft} />
             ) : (
               <PrimaryOptionsOff timeLeft={timeLeft} />
             )}

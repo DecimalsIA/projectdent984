@@ -48,7 +48,7 @@ const PrimaryOptionsOff: FunctionComponent<PrimaryOptionsOffProps> = ({
           <div className={styles.button1}>
             <div className={styles.box2} />
             <div className={styles.box3}>
-              <img className={styles.icon} alt="" src="Icon.svg" />
+              <img className={styles.icon} alt="" src="/assets/attack.svg" />
               <div className={styles.label}>attack</div>
             </div>
           </div>

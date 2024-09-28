@@ -20,6 +20,12 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
     <div className={styles.selectbeecontainer}>
       <div className="flex flex-row flex-nowrap w-full">
         <div>
+          <div className="text-center">
+            {' '}
+            <div className="name-battle">
+              <UserComponent userId2={userId2} />
+            </div>
+          </div>
           <div className="battle-bee h-56">
             <Bee
               basePathW={dataUser1?.['wings']?.typePart?.toLowerCase() || ''}
@@ -35,14 +41,14 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
               classSes="bee-battle-be"
             />
           </div>
-          <div className="text-center">
-            {' '}
-            <div className="name-battle">
-              <UserComponent userId2={userId2} />
-            </div>
-          </div>
         </div>
         <div>
+          <div className="center">
+            {' '}
+            <div className="name-battle">
+              <UserComponent userId2={userId1} />
+            </div>
+          </div>
           <div className="battle-bee-thow h-56">
             <Bee
               basePathW={dataUser2?.['wings']?.typePart?.toLowerCase() || ''}
@@ -57,12 +63,6 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
               basePathT={dataUser2?.['torso']?.typePart?.toLowerCase() || ''}
               classSes="bee-battle-be"
             />
-          </div>
-          <div className="center">
-            {' '}
-            <div className="name-battle">
-              <UserComponent userId2={userId1} />
-            </div>
           </div>
         </div>
       </div>

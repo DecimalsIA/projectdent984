@@ -22,7 +22,7 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
     setSelectedAbility(ability); // Almacenar la habilidad seleccionada
     console.log('ability', ability);
   };
-  console.log('dataBee', dataBee?.abilitiesData);
+
   return (
     <div className={styles.primaryoptions}>
       <div className={styles.beestats}>

@@ -89,6 +89,9 @@ const BattleComponent = ({
   }, [battleData?.roomId, userId]);
 
   const handleAttack = (selectedAbility: any) => {
+    console.log('selectedAbility', roomId && isMyTurn);
+    console.log('isMyTurn', isMyTurn);
+    console.log('roomId', roomId);
     if (roomId && isMyTurn) {
       // Emitir el evento 'battle-action' con la habilidad seleccionada y otros datos relevantes
       socketRef.current?.emit('battle-action', {
@@ -149,7 +152,11 @@ const BattleComponent = ({
             </p>
             {isMyTurn ? (
               <PrimaryOptionsOn
-                dataBee={dataBee}
+                dataBee={
+                  battleData?.acceptances?.idUser1 === userId
+                    ? battleData?.acceptances?.bee1[0]
+                    : battleData?.acceptances?.bee2[0]
+                }
                 life={life}
                 timeLeft={timeLeft}
                 onAttack={handleAttack}

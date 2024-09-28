@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { io } from 'socket.io-client';
+import { useState, useEffect, useRef } from 'react';
+import { io, Socket } from 'socket.io-client';
 import SelectBeeContainer from './Battle/SelectBeeContainer';
 import PrimaryOptionsOff from './Battle/PrimaryOptionsOff';
 import PrimaryOptionsOn from './Battle/PrimaryOptionsOn';
@@ -8,8 +8,6 @@ import BodyContainer from './Battle/BodyContainer';
 const TURN_DURATION = 50000; // Duración del turno en milisegundos (50 segundos)
 const WS =
   process.env.NEXT_PUBLIC_WS_URL || 'https://ws-server-pambii.onrender.com';
-// Conectar con el servidor de Socket.IO
-const socket = io(WS); // Cambia la URL por la de tu servidor
 
 const BattleComponent = ({
   userId,
@@ -25,30 +23,39 @@ const BattleComponent = ({
   const [opponentBee, setOpponentBee] = useState<any>({}); // Almacena la abeja del oponente
   const [life, setLife] = useState(500); // Vida inicial del jugador
   const [opponentLife, setOpponentLife] = useState(500); // Vida inicial del oponente
+  const [isConnected, setIsConnected] = useState(false); // Estado de la conexión
+
+  // Usamos useRef para mantener la instancia del socket
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    // Establecer roomId a partir de battleData cuando se cargue la batalla
-    setRoomId(battleData?.roomId);
-    setIsMyTurn(battleData?.inicialTurn === userId);
+    // Inicializar socket solo una vez
+    socketRef.current = io(WS);
 
-    // Establecer los datos de la abeja del usuario y del oponente
-    if (battleData?.acceptances?.idUser1 === userId) {
-      setDataBee(battleData?.acceptances?.bee1[0]);
-      setOpponentBee(battleData?.acceptances?.bee2[0]);
-    } else if (battleData?.acceptances?.idUser2 === userId) {
-      setDataBee(battleData?.acceptances?.bee2[0]);
-      setOpponentBee(battleData?.acceptances?.bee1[0]);
-    }
+    socketRef.current.on('connect', () => {
+      console.log('Conectado al servidor de Socket.IO:', socketRef.current?.id);
+      setIsConnected(true); // Cambiar el estado de conexión
+    });
+
+    socketRef.current.on('disconnect', () => {
+      console.log('Desconectado del servidor de Socket.IO');
+      setIsConnected(false); // Cambiar el estado de conexión
+    });
+
+    socketRef.current.on('connect_error', (error) => {
+      console.error('Error al conectar con Socket.IO:', error);
+      setIsConnected(false); // Cambiar el estado de conexión en caso de error
+    });
 
     // Escuchar el cambio de turno desde el servidor
-    socket.on('turn-change', ({ turn }) => {
+    socketRef.current.on('turn-change', ({ turn }) => {
       console.log('turn', turn);
       setIsMyTurn(turn === userId); // Actualiza el estado del turno
       setTimeLeft(TURN_DURATION / 1000); // Reiniciar el temporizador
     });
 
     // Escuchar actualizaciones de acción desde el servidor
-    socket.on('action-update', ({ idUser, action, bee, damage }) => {
+    socketRef.current.on('battle-action', ({ idUser, action, bee, damage }) => {
       console.log(
         `Acción recibida de ${idUser}: ${action}, Daño causado: ${damage}`,
       );
@@ -63,73 +70,45 @@ const BattleComponent = ({
     });
 
     // Escuchar cuando la batalla termina
-    socket.on('battle-ended', ({ winner, loser, message }) => {
+    socketRef.current.on('battle-ended', ({ winner, loser, message }) => {
       console.log(message);
       alert(`La batalla ha terminado. Ganador: ${winner}, Perdedor: ${loser}`);
-      // Aquí puedes agregar lógica para resetear el juego o redirigir
     });
 
-    // Temporizador de cuenta regresiva por cada turno
-    const countdown = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => {
-        if (prevTimeLeft <= 1) {
-          // Si el tiempo se agota, cambiar el turno automáticamente
-          if (isMyTurn) {
-            socket.emit('turn-change', {
-              roomId,
-              turn:
-                battleData?.acceptances?.idUser1 === userId
-                  ? battleData?.acceptances?.idUser2
-                  : battleData?.acceptances?.idUser1,
-            });
-            setIsMyTurn(false); // Cambiar el estado del turno
-          }
-          return TURN_DURATION / 1000; // Reiniciar el temporizador
-        } else {
-          return prevTimeLeft - 1;
-        }
-      });
-    }, 1000);
-
-    // Limpiar los eventos y temporizadores cuando el componente se desmonte
+    // Limpiar eventos cuando el componente se desmonte
     return () => {
-      clearInterval(countdown);
-      socket.off('turn-change');
-      socket.off('action-update');
-      socket.off('battle-ended');
+      socketRef.current?.disconnect();
+      socketRef.current?.off('connect');
+      socketRef.current?.off('disconnect');
+      socketRef.current?.off('connect_error');
+      socketRef.current?.off('turn-change');
+      socketRef.current?.off('battle-action');
+      socketRef.current?.off('battle-ended');
     };
   }, [battleData?.roomId, userId]);
 
   const handleAttack = (selectedAbility: any) => {
-    console.log(
-      'Selected ability for attack:',
-      selectedAbility,
-      roomId,
-      opponentLife,
-    );
-
     if (roomId && isMyTurn) {
       // Emitir el evento 'battle-action' con la habilidad seleccionada y otros datos relevantes
-      socket.emit('battle-action', {
-        roomId, // ID de la sala
-        action: 'attack', // Acción realizada
-        idUser: userId, // ID del usuario actual
-        bee: dataBee, // Datos de la abeja seleccionada
-        ability: selectedAbility, // Habilidad seleccionada
+      socketRef.current?.emit('battle-action', {
+        roomId,
+        action: 'attack',
+        idUser: userId,
+        bee: dataBee,
+        ability: selectedAbility,
       });
 
       // Emitir el evento para cambiar de turno
-      socket.emit('turn-change', {
-        roomId, // ID de la sala
+      socketRef.current?.emit('turn-change', {
+        roomId,
         turn:
           battleData?.acceptances?.idUser1 === userId
             ? battleData?.acceptances?.idUser2
-            : battleData?.acceptances?.idUser1, // Cambiar al oponente
+            : battleData?.acceptances?.idUser1,
       });
 
-      // Reiniciar el temporizador en el cliente
       setTimeLeft(TURN_DURATION / 1000);
-      setIsMyTurn(false); // Cambiar el estado del turno
+      setIsMyTurn(false);
     }
   };
 
@@ -162,12 +141,17 @@ const BattleComponent = ({
             userId1={battleData?.acceptances?.idUser1}
           />
           <div className="foter-g">
+            <p>
+              {isConnected
+                ? 'Conectado a Socket.IO'
+                : 'Desconectado de Socket.IO'}
+            </p>
             {isMyTurn ? (
               <PrimaryOptionsOn
-                dataBee={dataBee} // Pasa la abeja del jugador
-                life={life} // Pasa la vida actual del jugador
+                dataBee={dataBee}
+                life={life}
                 timeLeft={timeLeft}
-                onAttack={handleAttack} // Pasamos la función handleAttack
+                onAttack={handleAttack}
               />
             ) : (
               <PrimaryOptionsOff timeLeft={timeLeft} />

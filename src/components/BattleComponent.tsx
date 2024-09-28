@@ -29,6 +29,7 @@ const BattleComponent = ({
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
+    setIsMyTurn(battleData?.inicialTurn === userId);
     // Inicializar socket solo una vez
     socketRef.current = io(WS);
 

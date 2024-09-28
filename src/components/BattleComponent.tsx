@@ -42,6 +42,7 @@ const BattleComponent = ({
 
     // Escuchar el cambio de turno desde el servidor
     socket.on('turn-change', ({ turn }) => {
+      console.log('turn', turn);
       setIsMyTurn(turn === userId); // Actualiza el estado del turno
       setTimeLeft(TURN_DURATION / 1000); // Reiniciar el temporizador
     });
@@ -70,7 +71,24 @@ const BattleComponent = ({
 
     // Temporizador de cuenta regresiva por cada turno
     const countdown = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => (prevTimeLeft > 0 ? prevTimeLeft - 1 : 0));
+      setTimeLeft((prevTimeLeft) => {
+        if (prevTimeLeft <= 1) {
+          // Si el tiempo se agota, cambiar el turno automáticamente
+          if (isMyTurn) {
+            socket.emit('turn-change', {
+              roomId,
+              turn:
+                battleData?.acceptances?.idUser1 === userId
+                  ? battleData?.acceptances?.idUser2
+                  : battleData?.acceptances?.idUser1,
+            });
+            setIsMyTurn(false); // Cambiar el estado del turno
+          }
+          return TURN_DURATION / 1000; // Reiniciar el temporizador
+        } else {
+          return prevTimeLeft - 1;
+        }
+      });
     }, 1000);
 
     // Limpiar los eventos y temporizadores cuando el componente se desmonte
@@ -99,8 +117,22 @@ const BattleComponent = ({
         bee: dataBee, // Datos de la abeja seleccionada
         ability: selectedAbility, // Habilidad seleccionada
       });
+
+      // Emitir el evento para cambiar de turno
+      socket.emit('turn-change', {
+        roomId, // ID de la sala
+        turn:
+          battleData?.acceptances?.idUser1 === userId
+            ? battleData?.acceptances?.idUser2
+            : battleData?.acceptances?.idUser1, // Cambiar al oponente
+      });
+
+      // Reiniciar el temporizador en el cliente
+      setTimeLeft(TURN_DURATION / 1000);
+      setIsMyTurn(false); // Cambiar el estado del turno
     }
   };
+
   // Procesamiento de los datos de las abejas de ambos jugadores
   const dataUser1: any = battleData?.acceptances?.bee1[0]?.parts?.reduce(
     (acc: any, part: any) => {

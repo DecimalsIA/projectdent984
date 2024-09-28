@@ -25,13 +25,6 @@ const PrimaryOptionsOff: FunctionComponent<PrimaryOptionsOffProps> = ({
             />
             <div className={styles.beenametext}>Opponent's</div>
           </div>
-          <Image
-            className={styles.boldNatureTravelBee}
-            alt=""
-            width={20}
-            height={20}
-            src="Bold / Arrows / Alt Arrow Up.svg"
-          />
         </div>
         <div className={styles.levelbar}>
           <div className={styles.levelindicator}>

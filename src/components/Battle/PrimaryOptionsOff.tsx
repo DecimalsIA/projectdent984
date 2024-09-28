@@ -4,12 +4,10 @@ import Image from 'next/image';
 
 interface PrimaryOptionsOffProps {
   timeLeft: number;
-  dataBee: any;
 }
 
 const PrimaryOptionsOff: FunctionComponent<PrimaryOptionsOffProps> = ({
   timeLeft,
-  dataBee,
 }) => {
   return (
     <div className={styles.primaryoptions}>
@@ -23,7 +21,7 @@ const PrimaryOptionsOff: FunctionComponent<PrimaryOptionsOffProps> = ({
               height={20}
               src="/assets/Bee.png"
             />
-            <div className={styles.beenametext}>Opponent's</div>
+            <div className={styles.beenametext}>Opponent</div>
           </div>
         </div>
         <div className={styles.levelbar}>

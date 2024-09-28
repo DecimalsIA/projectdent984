@@ -25,6 +25,7 @@ const BattleComponent = ({
   useEffect(() => {
     // Establecer roomId a partir de battleData cuando se cargue la batalla
     setRoomId(battleData?.roomId);
+    setIsMyTurn(battleData?.inicialTurn === userId);
 
     // Escuchar el cambio de turno desde el servidor
     socket.on('turn-change', ({ turn }) => {
@@ -73,9 +74,14 @@ const BattleComponent = ({
       <BodyContainer />
       {battleData && (
         <>
-          <SelectBeeContainer dataUser1={dataUser1} dataUser2={dataUser2} />
+          <SelectBeeContainer
+            dataUser1={dataUser1}
+            dataUser2={dataUser2}
+            userId2={battleData?.acceptances?.idUser2}
+            userId1={battleData?.acceptances?.idUser1}
+          />
           <div className="foter-g">
-            {isMyTurn ? (
+            {true ? (
               <PrimaryOptionsOn timeLeft={timeLeft} />
             ) : (
               <PrimaryOptionsOff timeLeft={timeLeft} />

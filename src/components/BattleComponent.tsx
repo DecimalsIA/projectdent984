@@ -7,13 +7,13 @@ import BodyContainer from './Battle/BodyContainer';
 const TURN_DURATION = 10000; // Duración del turno en milisegundos (10 segundos)
 
 const BattleComponent = ({
-  isMyTurnInitially,
+  userId,
   battleData,
 }: {
-  isMyTurnInitially: boolean;
+  userId: any;
   battleData: any;
 }) => {
-  const [isMyTurn, setIsMyTurn] = useState(isMyTurnInitially); // Estado para saber si es tu turno o el del oponente
+  const [isMyTurn, setIsMyTurn] = useState(battleData.inicialTurn == userId); // Estado para saber si es tu turno o el del oponente
   const [timeLeft, setTimeLeft] = useState(TURN_DURATION / 1000); // Estado para el temporizador de cada turno
 
   useEffect(() => {
@@ -34,16 +34,31 @@ const BattleComponent = ({
       clearInterval(countdown);
     };
   }, []);
+  // Procesamiento de los datos de las abejas de ambos jugadores
+  console.log('battleData', battleData);
+
+  const dataUser1: any = battleData?.acceptances?.bee1[0]?.parts?.reduce(
+    (acc: any, part: any) => {
+      acc[part.namePart] = part;
+      return acc;
+    },
+    {},
+  );
+
+  const dataUser2: any = battleData?.acceptances?.bee2[0]?.parts?.reduce(
+    (acc: any, part: any) => {
+      acc[part.namePart] = part;
+      return acc;
+    },
+    {},
+  );
 
   return (
     <div className="gamefot">
       <BodyContainer />
       {battleData && (
         <>
-          <SelectBeeContainer
-            dataUser1={battleData.dataUser1}
-            dataUser2={battleData.dataUser1}
-          />
+          <SelectBeeContainer dataUser1={dataUser1} dataUser2={dataUser2} />
           <div className="foter-g">
             {isMyTurn ? (
               <PrimaryOptionsOn timeLeft={timeLeft} />

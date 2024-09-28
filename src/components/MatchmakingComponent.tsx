@@ -9,6 +9,7 @@ import useFetchBees from '@/hooks/useFetchBees';
 import UserComponent from './UserComponent';
 import BattleComponent from './BattleComponent';
 import { useRouter } from 'next/navigation';
+import useGetUserById from '@/hooks/useGetUsers';
 
 const WS =
   process.env.NEXT_PUBLIC_WS_URL || 'https://ws-server-pambii.onrender.com';
@@ -37,6 +38,7 @@ export default function MatchmakingComponent({
 }: MatchmakingProps) {
   const [timeLeft, setTimeLeft] = useState(180000); // Temporizador de 3 minutos
   const { data: dataBee, loading, error: errorBee } = useFetchBees(idUser, bee);
+  const { getUserById } = useGetUserById();
   const router = useRouter();
 
   const [acceptTimeLeft, setAcceptTimeLeft] = useState<number | null>(0); // Tiempo restante para aceptar el match
@@ -105,6 +107,7 @@ export default function MatchmakingComponent({
     // Escuchar el evento 'start-battle' y mostrar la alerta
     socketRef.current.on('start-battle', (data: any) => {
       console.log('La batalla ha comenzado:', data);
+      socketRef.current.emit('start-match', data);
       setIsisBattle(true);
       router.push('/game/battle/select-arena/' + bee + '/vs/' + data.roomId);
       alert('La batalla ha comenzado!');
@@ -175,10 +178,31 @@ export default function MatchmakingComponent({
   };
 
   // Aceptar el match
-  const handleAccept = () => {
+  const handleAccept = async () => {
     console.log('Match found:', matchData);
     if (matchData && socketRef.current) {
-      socketRef.current.emit('accept-match', matchData);
+      const foundUser = await getUserById(idUser);
+      let newMatchData = {};
+      if (matchData.idUser1 == idUser) {
+        newMatchData = {
+          nameuser: foundUser?.nomTlram,
+          player: '1',
+          bee: matchData.bee1,
+          idUser1: idUser,
+          nameBee: matchData.bee1[0].title,
+        };
+      }
+      if (matchData.idUser2 == idUser) {
+        newMatchData = {
+          nameuser: foundUser?.nomTlram,
+          player: '2',
+          bee: matchData.bee2,
+          idUser2: idUser,
+          nameBee: matchData.bee2[0].title,
+        };
+      }
+      console.log(newMatchData);
+      socketRef.current.emit('accept-match', newMatchData);
     } // start-battle
   };
 

@@ -18,9 +18,10 @@ const useBattleActions = ({
   dataBee,
   battleData,
 }: UseBattleActionsParams) => {
-  const [isMyTurn, setIsMyTurn] = useState(battleData?.inicialTurn === userId);
+  const [isMyTurn, setIsMyTurn] = useState(battleData?.inicialTurn == userId);
   const [timeLeft, setTimeLeft] = useState(TURN_DURATION / 1000);
 
+  console.log('userId', userId);
   const handleAttack = useCallback(
     (selectedAbility: any) => {
       console.log('handleAttack llamado');

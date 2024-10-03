@@ -78,7 +78,7 @@ const BattleComponent = ({
       socketRef.current?.off('battle-ended');
     };
   }, [battleData?.roomId, userId]);
-
+  console.log(battleData);
   // Usamos el hook personalizado para manejar las acciones de batalla
   const { handleAttack, isMyTurn, timeLeft } = useBattleActions({
     socket: socketRef.current,
@@ -87,6 +87,8 @@ const BattleComponent = ({
     dataBee,
     battleData,
   });
+  console.log('isMyTurn--->', isMyTurn);
+  console.log('timeLeft--->', timeLeft);
 
   const dataUser1: any = battleData?.acceptances?.bee1[0]?.parts?.reduce(
     (acc: any, part: any) => {

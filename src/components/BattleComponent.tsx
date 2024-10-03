@@ -92,10 +92,14 @@ const BattleComponent = ({
   }, [battleData?.roomId, userId]);
 
   const handleAttack = (selectedAbility: any) => {
-    console.log('selectedAbility', roomId && isMyTurn);
-    console.log('isMyTurn', isMyTurn);
-    console.log('roomId', roomId);
+    console.log('handleAttack llamado');
+    console.log('selectedAbility:', selectedAbility);
+    console.log('roomId:', roomId);
+    console.log('isMyTurn:', isMyTurn);
+
     if (roomId && isMyTurn) {
+      console.log('Emitiendo battle-action y turn-change');
+
       // Emitir el evento 'battle-action' con la habilidad seleccionada y otros datos relevantes
       socketRef.current?.emit('battle-action', {
         roomId,
@@ -116,6 +120,8 @@ const BattleComponent = ({
 
       setTimeLeft(TURN_DURATION / 1000);
       setIsMyTurn(false);
+    } else {
+      console.log('No se cumplen las condiciones para emitir eventos');
     }
   };
 
@@ -150,7 +156,7 @@ const BattleComponent = ({
           <div className="foter-g">
             <p>
               {isConnected
-                ? 'Conectado a Socket.IO'
+                ? 'Battle ID: ' + roomId
                 : 'Desconectado de Socket.IO'}
             </p>
             {isMyTurn ? (

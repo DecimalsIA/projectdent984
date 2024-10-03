@@ -20,9 +20,9 @@ const SelectArenaPage: React.FC = () => {
 
   const [battleData, setBattleData] = useState<any>(null);
 
-  console.log('data', userId, idsals, battleData);
   useEffect(() => {
     // Cuando el componente se monta o cuando roomId cambia, obtenemos la batalla
+    console.log('data', userId, idsals, battleData);
     if (idsals) {
       getBattleByRoomId(idsals);
       setBattleData(battle);

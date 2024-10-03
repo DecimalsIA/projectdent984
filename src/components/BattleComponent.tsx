@@ -26,6 +26,15 @@ const BattleComponent = ({
 
   const socketRef = useRef<Socket | null>(null);
 
+  // Usamos el hook personalizado para manejar las acciones de batalla
+  const { handleAttack, isMyTurn, timeLeft } = useBattleActions({
+    socket: socketRef.current,
+    roomId,
+    userId,
+    dataBee,
+    battleData,
+  });
+
   useEffect(() => {
     if (battleData?.roomId) {
       setRoomId(battleData.roomId);
@@ -84,14 +93,9 @@ const BattleComponent = ({
     };
   }, [battleData?.roomId, userId]);
 
-  // Usamos el hook personalizado para manejar las acciones de batalla
-  const { handleAttack, isMyTurn, timeLeft } = useBattleActions({
-    socket: socketRef.current,
-    roomId,
-    userId,
-    dataBee,
-    battleData,
-  });
+  useEffect(() => {
+    console.log('useEffect isMyTurn', isMyTurn);
+  }, [isMyTurn]);
 
   const dataUser1: any = battleData?.acceptances?.bee1[0]?.parts?.reduce(
     (acc: any, part: any) => {

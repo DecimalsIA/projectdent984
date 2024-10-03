@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { getFirestore, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { Socket } from 'socket.io-client';
 
@@ -19,10 +19,23 @@ const useBattleActions = ({
   dataBee,
   battleData,
 }: UseBattleActionsParams) => {
-  const [isMyTurn, setIsMyTurn] = useState(battleData?.inicialTurn == userId);
+  const [isMyTurn, setIsMyTurn] = useState(battleData?.inicialTurn === userId);
   const [timeLeft, setTimeLeft] = useState(TURN_DURATION / 1000);
   const db = getFirestore();
-  console.log('battleData?.inicialTurn', battleData?.inicialTurn);
+
+  useEffect(() => {
+    console.log('isMyTurn', isMyTurn);
+  }, [isMyTurn]);
+
+  useEffect(() => {
+    console.log(
+      'useBattleActions',
+      battleData?.inicialTurn,
+      userId,
+      battleData?.inicialTurn == userId,
+    );
+    setIsMyTurn(battleData?.inicialTurn == userId);
+  }, [userId, battleData?.inicialTurn]);
 
   // Función para cambiar el turno en Firestore
   const updateTurnInFirestore = async (nextTurnUserId: string) => {

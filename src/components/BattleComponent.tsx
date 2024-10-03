@@ -78,7 +78,7 @@ const BattleComponent = ({
       socketRef.current?.off('battle-ended');
     };
   }, [battleData?.roomId, userId]);
-  console.log(battleData);
+  console.log(battleData?.inicialTurn);
   // Usamos el hook personalizado para manejar las acciones de batalla
   const { handleAttack, isMyTurn, timeLeft } = useBattleActions({
     socket: socketRef.current,

@@ -5,7 +5,6 @@ import PrimaryOptionsOff from './Battle/PrimaryOptionsOff';
 import PrimaryOptionsOn from './Battle/PrimaryOptionsOn';
 import BodyContainer from './Battle/BodyContainer';
 import useBattleActions from '@/hooks/useBattleActions';
-//import useBattleActions from './useBattleActions';
 
 const TURN_DURATION = 50000; // Duración del turno en milisegundos (50 segundos)
 const WS =
@@ -49,6 +48,12 @@ const BattleComponent = ({
       setIsConnected(false);
     });
 
+    socketRef.current.on('turn-change', ({ turn }) => {
+      console.log('turn-change recibido:', turn);
+      // setIsMyTurn(turn === userId);
+      // setTimeLeft(TURN_DURATION / 1000);
+    });
+
     socketRef.current.on('battle-action', ({ idUser, action, bee, damage }) => {
       console.log(
         `Acción recibida de ${idUser}: ${action}, Daño causado: ${damage}`,
@@ -78,7 +83,7 @@ const BattleComponent = ({
       socketRef.current?.off('battle-ended');
     };
   }, [battleData?.roomId, userId]);
-  console.log(battleData?.inicialTurn);
+
   // Usamos el hook personalizado para manejar las acciones de batalla
   const { handleAttack, isMyTurn, timeLeft } = useBattleActions({
     socket: socketRef.current,
@@ -87,8 +92,6 @@ const BattleComponent = ({
     dataBee,
     battleData,
   });
-  console.log('isMyTurn--->', isMyTurn);
-  console.log('timeLeft--->', timeLeft);
 
   const dataUser1: any = battleData?.acceptances?.bee1[0]?.parts?.reduce(
     (acc: any, part: any) => {
@@ -104,11 +107,6 @@ const BattleComponent = ({
       return acc;
     },
     {},
-  );
-  console.log(
-    battleData?.inicialTurn == userId,
-    battleData?.inicialTurn,
-    userId,
   );
 
   return (
@@ -128,7 +126,7 @@ const BattleComponent = ({
                 ? 'Conectado a Socket.IO'
                 : 'Desconectado de Socket.IO'}
             </p>
-            {battleData?.inicialTurn == userId ? (
+            {isMyTurn ? (
               <PrimaryOptionsOn
                 dataBee={
                   battleData?.acceptances?.idUser1 === userId

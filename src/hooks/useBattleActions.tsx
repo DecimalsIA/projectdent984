@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { getFirestore, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { Socket } from 'socket.io-client';
 
 const TURN_DURATION = 50000; // Duración del turno en milisegundos (50 segundos)
@@ -18,12 +19,30 @@ const useBattleActions = ({
   dataBee,
   battleData,
 }: UseBattleActionsParams) => {
-  const [isMyTurn, setIsMyTurn] = useState(battleData?.inicialTurn == userId);
+  const [isMyTurn, setIsMyTurn] = useState(battleData?.inicialTurn === userId);
   const [timeLeft, setTimeLeft] = useState(TURN_DURATION / 1000);
+  const db = getFirestore();
 
-  console.log('userId', userId);
+  // Función para cambiar el turno en Firestore
+  const updateTurnInFirestore = async (nextTurnUserId: string) => {
+    if (roomId) {
+      const battleRef = doc(db, 'battleParticipants', roomId);
+      try {
+        // Actualiza el turno en Firestore
+        await updateDoc(battleRef, {
+          inicialTurn: nextTurnUserId,
+        });
+        console.log(
+          `El turno ha sido actualizado en Firestore a: ${nextTurnUserId}`,
+        );
+      } catch (error) {
+        console.error('Error al actualizar el turno en Firestore:', error);
+      }
+    }
+  };
+
   const handleAttack = useCallback(
-    (selectedAbility: any) => {
+    async (selectedAbility: any) => {
       console.log('handleAttack llamado');
       console.log('selectedAbility:', selectedAbility);
       console.log('roomId:', roomId);
@@ -44,6 +63,9 @@ const useBattleActions = ({
           battleData?.acceptances?.idUser1 === userId
             ? battleData?.acceptances?.idUser2
             : battleData?.acceptances?.idUser1;
+
+        // Cambiar turno en Firestore y luego emitir evento de turn-change
+        await updateTurnInFirestore(nextTurnUserId);
 
         socket.emit('turn-change', {
           roomId,

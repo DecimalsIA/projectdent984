@@ -114,7 +114,7 @@ const SelectArenaPage: React.FC = () => {
   };
   console.log('cardType', cardType);
   return (
-    <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4">
+    <div className="min-h-screen w-full bg-cover bg-center flex flex-col items-center justify-between p-4 mb-48">
       <CardPambii
         type={cardType}
         className="bg-gray-200 w-full text-black card-pambii-b flex items-center justify-center"

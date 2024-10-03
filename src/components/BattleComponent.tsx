@@ -30,6 +30,9 @@ const BattleComponent = ({
 
   useEffect(() => {
     setIsMyTurn(battleData?.inicialTurn === userId);
+    if (battleData?.roomId) {
+      setRoomId(battleData.roomId);
+    }
     // Inicializar socket solo una vez
     socketRef.current = io(WS);
 

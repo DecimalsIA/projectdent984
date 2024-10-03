@@ -13,7 +13,7 @@ const SelectArenaPage: React.FC = () => {
   const { roomId } = useParams();
   const userId = user?.id.toString() ?? '792924145';
 
-  const { getBattleByRoomId, battle, loading } = useGetBattleByRoomId();
+  const { subscribeToBattleByRoomId, battle, loading } = useGetBattleByRoomId();
   const idsals: any = roomId;
 
   // Estado para el turno inicial, los datos de la batalla y la conexión de Socket.IO
@@ -24,10 +24,10 @@ const SelectArenaPage: React.FC = () => {
     // Cuando el componente se monta o cuando roomId cambia, obtenemos la batalla
     console.log('data', userId, idsals, battleData);
     if (idsals) {
-      getBattleByRoomId(idsals);
+      subscribeToBattleByRoomId(idsals);
       setBattleData(battle);
     }
-  }, [getBattleByRoomId, battle, idsals]);
+  }, [subscribeToBattleByRoomId, battle, idsals]);
 
   if (loading) {
     return (

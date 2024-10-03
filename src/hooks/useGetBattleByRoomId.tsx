@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 
 interface Battle {
@@ -14,35 +14,52 @@ const useGetBattleByRoomId = () => {
   const [loading, setLoading] = useState(false);
   const [currentRoomId, setCurrentRoomId] = useState<string | null>(null); // Para almacenar el roomId actual
 
-  // Función que buscará la batalla en Firestore por roomId
-  const getBattleByRoomId = async (roomId: string): Promise<Battle | null> => {
-    // Verificar si ya se ha cargado una batalla para este roomId o si el roomId no ha cambiado
-    if (roomId === currentRoomId && battle) return battle;
+  // Función que suscribirá a la batalla en Firestore por roomId
+  const subscribeToBattleByRoomId = (roomId: string) => {
+    // Si el roomId no ha cambiado, no volver a suscribirse
+    if (roomId === currentRoomId) return;
 
     setLoading(true);
-    try {
-      // Crear una referencia al documento usando roomId como ID
-      const docRef = doc(db, 'battleParticipants', roomId);
-      const docSnap = await getDoc(docRef);
+    setCurrentRoomId(roomId); // Actualizar el roomId actual
 
-      if (docSnap.exists()) {
-        // Devolver y guardar la batalla encontrada
-        const battleDoc = docSnap.data() as Battle;
-        setBattle(battleDoc);
-        setCurrentRoomId(roomId); // Actualizar el roomId actual
-        return battleDoc;
-      } else {
-        return null; // No se encontró el documento con ese roomId
-      }
-    } catch (error) {
-      console.error('Error al obtener la batalla:', error);
-      return null;
-    } finally {
-      setLoading(false);
-    }
+    // Crear una referencia al documento usando roomId como ID
+    const docRef = doc(db, 'battleParticipants', roomId);
+
+    // Escuchar los cambios en tiempo real del documento
+    const unsubscribe = onSnapshot(
+      docRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          // Actualizar el estado de la batalla con los datos encontrados
+          const battleDoc = docSnap.data() as Battle;
+          setBattle(battleDoc);
+        } else {
+          // Si no existe el documento, establecer la batalla como null
+          setBattle(null);
+        }
+        setLoading(false); // Dejar de mostrar el estado de carga
+      },
+      (error) => {
+        console.error('Error al suscribirse a la batalla:', error);
+        setBattle(null);
+        setLoading(false);
+      },
+    );
+
+    // Retornar la función para cancelar la suscripción cuando cambie el roomId
+    return unsubscribe;
   };
 
-  return { getBattleByRoomId, battle, loading };
+  useEffect(() => {
+    // Limpiar la suscripción previa al cambiar el roomId
+    return () => {
+      if (currentRoomId) {
+        subscribeToBattleByRoomId(currentRoomId); // Cancelar suscripción anterior si es necesario
+      }
+    };
+  }, [currentRoomId]); // Efecto dependiente de cambios en currentRoomId
+
+  return { subscribeToBattleByRoomId, battle, loading };
 };
 
 export default useGetBattleByRoomId;

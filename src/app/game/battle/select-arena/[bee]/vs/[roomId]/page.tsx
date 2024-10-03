@@ -10,8 +10,9 @@ const WS =
   process.env.NEXT_PUBLIC_WS_URL || 'https://ws-server-pambii.onrender.com';
 const SelectArenaPage: React.FC = () => {
   const { user } = useTelegram();
-  const userId = user?.id.toString() ?? '792924145';
   const { roomId } = useParams();
+  const userId = user?.id.toString() ?? '792924145';
+
   const { getBattleByRoomId, battle, loading } = useGetBattleByRoomId();
   const idsals: any = roomId;
 
@@ -26,7 +27,7 @@ const SelectArenaPage: React.FC = () => {
       getBattleByRoomId(idsals);
       setBattleData(battle);
     }
-  }, [roomId, getBattleByRoomId]);
+  }, [getBattleByRoomId, battle, idsals]);
 
   if (loading) {
     return (

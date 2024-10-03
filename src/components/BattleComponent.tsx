@@ -4,6 +4,8 @@ import SelectBeeContainer from './Battle/SelectBeeContainer';
 import PrimaryOptionsOff from './Battle/PrimaryOptionsOff';
 import PrimaryOptionsOn from './Battle/PrimaryOptionsOn';
 import BodyContainer from './Battle/BodyContainer';
+import useBattleActions from '@/hooks/useBattleActions';
+//import useBattleActions from './useBattleActions';
 
 const TURN_DURATION = 50000; // Duración del turno en milisegundos (50 segundos)
 const WS =
@@ -16,8 +18,6 @@ const BattleComponent = ({
   userId: any;
   battleData: any;
 }) => {
-  const [isMyTurn, setIsMyTurn] = useState(battleData?.inicialTurn === userId);
-  const [timeLeft, setTimeLeft] = useState(TURN_DURATION / 1000);
   const [roomId, setRoomId] = useState<string | null>(null);
   const [dataBee, setDataBee] = useState<any>({});
   const [opponentBee, setOpponentBee] = useState<any>({});
@@ -28,8 +28,6 @@ const BattleComponent = ({
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    setIsMyTurn(battleData?.inicialTurn === userId);
-
     if (battleData?.roomId) {
       setRoomId(battleData.roomId);
     }
@@ -49,12 +47,6 @@ const BattleComponent = ({
     socketRef.current.on('connect_error', (error) => {
       console.error('Error al conectar con Socket.IO:', error);
       setIsConnected(false);
-    });
-
-    socketRef.current.on('turn-change', ({ turn }) => {
-      console.log('turn-change recibido:', turn);
-      setIsMyTurn(turn === userId);
-      setTimeLeft(TURN_DURATION / 1000);
     });
 
     socketRef.current.on('battle-action', ({ idUser, action, bee, damage }) => {
@@ -87,39 +79,14 @@ const BattleComponent = ({
     };
   }, [battleData?.roomId, userId]);
 
-  const handleAttack = (selectedAbility: any) => {
-    console.log('handleAttack llamado');
-    console.log('selectedAbility:', selectedAbility);
-    console.log('roomId:', roomId);
-    console.log('isMyTurn:', isMyTurn);
-
-    if (roomId && isMyTurn) {
-      console.log('Emitiendo battle-action y turn-change');
-
-      socketRef.current?.emit('battle-action', {
-        roomId,
-        action: 'attack',
-        idUser: userId,
-        bee: dataBee,
-        ability: selectedAbility,
-      });
-
-      const nextTurnUserId =
-        battleData?.acceptances?.idUser1 === userId
-          ? battleData?.acceptances?.idUser2
-          : battleData?.acceptances?.idUser1;
-
-      socketRef.current?.emit('turn-change', {
-        roomId,
-        turn: nextTurnUserId,
-      });
-
-      setTimeLeft(TURN_DURATION / 1000);
-      setIsMyTurn(false);
-    } else {
-      console.log('No se cumplen las condiciones para emitir eventos');
-    }
-  };
+  // Usamos el hook personalizado para manejar las acciones de batalla
+  const { handleAttack, isMyTurn, timeLeft } = useBattleActions({
+    socket: socketRef.current,
+    roomId,
+    userId,
+    dataBee,
+    battleData,
+  });
 
   const dataUser1: any = battleData?.acceptances?.bee1[0]?.parts?.reduce(
     (acc: any, part: any) => {

@@ -112,6 +112,21 @@ const BattleComponent = ({
     },
     {},
   );
+  // Para ejecutar un ataque y actualizar la barra de vida:
+  const onAttackMe = async (selectedAbility: any) => {
+    const opponentLife = await handleAttack(selectedAbility);
+    if (opponentLife !== null) {
+      // Aquí puedes actualizar la barra de progreso con `opponentLife`
+      setLife(
+        battleData.acceptances.idUser1 === userId
+          ? battleData.acceptances.lifeUser1
+          : battleData.acceptances.lifeUser2,
+      );
+
+      console.log(`La vida del oponente es ahora: ${opponentLife}`);
+      // Actualiza la barra de progreso en tu componente
+    }
+  };
 
   return (
     <div className="gamefot">
@@ -139,7 +154,7 @@ const BattleComponent = ({
                 }
                 life={life}
                 timeLeft={timeLeft}
-                onAttack={handleAttack}
+                onAttack={onAttackMe}
               />
             ) : (
               <PrimaryOptionsOff timeLeft={timeLeft} />

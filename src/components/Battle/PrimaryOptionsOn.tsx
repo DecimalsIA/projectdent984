@@ -31,6 +31,7 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
   const handleAttackClick = () => {
     if (selectedAbility) {
       onAttack(selectedAbility); // Llama a la función onAttack con la habilidad seleccionada
+      console.log('selectedAbility', selectedAbility);
     } else {
       console.log('No ability selected');
     }

@@ -105,6 +105,11 @@ const BattleComponent = ({
     },
     {},
   );
+  console.log(
+    battleData?.inicialTurn == userId,
+    battleData?.inicialTurn,
+    userId,
+  );
 
   return (
     <div className="gamefot">
@@ -123,7 +128,7 @@ const BattleComponent = ({
                 ? 'Conectado a Socket.IO'
                 : 'Desconectado de Socket.IO'}
             </p>
-            {isMyTurn ? (
+            {battleData?.inicialTurn == userId ? (
               <PrimaryOptionsOn
                 dataBee={
                   battleData?.acceptances?.idUser1 === userId

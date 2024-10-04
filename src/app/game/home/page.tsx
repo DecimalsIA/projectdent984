@@ -188,7 +188,7 @@ const Home = () => {
               <UserHome userName={`${user?.first_name} ${user?.last_name}`} />
               {slideData[currentSlide]?.power &&
               slideData[currentSlide].power.length > 0 ? (
-                <div className="flex  overflow-x-auto max-w-full min-w-[320px]">
+                <div className="flex  overflow-x-auto max-w-full min-w-[396px]">
                   <div className="flex flex-wrap space-x-1 gap-2 ">
                     {slideData[currentSlide].power.map((power, index) => (
                       <BadgePambii

@@ -23,6 +23,7 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
           <div className="text-center">
             {' '}
             <div className="name-battle">
+              +380HP
               <UserComponent userId2={userId2} />
             </div>
           </div>
@@ -46,6 +47,7 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
           <div className="center">
             {' '}
             <div className="name-battle">
+              +38HP
               <UserComponent userId2={userId1} />
             </div>
           </div>

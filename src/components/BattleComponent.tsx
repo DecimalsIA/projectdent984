@@ -21,19 +21,33 @@ const BattleComponent = ({
   const [dataBee, setDataBee] = useState<any>({});
   const [opponentBee, setOpponentBee] = useState<any>({});
   const [life, setLife] = useState(500);
-  const [opponentLife, setOpponentLife] = useState(500);
+  const [opponentLife, setOpponentLife] = useState(
+    battleData.acceptances.idUser1 === userId
+      ? battleData.lifeUser1
+      : battleData.lifeUser2,
+  );
   const [isConnected, setIsConnected] = useState(false);
 
   const socketRef = useRef<Socket | null>(null);
 
   // Usamos el hook personalizado para manejar las acciones de batalla
-  const { handleAttack, isMyTurn, timeLeft } = useBattleActions({
+  const { handleAttack, isMyTurn, timeLeft, battleOutcome } = useBattleActions({
     socket: socketRef.current,
     roomId,
     userId,
     dataBee,
     battleData,
   });
+
+  useEffect(() => {
+    if (battleOutcome === 'win') {
+      console.log('¡Ganaste la batalla!');
+      alert('¡Ganaste la batalla!');
+    } else if (battleOutcome === 'lose') {
+      console.log('Perdiste la batalla');
+      alert('Perdiste la batalla!');
+    }
+  }, [battleOutcome]);
 
   useEffect(() => {
     if (battleData?.roomId) {
@@ -57,30 +71,11 @@ const BattleComponent = ({
       setIsConnected(false);
     });
 
-    socketRef.current.on('turn-change', ({ turn }) => {
-      console.log('turn-change recibido:', turn);
-      // setIsMyTurn(turn === userId);
-      // setTimeLeft(TURN_DURATION / 1000);
-    });
-
-    socketRef.current.on('battle-action', ({ idUser, action, bee, damage }) => {
-      console.log(
-        `Acción recibida de ${idUser}: ${action}, Daño causado: ${damage}`,
-      );
-
-      if (idUser !== userId) {
-        setOpponentLife((prevLife) => Math.max(prevLife - damage, 0));
-        setOpponentBee(bee);
-      } else {
-        setLife((prevLife) => Math.max(prevLife - damage, 0));
-        setDataBee(bee);
-      }
-    });
-
-    socketRef.current.on('battle-ended', ({ winner, loser, message }) => {
-      console.log(message);
-      alert(`La batalla ha terminado. Ganador: ${winner}, Perdedor: ${loser}`);
-    });
+    setOpponentLife(
+      battleData.acceptances.idUser1 === userId
+        ? battleData.lifeUser1
+        : battleData.lifeUser2,
+    );
 
     return () => {
       socketRef.current?.disconnect();
@@ -91,7 +86,13 @@ const BattleComponent = ({
       socketRef.current?.off('battle-action');
       socketRef.current?.off('battle-ended');
     };
-  }, [battleData?.roomId, userId]);
+  }, [
+    battleData.acceptances.idUser1,
+    battleData.lifeUser1,
+    battleData.lifeUser2,
+    battleData.roomId,
+    userId,
+  ]);
 
   useEffect(() => {
     console.log('useEffect isMyTurn', isMyTurn);
@@ -117,10 +118,10 @@ const BattleComponent = ({
     const opponentLife = await handleAttack(selectedAbility);
     if (opponentLife !== null) {
       // Aquí puedes actualizar la barra de progreso con `opponentLife`
-      setLife(
+      setOpponentLife(
         battleData.acceptances.idUser1 === userId
-          ? battleData.acceptances.lifeUser1
-          : battleData.acceptances.lifeUser2,
+          ? battleData.lifeUser1
+          : battleData.lifeUser2,
       );
 
       console.log(`La vida del oponente es ahora: ${opponentLife}`);
@@ -128,6 +129,7 @@ const BattleComponent = ({
     }
   };
 
+  console.log('opponentLife', battleData.lifeUser1);
   return (
     <div className="gamefot">
       <BodyContainer />
@@ -152,12 +154,12 @@ const BattleComponent = ({
                     ? battleData?.acceptances?.bee1[0]
                     : battleData?.acceptances?.bee2[0]
                 }
-                life={life}
+                life={opponentLife}
                 timeLeft={timeLeft}
                 onAttack={onAttackMe}
               />
             ) : (
-              <PrimaryOptionsOff timeLeft={timeLeft} />
+              <PrimaryOptionsOff life={opponentLife} timeLeft={timeLeft} />
             )}
           </div>
         </>

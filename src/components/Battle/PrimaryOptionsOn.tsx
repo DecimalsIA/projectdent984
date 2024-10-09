@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { FunctionComponent, useState } from 'react';
 import styles from './PrimaryOptionsOn.module.css';
 import Image from 'next/image';
@@ -37,6 +38,7 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
     }
   };
   const lifePercentage = (life / 500) * 100;
+  console.log('lifePercentage----->', lifePercentage);
   return (
     <div className={styles.primaryoptions}>
       <div className={styles.beestats}>

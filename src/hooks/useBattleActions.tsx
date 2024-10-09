@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect } from 'react';
 import { getFirestore, doc, updateDoc } from 'firebase/firestore';
 import { Socket } from 'socket.io-client';
 
 const TURN_DURATION = 50000; // Duración del turno en milisegundos (50 segundos)
-const MAX_BEE_LIFE = 100; // Vida máxima de la abeja
+const MAX_BEE_LIFE = 500; // Vida máxima de la abeja
 
 interface UseBattleActionsParams {
   socket: Socket | null;
@@ -22,6 +23,9 @@ const useBattleActions = ({
 }: UseBattleActionsParams) => {
   const [isMyTurn, setIsMyTurn] = useState(battleData?.inicialTurn === userId);
   const [timeLeft, setTimeLeft] = useState(TURN_DURATION / 1000);
+  const [battleOutcome, setBattleOutcome] = useState<'win' | 'lose' | null>(
+    null,
+  );
   const db = getFirestore();
 
   useEffect(() => {
@@ -37,6 +41,38 @@ const useBattleActions = ({
     );
     setIsMyTurn(battleData?.inicialTurn == userId);
   }, [userId, battleData?.inicialTurn]);
+
+  // Comprobar si ha habido un ganador o un perdedor
+  useEffect(() => {
+    if (battleData) {
+      const isUser1 = battleData?.acceptances?.idUser1 === userId;
+      const myLife = isUser1 ? battleData.lifeUser1 : battleData.lifeUser2;
+      const opponentLife = isUser1
+        ? battleData.lifeUser2
+        : battleData.lifeUser1;
+
+      // Si la vida del oponente llega a 0, el jugador gana
+      if (opponentLife <= 0) {
+        setBattleOutcome('win');
+        updateWinnerOrLoserInFirestore(
+          userId,
+          isUser1
+            ? battleData?.acceptances?.idUser2
+            : battleData?.acceptances?.idUser1,
+        );
+      }
+      // Si la vida del jugador llega a 0, el jugador pierde
+      else if (myLife <= 0) {
+        setBattleOutcome('lose');
+        updateWinnerOrLoserInFirestore(
+          isUser1
+            ? battleData?.acceptances?.idUser2
+            : battleData?.acceptances?.idUser1,
+          userId,
+        );
+      }
+    }
+  }, [battleData, userId]);
 
   // Función para cambiar el turno en Firestore
   const updateTurnInFirestore = async (nextTurnUserId: string) => {
@@ -56,17 +92,26 @@ const useBattleActions = ({
     }
   };
 
-  // Función para actualizar el ganador en Firestore
-  const updateWinnerInFirestore = async (winnerId: string) => {
+  // Función para actualizar el ganador o el perdedor en Firestore
+  const updateWinnerOrLoserInFirestore = async (
+    winnerId: string,
+    loserId: string,
+  ) => {
     if (roomId) {
       const battleRef = doc(db, 'battleParticipants', roomId);
       try {
+        // Actualiza el ganador y el perdedor
         await updateDoc(battleRef, {
           winner: winnerId,
+          loser: loserId,
         });
         console.log(`El ganador ha sido registrado en Firestore: ${winnerId}`);
+        console.log(`El perdedor ha sido registrado en Firestore: ${loserId}`);
       } catch (error) {
-        console.error('Error al registrar el ganador en Firestore:', error);
+        console.error(
+          'Error al registrar el ganador o perdedor en Firestore:',
+          error,
+        );
       }
     }
   };
@@ -110,8 +155,67 @@ const useBattleActions = ({
             case 'Fireball':
               damage = 10 * 2.5;
               break;
-            // Agrega más habilidades aquí con su lógica
+            case 'Frenzy':
+              damage = 10 * 0.6 * 4; // 4 ataques consecutivos
+              break;
+            case 'Flying':
+              damage = 0; // Evita ataques cuerpo a cuerpo
+              break;
+            case 'Cover':
+              damage = 0; // Defensa activada
+              break;
+            case 'Distract':
+              damage = 0; // Cancela habilidades canalizadas
+              break;
+            case 'Wake up':
+              damage = 0; // Despierta del estado "dormido"
+              break;
+            case 'Reflection':
+              damage = 0; // Refleja el próximo ataque
+              break;
+            case 'Down to Earth':
+              damage = 0; // Paraliza al oponente
+              break;
+            case 'Jailwalk':
+              damage = beeLife * 0.2; // Pierde el 20% de la vida si intenta moverse
+              break;
+            case 'Freedom':
+              damage = 0; // Elimina todos los debuffs
+              break;
+            case 'See through':
+              damage = 10 * 2; // Ataca a través de las paredes
+              break;
+            case 'Drain':
+              damage = 10 * 1; // Daño normal y roba vida (20% de lo infligido)
+              break;
+            case 'Poison Dart':
+              damage = 10 * 1.5; // Envenena al oponente
+              break;
+            case 'Transform':
+              damage = 0; // Cambia el tipo de abeja
+              break;
+            case 'Charge':
+              damage = beeLife; // Carga ataque mortal (mata al oponente)
+              break;
+            case 'Burn':
+              damage = 10 * 2; // Aplica el estado quemado
+              break;
+            case 'Sting':
+              damage = 10 * 4; // Gran daño, pero se daña a sí mismo
+              break;
+            case 'Firewall':
+              damage = 0; // Levanta un muro de fuego, quema si se ataca
+              break;
+            case 'Tornado':
+              damage = 10 * 2; // Daño por tornado y confusión
+              break;
+            case 'Hammer':
+              damage = 10 * 6; // Gran daño después de cargar
+              break;
+            case 'Heal':
+              return beeLife + MAX_BEE_LIFE * 0.4; // Cura un 40% de la vida máxima
             default:
+              damage = 10;
               console.log('Habilidad no reconocida');
               break;
           }
@@ -122,13 +226,6 @@ const useBattleActions = ({
         let updatedOpponentLife = applySkill(selectedAbility, opponentLife);
 
         console.log('Vida restante del oponente:', updatedOpponentLife);
-
-        // Verificar si el oponente ha perdido
-        if (updatedOpponentLife <= 0) {
-          updatedOpponentLife = 0; // No permitir que la vida sea negativa
-          await updateWinnerInFirestore(userId);
-          console.log(`¡${userId} ha ganado la batalla!`);
-        }
 
         // Actualizar el campo `lifeUser1` o `lifeUser2` en Firestore
         const battleRef = doc(db, 'battleParticipants', roomId);
@@ -142,13 +239,6 @@ const useBattleActions = ({
         } catch (error) {
           console.error('Error al actualizar la vida en Firestore:', error);
         }
-
-        // Calcular el porcentaje de vida restante
-        const opponentLifePercentage =
-          (updatedOpponentLife / MAX_BEE_LIFE) * 100;
-        console.log(
-          `Porcentaje de vida del oponente: ${opponentLifePercentage}%`,
-        );
 
         // Cambiar turno
         const nextTurnUserId = isUser1
@@ -166,7 +256,10 @@ const useBattleActions = ({
         setIsMyTurn(false);
 
         // Retorna el porcentaje de vida restante del oponente para actualizar la barra de progreso
-        return opponentLifePercentage;
+        return {
+          result: 'continue',
+          opponentLifePercentage: (updatedOpponentLife / MAX_BEE_LIFE) * 100,
+        };
       } else {
         console.log('No se cumplen las condiciones para emitir eventos');
         return null;
@@ -175,7 +268,7 @@ const useBattleActions = ({
     [roomId, isMyTurn, socket, userId, dataBee, battleData],
   );
 
-  return { handleAttack, isMyTurn, timeLeft };
+  return { handleAttack, isMyTurn, timeLeft, battleOutcome };
 };
 
 export default useBattleActions;

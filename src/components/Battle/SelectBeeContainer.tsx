@@ -8,6 +8,10 @@ interface SelectBeeContainerProps {
   dataUser2: any; // Define the type for dataUser2 as needed
   userId2: any;
   userId1: any;
+  battleIfoUser1: any;
+  battleIfoUser2: any;
+  battleIfoUser1Number: any;
+  battleIfoUser2Number: any;
 }
 
 const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
@@ -15,6 +19,10 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
   dataUser2,
   userId1,
   userId2,
+  battleIfoUser1,
+  battleIfoUser2,
+  battleIfoUser1Number,
+  battleIfoUser2Number,
 }) => {
   return (
     <div className={styles.selectbeecontainer}>
@@ -23,7 +31,7 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
           <div className="text-center">
             {' '}
             <div className="name-battle">
-              +380HP
+              {battleIfoUser1Number !== 0 && battleIfoUser1Number}
               <UserComponent userId2={userId2} />
             </div>
           </div>
@@ -47,7 +55,7 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
           <div className="center">
             {' '}
             <div className="name-battle">
-              +38HP
+              {battleIfoUser2Number !== 0 && battleIfoUser2Number}
               <UserComponent userId2={userId1} />
             </div>
           </div>

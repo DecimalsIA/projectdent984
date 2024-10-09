@@ -27,6 +27,14 @@ const BattleComponent = ({
       : battleData.lifeUser2,
   );
   const [isConnected, setIsConnected] = useState(false);
+  const [battleResult, setBattleResult] = useState('');
+  const [battleResultTypeUser1, setBattleResultTypeUser1] = useState('');
+  const [battleResultTypeNumberUser1, setBattleResultTypeNumberUser1] =
+    useState(0);
+
+  const [battleResultTypeUser2, setBattleResultTypeUser2] = useState('');
+  const [battleResultTypeNumberUser2, setBattleResultTypeNumberUser2] =
+    useState(0);
 
   const socketRef = useRef<Socket | null>(null);
 
@@ -124,7 +132,32 @@ const BattleComponent = ({
           : battleData.lifeUser2,
       );
 
-      console.log(`La vida del oponente es ahora: ${opponentLife}`);
+      if (opponentLife?.result === 'attack') {
+        if (battleData.acceptances.idUser1 === userId) {
+          setBattleResultTypeUser1(opponentLife?.result);
+          setBattleResultTypeNumberUser1(opponentLife.value);
+        } else {
+          setBattleResultTypeUser2(opponentLife?.result);
+          setBattleResultTypeNumberUser2(opponentLife.value);
+        }
+
+        setBattleResult(
+          `Ataque realizado con un valor de daño de: ${opponentLife}`,
+        );
+      } else if (opponentLife?.result === 'defense') {
+        setBattleResult(
+          `Defensa activada, valor de defensa aplicado: ${opponentLife}`,
+        );
+        if (battleData.acceptances.idUser1 === userId) {
+          setBattleResultTypeUser1(opponentLife?.result);
+          setBattleResultTypeNumberUser1(opponentLife.value);
+        } else {
+          setBattleResultTypeUser2(opponentLife?.result);
+          setBattleResultTypeNumberUser2(opponentLife.value);
+        }
+      }
+
+      console.log(`La vida del oponente es ahora: ${opponentLife.value}`);
       // Actualiza la barra de progreso en tu componente
     }
   };
@@ -140,6 +173,10 @@ const BattleComponent = ({
             dataUser2={dataUser2}
             userId2={battleData?.acceptances?.idUser2}
             userId1={battleData?.acceptances?.idUser1}
+            battleIfoUser1={battleResultTypeUser1}
+            battleIfoUser2={battleResultTypeUser2}
+            battleIfoUser1Number={battleResultTypeNumberUser1}
+            battleIfoUser2Number={battleResultTypeNumberUser2}
           />
           <div className="foter-g">
             <p>

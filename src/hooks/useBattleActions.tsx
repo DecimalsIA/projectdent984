@@ -145,87 +145,120 @@ const useBattleActions = ({
         // Aplica la habilidad seleccionada
         const applySkill = (ability: any, beeLife: number) => {
           let damage = 0;
+          let type = ''; // attack o defense
+
           switch (ability.name) {
             case 'Attack':
               damage = 10;
+              type = 'attack';
               break;
             case 'Throw':
               damage = 10 * 0.9;
+              type = 'attack';
               break;
             case 'Fireball':
               damage = 10 * 2.5;
+              type = 'attack';
               break;
             case 'Frenzy':
               damage = 10 * 0.6 * 4; // 4 ataques consecutivos
+              type = 'attack';
               break;
             case 'Flying':
               damage = 0; // Evita ataques cuerpo a cuerpo
+              type = 'defense';
               break;
             case 'Cover':
               damage = 0; // Defensa activada
+              type = 'defense';
               break;
             case 'Distract':
               damage = 0; // Cancela habilidades canalizadas
+              type = 'defense';
               break;
             case 'Wake up':
               damage = 0; // Despierta del estado "dormido"
+              type = 'defense';
               break;
             case 'Reflection':
               damage = 0; // Refleja el próximo ataque
+              type = 'defense';
               break;
             case 'Down to Earth':
               damage = 0; // Paraliza al oponente
+              type = 'defense';
               break;
             case 'Jailwalk':
               damage = beeLife * 0.2; // Pierde el 20% de la vida si intenta moverse
+              type = 'attack';
               break;
             case 'Freedom':
               damage = 0; // Elimina todos los debuffs
+              type = 'defense';
               break;
             case 'See through':
               damage = 10 * 2; // Ataca a través de las paredes
+              type = 'attack';
               break;
             case 'Drain':
               damage = 10 * 1; // Daño normal y roba vida (20% de lo infligido)
+              type = 'attack';
               break;
             case 'Poison Dart':
               damage = 10 * 1.5; // Envenena al oponente
+              type = 'attack';
               break;
             case 'Transform':
               damage = 0; // Cambia el tipo de abeja
+              type = 'defense';
               break;
             case 'Charge':
               damage = beeLife; // Carga ataque mortal (mata al oponente)
+              type = 'attack';
               break;
             case 'Burn':
               damage = 10 * 2; // Aplica el estado quemado
+              type = 'attack';
               break;
             case 'Sting':
               damage = 10 * 4; // Gran daño, pero se daña a sí mismo
+              type = 'attack';
               break;
             case 'Firewall':
               damage = 0; // Levanta un muro de fuego, quema si se ataca
+              type = 'defense';
               break;
             case 'Tornado':
               damage = 10 * 2; // Daño por tornado y confusión
+              type = 'attack';
               break;
             case 'Hammer':
               damage = 10 * 6; // Gran daño después de cargar
+              type = 'attack';
               break;
             case 'Heal':
-              return beeLife + MAX_BEE_LIFE * 0.4; // Cura un 40% de la vida máxima
+              return {
+                type: 'defense',
+                value: MAX_BEE_LIFE * 0.4,
+                beeLife: beeLife + MAX_BEE_LIFE * 0.4,
+              }; // Cura un 40% de la vida máxima
             default:
               damage = 10;
+              type = 'attack';
               console.log('Habilidad no reconocida');
               break;
           }
-          return beeLife - damage;
+          return { type, value: damage, beeLife: beeLife - damage };
         };
 
-        // Calcular la nueva vida del oponente
-        let updatedOpponentLife = applySkill(selectedAbility, opponentLife);
+        // Aplicar la habilidad y obtener el resultado
+        const {
+          type,
+          value,
+          beeLife: updatedOpponentLife,
+        } = applySkill(selectedAbility, opponentLife);
 
-        console.log('Vida restante del oponente:', updatedOpponentLife);
+        console.log(`Resultado del ${type}:`, value);
 
         // Actualizar el campo `lifeUser1` o `lifeUser2` en Firestore
         const battleRef = doc(db, 'battleParticipants', roomId);
@@ -255,9 +288,10 @@ const useBattleActions = ({
         setTimeLeft(TURN_DURATION / 1000);
         setIsMyTurn(false);
 
-        // Retorna el porcentaje de vida restante del oponente para actualizar la barra de progreso
+        // Retornar el resultado del ataque o defensa
         return {
-          result: 'continue',
+          result: type,
+          value,
           opponentLifePercentage: (updatedOpponentLife / MAX_BEE_LIFE) * 100,
         };
       } else {

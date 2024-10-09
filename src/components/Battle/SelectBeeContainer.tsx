@@ -31,7 +31,9 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
           <div className="text-center">
             {' '}
             <div className="name-battle">
+              {battleIfoUser1 !== '' && battleIfoUser1}
               {battleIfoUser1Number !== 0 && battleIfoUser1Number}
+
               <UserComponent userId2={userId2} />
             </div>
           </div>
@@ -56,6 +58,7 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
             {' '}
             <div className="name-battle">
               {battleIfoUser2Number !== 0 && battleIfoUser2Number}
+              {battleIfoUser2 !== '' && battleIfoUser2}
               <UserComponent userId2={userId1} />
             </div>
           </div>

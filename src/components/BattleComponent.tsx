@@ -21,11 +21,7 @@ const BattleComponent = ({
   const [dataBee, setDataBee] = useState<any>({});
   const [opponentBee, setOpponentBee] = useState<any>({});
   const [life, setLife] = useState(500);
-  const [opponentLife, setOpponentLife] = useState(
-    battleData.acceptances.idUser1 === userId
-      ? battleData.lifeUser1
-      : battleData.lifeUser2,
-  );
+
   const [isConnected, setIsConnected] = useState(false);
   const [battleResult, setBattleResult] = useState('');
   const [battleResultTypeUser1, setBattleResultTypeUser1] = useState('');
@@ -46,7 +42,11 @@ const BattleComponent = ({
     dataBee,
     battleData,
   });
-
+  const [opponentLife, setOpponentLife] = useState(
+    battleData?.acceptances?.idUser1 === userId
+      ? battleData?.lifeUser1
+      : battleData?.lifeUser2,
+  );
   useEffect(() => {
     if (battleOutcome === 'win') {
       console.log('¡Ganaste la batalla!');
@@ -80,9 +80,9 @@ const BattleComponent = ({
     });
 
     setOpponentLife(
-      battleData.acceptances.idUser1 === userId
-        ? battleData.lifeUser1
-        : battleData.lifeUser2,
+      battleData?.acceptances?.idUser1 === userId
+        ? battleData?.lifeUser1
+        : battleData?.lifeUser2,
     );
 
     return () => {
@@ -95,10 +95,10 @@ const BattleComponent = ({
       socketRef.current?.off('battle-ended');
     };
   }, [
-    battleData.acceptances.idUser1,
-    battleData.lifeUser1,
-    battleData.lifeUser2,
-    battleData.roomId,
+    battleData?.acceptances?.idUser1,
+    battleData?.lifeUser1,
+    battleData?.lifeUser2,
+    battleData?.roomId,
     userId,
   ]);
 
@@ -127,18 +127,18 @@ const BattleComponent = ({
     if (opponentLife !== null) {
       // Aquí puedes actualizar la barra de progreso con `opponentLife`
       setOpponentLife(
-        battleData.acceptances.idUser1 === userId
-          ? battleData.lifeUser1
-          : battleData.lifeUser2,
+        battleData?.acceptances?.idUser1 === userId
+          ? battleData?.lifeUser1
+          : battleData?.lifeUser2,
       );
 
       if (opponentLife?.result === 'attack') {
-        if (battleData.acceptances.idUser1 === userId) {
+        if (battleData?.acceptances?.idUser1 === userId) {
           setBattleResultTypeUser1(opponentLife?.result);
-          setBattleResultTypeNumberUser1(opponentLife.value);
+          setBattleResultTypeNumberUser1(opponentLife?.value);
         } else {
           setBattleResultTypeUser2(opponentLife?.result);
-          setBattleResultTypeNumberUser2(opponentLife.value);
+          setBattleResultTypeNumberUser2(opponentLife?.value);
         }
 
         setBattleResult(
@@ -148,21 +148,28 @@ const BattleComponent = ({
         setBattleResult(
           `Defensa activada, valor de defensa aplicado: ${opponentLife}`,
         );
-        if (battleData.acceptances.idUser1 === userId) {
+        if (battleData?.acceptances?.idUser1 === userId) {
           setBattleResultTypeUser1(opponentLife?.result);
-          setBattleResultTypeNumberUser1(opponentLife.value);
+          setBattleResultTypeNumberUser1(opponentLife?.value);
         } else {
           setBattleResultTypeUser2(opponentLife?.result);
-          setBattleResultTypeNumberUser2(opponentLife.value);
+          setBattleResultTypeNumberUser2(opponentLife?.value);
         }
       }
 
-      console.log(`La vida del oponente es ahora: ${opponentLife.value}`);
+      console.log(`La vida del oponente es ahora: ${opponentLife?.value}`);
+
+      setTimeout(() => {
+        setBattleResultTypeUser1('');
+        setBattleResultTypeNumberUser1(0);
+        setBattleResultTypeUser2('');
+        setBattleResultTypeNumberUser2(0);
+      }, 800);
       // Actualiza la barra de progreso en tu componente
     }
   };
 
-  console.log('opponentLife', battleData.lifeUser1);
+  console.log('opponentLife', battleData?.lifeUser1);
   return (
     <div className="gamefot">
       <BodyContainer />

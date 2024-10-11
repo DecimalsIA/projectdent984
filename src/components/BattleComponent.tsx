@@ -19,8 +19,6 @@ const BattleComponent = ({
 }) => {
   const [roomId, setRoomId] = useState<string | null>(null);
   const [dataBee, setDataBee] = useState<any>({});
-  const [opponentBee, setOpponentBee] = useState<any>({});
-  const [life, setLife] = useState(500);
 
   const [isConnected, setIsConnected] = useState(false);
   const [battleResult, setBattleResult] = useState('');
@@ -164,7 +162,7 @@ const BattleComponent = ({
         setBattleResultTypeNumberUser1(0);
         setBattleResultTypeUser2('');
         setBattleResultTypeNumberUser2(0);
-      }, 800);
+      }, 1300);
       // Actualiza la barra de progreso en tu componente
     }
   };
@@ -184,13 +182,17 @@ const BattleComponent = ({
             battleIfoUser2={battleResultTypeUser2}
             battleIfoUser1Number={battleResultTypeNumberUser1}
             battleIfoUser2Number={battleResultTypeNumberUser2}
+            life1={
+              battleData?.acceptances?.idUser1 === userId &&
+              battleData?.lifeUser1
+            }
+            life2={
+              battleData?.acceptances?.idUser2 === userId
+                ? battleData?.lifeUser2
+                : battleData?.lifeUser2
+            }
           />
           <div className="foter-g">
-            <p>
-              {isConnected
-                ? 'Conectado a Socket.IO'
-                : 'Desconectado de Socket.IO'}
-            </p>
             {isMyTurn ? (
               <PrimaryOptionsOn
                 dataBee={
@@ -201,9 +203,22 @@ const BattleComponent = ({
                 life={opponentLife}
                 timeLeft={timeLeft}
                 onAttack={onAttackMe}
+                type={
+                  battleData?.acceptances?.idUser1 === userId
+                    ? battleResultTypeUser1 + '[]' + battleResultTypeUser1
+                    : battleResultTypeUser2 + '[]' + battleResultTypeUser2
+                }
               />
             ) : (
-              <PrimaryOptionsOff life={opponentLife} timeLeft={timeLeft} />
+              <PrimaryOptionsOff
+                life={opponentLife}
+                timeLeft={timeLeft}
+                type={
+                  battleData?.acceptances?.idUser1 === userId
+                    ? battleResultTypeUser1 + '' + battleResultTypeUser1
+                    : battleResultTypeUser2 + '' + battleResultTypeUser2
+                }
+              />
             )}
           </div>
         </>

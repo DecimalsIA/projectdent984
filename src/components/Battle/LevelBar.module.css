@@ -1,0 +1,86 @@
+.beeLife {
+  position: relative;
+  letter-spacing: 0.02em;
+  line-height: 100%;
+  text-transform: uppercase;
+}
+
+.levelindicator {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.start {
+  align-self: stretch;
+  width: 8px;
+  position: relative;
+  border-radius: 100px;
+}
+
+.progress {
+  border-radius: 2px;
+  height: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 190px;
+  background-size: 200% 100%;
+  animation: shimmer 1.9s infinite linear;
+  transition: width 0.5s ease-in-out;
+}
+
+.progressRed {
+  background: linear-gradient(90deg, #ff4d4d 25%, #ff4d4d 50%, #ffa8a8 75%);
+  animation: shimmer 1.9s infinite linear;
+  transition: width 0.5s ease-in-out;
+}
+
+.progressGreem {
+  background: linear-gradient(90deg, #52be97 25%, #52be97 50%, #a8ffda 75%);
+  animation: shimmer 1.9s infinite linear;
+  transition: width 0.5s ease-in-out;
+}
+
+.battle-bee-bar {
+  transform: scale(1) rotateY(180deg);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.progresbar {
+  align-self: stretch;
+  border-radius: 6px;
+  background-color: #4e4e4e;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.levelbar {
+  width: 170px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+  text-align: left;
+  font-size: 11px;
+  color: #fff;
+  font-family: Poppins;
+  margin-top: 20px;
+}

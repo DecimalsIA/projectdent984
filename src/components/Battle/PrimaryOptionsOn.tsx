@@ -8,6 +8,7 @@ interface PrimaryOptionsOnProps {
   dataBee: any; // Ajustar el tipo según sea necesario
   onAttack: (selectedAbility: any) => void; // Nueva prop para manejar el ataque
   life: any;
+  type: any;
 }
 
 const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
@@ -15,6 +16,7 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
   dataBee,
   onAttack,
   life,
+  type,
 }) => {
   interface Ability {
     id: number;
@@ -51,7 +53,9 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
               height={20}
               src="/assets/Bee.png"
             />
-            <div className={styles.beenametext}>{dataBee.title}</div>
+            <div className={styles.beenametext}>
+              {dataBee.title} {type}
+            </div>
           </div>
           <Image
             className={styles.boldNatureTravelBee}
@@ -104,7 +108,7 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
             <p>No data available</p>
           )}
         </div>
-        <div className={styles.levelbar}>
+        {/* <div className={styles.levelbar}>
           <div className={styles.levelindicator}>
             <b className={styles.beeLife}>BEE LIFE</b>
             <b className={styles.beeLife}>{life} - 500</b>
@@ -166,7 +170,7 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className={styles.buttonParent}>
           <div className={styles.button3}>
             <div className={styles.box6} />

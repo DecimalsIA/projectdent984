@@ -865,3 +865,7 @@ h2 {
   height: 33px !important;
   cursor: pointer;
 }
+
+.battle-bee-bar {
+  transform: scale(1) rotateY(180deg);
+}

@@ -149,19 +149,19 @@ const useBattleActions = ({
 
           switch (ability.name) {
             case 'Attack':
-              damage = 10;
+              damage = 50;
               type = 'attack';
               break;
             case 'Throw':
-              damage = 10 * 0.9;
+              damage = 50 * 0.9;
               type = 'attack';
               break;
             case 'Fireball':
-              damage = 10 * 2.5;
+              damage = 50 * 2.5;
               type = 'attack';
               break;
             case 'Frenzy':
-              damage = 10 * 0.6 * 4; // 4 ataques consecutivos
+              damage = 50 * 0.6 * 4; // 4 ataques consecutivos
               type = 'attack';
               break;
             case 'Flying':
@@ -197,15 +197,15 @@ const useBattleActions = ({
               type = 'defense';
               break;
             case 'See through':
-              damage = 10 * 2; // Ataca a través de las paredes
+              damage = 50 * 2; // Ataca a través de las paredes
               type = 'attack';
               break;
             case 'Drain':
-              damage = 10 * 1; // Daño normal y roba vida (20% de lo infligido)
+              damage = 50 * 1; // Daño normal y roba vida (20% de lo infligido)
               type = 'attack';
               break;
             case 'Poison Dart':
-              damage = 10 * 1.5; // Envenena al oponente
+              damage = 50 * 1.5; // Envenena al oponente
               type = 'attack';
               break;
             case 'Transform':
@@ -217,11 +217,11 @@ const useBattleActions = ({
               type = 'attack';
               break;
             case 'Burn':
-              damage = 10 * 2; // Aplica el estado quemado
+              damage = 50 * 2; // Aplica el estado quemado
               type = 'attack';
               break;
             case 'Sting':
-              damage = 10 * 4; // Gran daño, pero se daña a sí mismo
+              damage = 50 * 4; // Gran daño, pero se daña a sí mismo
               type = 'attack';
               break;
             case 'Firewall':
@@ -229,11 +229,11 @@ const useBattleActions = ({
               type = 'defense';
               break;
             case 'Tornado':
-              damage = 10 * 2; // Daño por tornado y confusión
+              damage = 50 * 2; // Daño por tornado y confusión
               type = 'attack';
               break;
             case 'Hammer':
-              damage = 10 * 6; // Gran daño después de cargar
+              damage = 50 * 6; // Gran daño después de cargar
               type = 'attack';
               break;
             case 'Heal':

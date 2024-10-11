@@ -5,11 +5,13 @@ import Image from 'next/image';
 interface PrimaryOptionsOffProps {
   timeLeft: number;
   life: number;
+  type: any;
 }
 
 const PrimaryOptionsOff: FunctionComponent<PrimaryOptionsOffProps> = ({
   timeLeft,
   life,
+  type,
 }) => {
   const lifePercentage = (life / 500) * 100;
   console.log('--->life', life);
@@ -25,10 +27,10 @@ const PrimaryOptionsOff: FunctionComponent<PrimaryOptionsOffProps> = ({
               height={20}
               src="/assets/Bee.png"
             />
-            <div className={styles.beenametext}>Opponent</div>
+            <div className={styles.beenametext}>Opponent | {type}</div>
           </div>
         </div>
-        <div className={styles.levelbar}>
+        {/*   <div className={styles.levelbar}>
           <div className={styles.levelindicator}>
             <b className={styles.beeLife}>BEE LIFE</b>
             <b className={styles.beeLife}>{life} - 500</b>
@@ -41,8 +43,8 @@ const PrimaryOptionsOff: FunctionComponent<PrimaryOptionsOffProps> = ({
               <div className={styles.start} />
               <div className={styles.start} />
             </div>
-          </div>
-        </div>
+          </div> 
+        </div>*/}
         <div className={styles.buttonParent}>
           <div className={styles.button}>
             <div className={styles.box} />

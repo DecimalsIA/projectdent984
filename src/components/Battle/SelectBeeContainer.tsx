@@ -2,6 +2,7 @@ import { FunctionComponent } from 'react';
 import styles from './SelectBeeContainer.module.css';
 import Bee from '../Bee';
 import UserComponent from '../UserComponent';
+import LevelBar from './LevelBar';
 
 interface SelectBeeContainerProps {
   dataUser1: any;
@@ -12,6 +13,8 @@ interface SelectBeeContainerProps {
   battleIfoUser2: any;
   battleIfoUser1Number: any;
   battleIfoUser2Number: any;
+  life1: any;
+  life2: any;
 }
 
 const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
@@ -23,6 +26,8 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
   battleIfoUser2,
   battleIfoUser1Number,
   battleIfoUser2Number,
+  life1,
+  life2,
 }) => {
   return (
     <div className={styles.selectbeecontainer}>
@@ -34,7 +39,11 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
               {battleIfoUser1 !== '' && battleIfoUser1}
               {battleIfoUser1Number !== 0 && battleIfoUser1Number}
 
-              <UserComponent userId2={userId2} />
+              <LevelBar
+                name={<UserComponent userId2={userId1} />}
+                init={life1}
+                life={life1}
+              />
             </div>
           </div>
           <div className="battle-bee h-56">
@@ -59,7 +68,13 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
             <div className="name-battle">
               {battleIfoUser2Number !== 0 && battleIfoUser2Number}
               {battleIfoUser2 !== '' && battleIfoUser2}
-              <UserComponent userId2={userId1} />
+
+              <LevelBar
+                name={<UserComponent userId2={userId2} />}
+                classe="battle-bee-bar"
+                init={life2}
+                life={life2}
+              />
             </div>
           </div>
           <div className="battle-bee-thow h-56">

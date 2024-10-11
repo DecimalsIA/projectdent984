@@ -204,8 +204,8 @@ const BattleComponent = ({
                 onAttack={onAttackMe}
                 type={
                   battleData?.acceptances?.idUser1 === userId
-                    ? battleResultTypeUser2 + '[]' + battleResultTypeUser2
-                    : battleResultTypeUser1 + '[]' + battleResultTypeUser1
+                    ? battleResultTypeUser1 + '[]' + battleResultTypeUser1
+                    : battleResultTypeUser2 + '[]' + battleResultTypeUser2
                 }
               />
             ) : (
@@ -214,8 +214,8 @@ const BattleComponent = ({
                 timeLeft={timeLeft}
                 type={
                   battleData?.acceptances?.idUser1 === userId
-                    ? battleResultTypeUser2 + '[]' + battleResultTypeUser2
-                    : battleResultTypeUser1 + '[]' + battleResultTypeUser1
+                    ? battleResultTypeUser1 + '[]' + battleResultTypeUser1
+                    : battleResultTypeUser2 + '[]' + battleResultTypeUser2
                 }
               />
             )}

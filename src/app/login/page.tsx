@@ -22,6 +22,7 @@ const Page: React.FC = () => {
   const connectionExists = usePhantomConnection(userId ?? '');
   const verifyBee = useVerifyBee(userId ?? '');
   console.log('isAuthenticated', isAuthenticated);
+  console.log('connectionExists', connectionExists);
   useEffect(() => {
     if (connectionExists) {
       login(); // Reemplazar setAuthenticated(true) con login()

@@ -168,7 +168,7 @@ const BattleComponent = ({
         setBattleResultTypeNumberUser1(0);
         setBattleResultTypeUser2('');
         setBattleResultTypeNumberUser2(0);
-      }, 1300);
+      }, 3500);
       // Actualiza la barra de progreso en tu componente
     }
   };
@@ -184,19 +184,12 @@ const BattleComponent = ({
             dataUser2={dataUser2}
             userId2={battleData?.acceptances?.idUser2}
             userId1={battleData?.acceptances?.idUser1}
-            battleIfoUser1={battleResultTypeUser1}
-            battleIfoUser2={battleResultTypeUser2}
-            battleIfoUser1Number={battleResultTypeNumberUser1}
-            battleIfoUser2Number={battleResultTypeNumberUser2}
-            life1={
-              battleData?.acceptances?.idUser1 === userId &&
-              battleData?.lifeUser1
-            }
-            life2={
-              battleData?.acceptances?.idUser2 === userId
-                ? battleData?.lifeUser2
-                : battleData?.lifeUser2
-            }
+            battleIfoUser1={battleResultTypeUser2}
+            battleIfoUser2={battleResultTypeUser1}
+            battleIfoUser1Number={battleResultTypeNumberUser2}
+            battleIfoUser2Number={battleResultTypeNumberUser1}
+            life1={battleData?.lifeUser1}
+            life2={battleData?.lifeUser2}
           />
           <div className="foter-g">
             {isMyTurn ? (
@@ -211,8 +204,8 @@ const BattleComponent = ({
                 onAttack={onAttackMe}
                 type={
                   battleData?.acceptances?.idUser1 === userId
-                    ? battleResultTypeUser1 + '[]' + battleResultTypeUser1
-                    : battleResultTypeUser2 + '[]' + battleResultTypeUser2
+                    ? battleResultTypeUser2 + '[]' + battleResultTypeUser2
+                    : battleResultTypeUser1 + '[]' + battleResultTypeUser1
                 }
               />
             ) : (
@@ -221,8 +214,8 @@ const BattleComponent = ({
                 timeLeft={timeLeft}
                 type={
                   battleData?.acceptances?.idUser1 === userId
-                    ? battleResultTypeUser1 + '' + battleResultTypeUser1
-                    : battleResultTypeUser2 + '' + battleResultTypeUser2
+                    ? battleResultTypeUser2 + '[]' + battleResultTypeUser2
+                    : battleResultTypeUser1 + '[]' + battleResultTypeUser1
                 }
               />
             )}

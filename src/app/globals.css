@@ -869,3 +869,19 @@ h2 {
 .battle-bee-bar {
   transform: scale(1) rotateY(180deg);
 }
+
+.typeAbi {
+  position: absolute;
+  font-size: 25px;
+  top: 80px;
+  z-index: 1;
+  font-weight: bold;
+}
+
+.defense {
+  color: cadetblue;
+}
+
+.attak {
+  color: red;
+}

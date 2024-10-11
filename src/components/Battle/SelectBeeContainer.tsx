@@ -33,12 +33,22 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
     <div className={styles.selectbeecontainer}>
       <div className="flex flex-row flex-nowrap w-full">
         <div>
+          <div className="typeAbi">
+            {' '}
+            <span
+              className={battleIfoUser1 === 'defense' ? 'defense' : 'attak'}
+            >
+              {battleIfoUser1 !== '' && battleIfoUser1}
+            </span>
+            <span
+              className={battleIfoUser1 === 'defense' ? 'defense' : 'attak'}
+            >
+              {battleIfoUser1Number !== 0 && '+ ' + battleIfoUser1Number}
+            </span>
+          </div>
           <div className="text-center">
             {' '}
             <div className="name-battle">
-              {battleIfoUser1 !== '' && battleIfoUser1}
-              {battleIfoUser1Number !== 0 && battleIfoUser1Number}
-
               <LevelBar
                 name={<UserComponent userId2={userId1} />}
                 init={life1}
@@ -63,12 +73,22 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
           </div>
         </div>
         <div>
+          <div className="typeAbi">
+            <span
+              className={battleIfoUser2 === 'defense' ? 'defense' : 'attak'}
+            >
+              {battleIfoUser2 !== '' && battleIfoUser2}
+            </span>
+
+            <span
+              className={battleIfoUser2 === 'defense' ? 'defense' : 'attak'}
+            >
+              {battleIfoUser2Number !== 0 && '+ ' + battleIfoUser2Number}
+            </span>
+          </div>
           <div className="center">
             {' '}
             <div className="name-battle">
-              {battleIfoUser2Number !== 0 && battleIfoUser2Number}
-              {battleIfoUser2 !== '' && battleIfoUser2}
-
               <LevelBar
                 name={<UserComponent userId2={userId2} />}
                 classe="battle-bee-bar"

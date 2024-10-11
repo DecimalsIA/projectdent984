@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 const SelectBeeWinner: FunctionComponent = () => {
   const router = useRouter();
   const gotoHome = () => {
-router.push('/game/home');
+    router.push('/game/home');
   };
   return (
     <div className={styles.selectbeecontainer}>
@@ -17,7 +17,7 @@ router.push('/game/home');
         width={20}
         height={20}
         alt=""
-        src="/assets/attack.svg"
+        src="/assets/wins.svg"
       />
       <div className={styles.text}>PAMBII WIN: 50</div>
       <div className={styles.text}>

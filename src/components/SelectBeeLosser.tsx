@@ -17,9 +17,9 @@ const SelectBeeLosser: FunctionComponent = () => {
         width={20}
         height={20}
         alt=""
-        src="/assets/attack.svg"
+        src="/assets/loss.svg"
       />{' '}
-      <div className={styles.text}>PAMBII WIN: 50</div>);
+      <div className={styles.text}>PAMBII LOSS: 50</div>);
       <div className={styles.text}>
         Dont worry, when you lose, you can create a better strategy to beat your
         opponents.

@@ -52,11 +52,11 @@ const BattleComponent = ({
   useEffect(() => {
     if (battleOutcome === 'win') {
       console.log('¡Ganaste la batalla!');
-      alert('¡Ganaste la batalla!');
+      console.log('¡Ganaste la batalla!');
       setIsWinner(true);
     } else if (battleOutcome === 'lose') {
       console.log('Perdiste la batalla');
-      alert('Perdiste la batalla!');
+      console.log('Perdiste la batalla!');
       setIsLosser(true);
     }
   }, [battleOutcome]);

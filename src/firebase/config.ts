@@ -14,7 +14,7 @@ const app = initializeApp(firebaseConfig);
 
 // Inicializar Firestore con persistencia habilitada
 const db = initializeFirestore(app, {
-  localCache: persistentLocalCache(), // Habilita la persistencia local
+  // localCache: persistentLocalCache(), // Habilita la persistencia local
 });
 
 export { db };

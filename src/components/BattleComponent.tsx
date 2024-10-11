@@ -5,6 +5,8 @@ import PrimaryOptionsOff from './Battle/PrimaryOptionsOff';
 import PrimaryOptionsOn from './Battle/PrimaryOptionsOn';
 import BodyContainer from './Battle/BodyContainer';
 import useBattleActions from '@/hooks/useBattleActions';
+import SelectBeeWinner from './SelectBeeWinner';
+import SelectBeeLosser from './SelectBeeLosser';
 
 const TURN_DURATION = 50000; // Duración del turno en milisegundos (50 segundos)
 const WS =
@@ -21,6 +23,8 @@ const BattleComponent = ({
   const [dataBee, setDataBee] = useState<any>({});
 
   const [isConnected, setIsConnected] = useState(false);
+  const [isWinner, setIsWinner] = useState(false);
+  const [isLosser, setIsLosser] = useState(false);
   const [battleResult, setBattleResult] = useState('');
   const [battleResultTypeUser1, setBattleResultTypeUser1] = useState('');
   const [battleResultTypeNumberUser1, setBattleResultTypeNumberUser1] =
@@ -49,9 +53,11 @@ const BattleComponent = ({
     if (battleOutcome === 'win') {
       console.log('¡Ganaste la batalla!');
       alert('¡Ganaste la batalla!');
+      setIsWinner(true);
     } else if (battleOutcome === 'lose') {
       console.log('Perdiste la batalla');
       alert('Perdiste la batalla!');
+      setIsLosser(true);
     }
   }, [battleOutcome]);
 
@@ -168,7 +174,7 @@ const BattleComponent = ({
   };
 
   console.log('opponentLife', battleData?.lifeUser1);
-  return (
+  return !isWinner && !isLosser ? (
     <div className="gamefot">
       <BodyContainer />
       {battleData && (
@@ -224,6 +230,11 @@ const BattleComponent = ({
         </>
       )}
     </div>
+  ) : (
+    <>
+      {isWinner && <SelectBeeWinner />}
+      {isLosser && <SelectBeeLosser />}
+    </>
   );
 };
 

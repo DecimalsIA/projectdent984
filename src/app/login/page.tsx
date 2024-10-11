@@ -12,7 +12,7 @@ import useVerifyBee from '@/hooks/useVerifyBee';
 
 const Page: React.FC = () => {
   const { user: tgUser } = useTelegram();
-  const { setAuthenticated } = useAuth();
+  const { isAuthenticated, login, logout } = useAuth();
   const router = useRouter();
 
   // Verificar si tgUser está definido y tiene un id antes de continuar
@@ -21,17 +21,19 @@ const Page: React.FC = () => {
   // Solo llama a usePhantomConnection si userId está disponible
   const connectionExists = usePhantomConnection(userId ?? '');
   const verifyBee = useVerifyBee(userId ?? '');
-
+  console.log('isAuthenticated', isAuthenticated);
   useEffect(() => {
     if (connectionExists) {
-      setAuthenticated(true);
+      login(); // Reemplazar setAuthenticated(true) con login()
       if (verifyBee) {
         router.push('/game/home');
       } else {
         router.push('/bee');
       }
+    } else {
+      logout(); // Llamar a logout si no hay conexión
     }
-  }, [connectionExists, router, setAuthenticated, verifyBee]);
+  }, [connectionExists, router, login, logout, verifyBee]);
 
   // Mientras se verifica la existencia de tgUser y su id, se puede mostrar un indicador de carga
   if (!userId) {

@@ -21,8 +21,6 @@ const ConnectWallet: React.FC<PageProps> = ({ idUserTelegram }) => {
   const { user: tgUser } = useTelegram();
   const { url } = usePhantomConnect(idUserTelegram);
   const [user, setUser] = useState<User | null>(null);
-  console.log(idUserTelegram);
-  console.log('url', url);
 
   useEffect(() => {
     if (tgUser) {

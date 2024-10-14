@@ -19,8 +19,7 @@ const htmlContent = `
       <title>Página Renderizada</title>
     </head>
     <body>
-      <h1>¡Hola, este es un HTML renderizado desde Next.js!</h1>
-      <p>Este contenido se genera utilizando NextRequest y NextResponse.</p>
+      <h1>¡Hola, Ve a telegram!</h1>
     </body>
     </html>
   `;
@@ -122,7 +121,7 @@ export async function GET(request: NextRequest) {
 
     if (decodedPayload.signature) {
 
-      if (fromTrn === 'buyBee' || fromTrn === null) {
+      if (fromTrn === 'buyBee') {
         const genBee = await createBeeParts(userId, decodedPayload.signature);
         console.log('genBee', genBee)
 

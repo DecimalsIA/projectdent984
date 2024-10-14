@@ -72,7 +72,7 @@ export async function POST(request: Request) {
       updateAt: new Date().getTime()
     };
 
-    // Guardar el slot en Firestore en la colección `slots`
+    // Guardar el slot en Firestore en la colección `slots` //
     await setDoc(doc(db, 'slots', slotId), slot);
 
     // Determinar el tipo de la abeja basado en la mayoría de los tipos de las partes
@@ -104,6 +104,7 @@ export async function POST(request: Request) {
     await setDoc(doc(db, 'BEES', beeId), bee);
 
     // Consultar el documento del usuario donde el campo `idUser` coincida con `userId`
+
     const usersRef = collection(db, 'USERS');
     const q = query(usersRef, where('idUser', '==', userId));
     const querySnapshot = await getDocs(q);

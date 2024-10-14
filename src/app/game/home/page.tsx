@@ -183,12 +183,12 @@ const Home = () => {
             />
           )}
           <div>
-            <CardPambii className="beeCard w-full mt-2 min-w-[381px] ">
+            <CardPambii className="beeCard w-full mt-2">
               {isModalOpen && <ModalPambii className="p-4" data={modalData} />}
               <UserHome userName={`${user?.first_name} ${user?.last_name}`} />
               {slideData[currentSlide]?.power &&
               slideData[currentSlide].power.length > 0 ? (
-                <div className="flex  overflow-x-auto max-w-full min-w-[396px]">
+                <div className="flex  overflow-x-auto max-w-full">
                   <div className="flex flex-wrap space-x-1 gap-2 ">
                     {slideData[currentSlide].power.map((power, index) => (
                       <BadgePambii

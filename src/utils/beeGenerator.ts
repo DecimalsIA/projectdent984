@@ -106,7 +106,7 @@ export const collectPowers = (parts: BeePiece[]): Power[] => {
 };
 export const collectStats = (parts: BeePiece[]): Record<StatName, number> => {
   const initialStats: Record<StatName, number> = {
-    Health: 0,
+    Health: 300,
     Speed: 0,
     Attack: 0,
     Defense: 0,

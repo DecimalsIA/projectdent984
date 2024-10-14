@@ -14981,10 +14981,10 @@ pako@^2.0.3:
   resolved "https://registry.npmjs.org/pako/-/pako-2.1.0.tgz"
   integrity sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==
 
-pambii-devtrader-front@^1.0.43:
-  version "1.0.43"
-  resolved "https://registry.npmjs.org/pambii-devtrader-front/-/pambii-devtrader-front-1.0.43.tgz"
-  integrity sha512-/l0i5vINovvA9qjTlMOHedQ6DnLx1cKZoa2rde6R+sQN7QHT+WBLRcGKzholbkRbBwtGMYEqiaYaT5u59CyTng==
+pambii-devtrader-front@^1.0.44:
+  version "1.0.44"
+  resolved "https://registry.yarnpkg.com/pambii-devtrader-front/-/pambii-devtrader-front-1.0.44.tgz#9651ae5fdc73198dd540d0bcf971ef48fc4fee08"
+  integrity sha512-VEwuyCEXa+7W3qWPgud6ALnZ8R0evGDWZGA6qoAz58xXwR9h0q2ab1T+lKCm8fmR4zwSB/RNJf/mfnWJF6Btwg==
   dependencies:
     "@pixi/react" "^7.1.2"
     "@testing-library/jest-dom" "^5.17.0"

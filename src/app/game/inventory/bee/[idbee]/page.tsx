@@ -61,6 +61,8 @@ const SpecialMarketPage: React.FC = () => {
         type="text"
         id="textInput"
         value={inputValue}
+        maxLength={10}
+        minLength={4}
         onChange={handleChange}
         className="w-full inpurModal"
         ref={inputRef}

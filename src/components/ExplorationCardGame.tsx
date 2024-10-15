@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import styles from './ExplorationCard.module.css';
 import Countdown from './Countdown';
-import TransactionComponent from './TransactionComponent';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -32,11 +31,11 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
   useEffect(() => {
     // Asegúrate de que timeLock tenga un valor válido antes de hacer la comparación
     if (timeLock) {
-      const endp: Date = new Date();
-      const timeLockDate: Date = new Date(timeLock);
+      const endp: any = new Date();
+      //  const timeLockDate= timeLock - endp < 0 ? true : false;
 
       // Actualizamos el estado basado en la comparación
-      const isTimeReached = timeLockDate.getTime() - endp.getTime() < 0;
+      const isTimeReached = timeLock - endp < 0 ? true : false;
       setStatePay(isTimeReached);
 
       console.log('TimeLock:', timeLock);

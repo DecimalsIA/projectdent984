@@ -196,13 +196,20 @@ export default function MatchmakingComponent({
       socketRef.current.emit('accept-match', newMatchData);
     } // start-battle
   };
-
+  const cancelBattle = async () => {
+    if (retryIntervalRef.current) clearInterval(retryIntervalRef.current); //
+    console.log('DIDID');
+    setIsMatching(false);
+    socketRef.current.emit('cancel-match');
+  };
   // Rechazar el match
   const handleReject = () => {
+    if (retryIntervalRef.current) clearInterval(retryIntervalRef.current); //
     setRejectionCount((prevCount) => prevCount + 1);
     if (rejectionCount >= 1 && socketRef.current) {
       setIsMatching(false);
       socketRef.current.emit('cancel-match');
+      handleSendRequest();
     } else if (socketRef.current) {
       socketRef.current.emit('find-match', {
         idUser,
@@ -260,7 +267,9 @@ export default function MatchmakingComponent({
                   alt=""
                   src="/assets/bee-characters/icons/decline.svg"
                 />
-                <div className={styles.label}>CANCEL BATTLE</div>
+                <button className={styles.label} onClick={cancelBattle}>
+                  CANCEL BATTLE
+                </button>
               </div>
             </div>
           </div>
@@ -383,7 +392,7 @@ export default function MatchmakingComponent({
         </div>
       ) : (
         <div className={styles.name}>
-          <button onClick={handleSendRequest}>Start Matchmaking</button>
+          <button onClick={handleSendRequest}>Buscar Oponente</button>
         </div>
       )}
     </div>

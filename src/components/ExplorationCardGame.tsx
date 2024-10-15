@@ -4,6 +4,7 @@ import Countdown from './Countdown';
 import TransactionComponent from './TransactionComponent';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 interface ExplorationCardGameProps {
   dificultad: string;
   bee: string;
@@ -23,11 +24,27 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
   timeLock,
   updateAt,
 }) => {
+  const [statePay, setStatePay] = useState(false);
   const router = useRouter();
   console.log(timeLock);
   const endp: any = new Date();
-  const statePay = timeLock - endp < 0 ? true : false;
-  console.log(statePay);
+
+  useEffect(() => {
+    // Asegúrate de que timeLock tenga un valor válido antes de hacer la comparación
+    if (timeLock) {
+      const endp: Date = new Date();
+      const timeLockDate: Date = new Date(timeLock);
+
+      // Actualizamos el estado basado en la comparación
+      const isTimeReached = timeLockDate.getTime() - endp.getTime() < 0;
+      setStatePay(isTimeReached);
+
+      console.log('TimeLock:', timeLock);
+      console.log('End time:', endp);
+      console.log('StatePay:', isTimeReached);
+    }
+  }, [timeLock]);
+  //console.log(statePay);
 
   return (
     <div className={styles.explorationcard}>

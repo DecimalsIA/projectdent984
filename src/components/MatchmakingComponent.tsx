@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
@@ -219,6 +220,23 @@ export default function MatchmakingComponent({
       });
     }
   };
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      cancelBattle();
+      return; // Detenemos el efecto si el tiempo se ha acabado
+    }
+
+    // Creamos un intervalo que se ejecuta cada segundo (1000 ms)
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => prevTime - 1000);
+    }, 1000);
+
+    // Limpiamos el intervalo cuando el componente se desmonta o si se acaba el tiempo
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  const minutes = Math.floor(timeLeft / 60000);
+  const seconds = Math.floor((timeLeft % 60000) / 1000);
 
   // Temporizador para el matchmaking
   useEffect(() => {
@@ -233,9 +251,6 @@ export default function MatchmakingComponent({
       clearInterval(timer);
     };
   }, [isMatching]);
-
-  const minutes = Math.floor(timeLeft / 60000);
-  const seconds = Math.floor((timeLeft % 60000) / 1000);
 
   return (
     <div className={styles.matchmakingContainer}>

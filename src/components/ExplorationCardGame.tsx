@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Image from 'next/image';
 import styles from './ExplorationCard.module.css';
 import Countdown from './Countdown';
+import TransactionComponent from './TransactionComponent';
 import { ButtonPambii } from 'pambii-devtrader-front';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -23,27 +25,19 @@ const ExplorationCardGame: React.FC<ExplorationCardGameProps> = ({
   timeLock,
   updateAt,
 }) => {
-  const [statePay, setStatePay] = useState(false);
   const router = useRouter();
-  console.log(timeLock);
-  const endp: any = new Date();
-
+  const [statePay, setStatePay] = useState(false);
   useEffect(() => {
-    // Asegúrate de que timeLock tenga un valor válido antes de hacer la comparación
-    if (timeLock) {
-      const endp: any = new Date();
-      //  const timeLockDate= timeLock - endp < 0 ? true : false;
+    const endp: any = new Date();
+    const isTimeReached = timeLock - endp < 0 ? true : false;
+    setStatePay(isTimeReached);
+    console.log('TimeLock:', timeLock);
+    console.log('End time:', endp);
+    console.log('StatePay:', isTimeReached);
+  }, []);
 
-      // Actualizamos el estado basado en la comparación
-      const isTimeReached = timeLock - endp < 0 ? true : false;
-      setStatePay(isTimeReached);
-
-      console.log('TimeLock:', timeLock);
-      console.log('End time:', endp);
-      console.log('StatePay:', isTimeReached);
-    }
-  }, [timeLock]);
-  //console.log(statePay);
+  // const statePay = timeLock - endp < 0 ? true : false;
+  // console.log(statePay);
 
   return (
     <div className={styles.explorationcard}>

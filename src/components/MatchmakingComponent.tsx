@@ -407,7 +407,7 @@ export default function MatchmakingComponent({
         </div>
       ) : (
         <div className={styles.name}>
-          <button onClick={handleSendRequest}>Buscar Oponente</button>
+          <button onClick={handleSendRequest}>Search Opponent</button>
         </div>
       )}
     </div>

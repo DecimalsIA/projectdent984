@@ -880,8 +880,28 @@ h2 {
 
 .defense {
   color: cadetblue;
+  font-weight: bold;
+
+  text-shadow:
+    -1px -1px 0 #1f1e1e,
+    /* Sombra hacia la esquina superior izquierda */
+    1px -1px 0 #1f1e1e,
+    /* Sombra hacia la esquina superior derecha */
+    -1px 1px 0 #1f1e1e,
+    /* Sombra hacia la esquina inferior izquierda */
+    1px 1px 0 #1f1e1e;
+  /* Sombra hacia la esquina inferior derecha */
 }
 
 .attak {
   color: red;
+  text-shadow:
+    -1px -1px 0 #1f1e1e,
+    /* Sombra hacia la esquina superior izquierda */
+    1px -1px 0 #1f1e1e,
+    /* Sombra hacia la esquina superior derecha */
+    -1px 1px 0 #1f1e1e,
+    /* Sombra hacia la esquina inferior izquierda */
+    1px 1px 0 #1f1e1e;
+  /* Sombra hacia la esquina inferior derecha */
 }

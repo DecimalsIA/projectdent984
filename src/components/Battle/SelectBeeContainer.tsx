@@ -77,13 +77,13 @@ const SelectBeeContainer: FunctionComponent<SelectBeeContainerProps> = ({
             <span
               className={battleIfoUser2 === 'defense' ? 'defense' : 'attak'}
             >
-              {battleIfoUser2 !== '' && battleIfoUser2}
+              {battleIfoUser2 !== '+ ' && battleIfoUser2}
             </span>
 
             <span
               className={battleIfoUser2 === 'defense' ? 'defense' : 'attak'}
             >
-              {battleIfoUser2Number !== 0 && '+ ' + battleIfoUser2Number}
+              {battleIfoUser2Number !== 0 && '- ' + battleIfoUser2Number}
             </span>
           </div>
           <div className="center">

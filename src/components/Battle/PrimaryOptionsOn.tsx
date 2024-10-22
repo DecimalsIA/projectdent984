@@ -39,7 +39,7 @@ const PrimaryOptionsOn: FunctionComponent<PrimaryOptionsOnProps> = ({
       console.log('No ability selected');
     }
   };
-  const lifePercentage = (life / 500) * 100;
+  const lifePercentage = (life / 200) * 100;
   console.log('lifePercentage----->', lifePercentage);
   return (
     <div className={styles.primaryoptions}>

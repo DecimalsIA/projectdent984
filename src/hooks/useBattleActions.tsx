@@ -4,7 +4,7 @@ import { getFirestore, doc, updateDoc } from 'firebase/firestore';
 import { Socket } from 'socket.io-client';
 
 const TURN_DURATION = 50000; // Duración del turno en milisegundos (50 segundos)
-const MAX_BEE_LIFE = 500; // Vida máxima de la abeja
+const MAX_BEE_LIFE = 200; // Vida máxima de la abeja
 
 interface UseBattleActionsParams {
   socket: Socket | null;

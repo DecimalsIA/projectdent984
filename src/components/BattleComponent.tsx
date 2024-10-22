@@ -125,6 +125,7 @@ const BattleComponent = ({
     },
     {},
   );
+
   // Para ejecutar un ataque y actualizar la barra de vida:
   const onAttackMe = async (selectedAbility: any) => {
     const opponentLife = await handleAttack(selectedAbility);
@@ -174,6 +175,8 @@ const BattleComponent = ({
   };
 
   console.log('opponentLife', battleData?.lifeUser1);
+  console.log('dataUser1', battleData);
+  console.log('dataUser2', dataUser2);
   return !isWinner && !isLosser ? (
     <div className="gamefot">
       <BodyContainer />

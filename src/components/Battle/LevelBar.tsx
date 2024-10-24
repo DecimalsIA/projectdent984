@@ -17,7 +17,7 @@ const LevelBar: FunctionComponent<LevelBarProps> = ({
   const lifePercentage = (life / 200) * 100;
   console.log('life', life);
   const progressBarColor =
-    lifePercentage < 51 ? styles.progressRed : styles.progressGreem;
+    lifePercentage < 50 ? styles.progressRed : styles.progressGreem;
   console.log('progressBarColor', progressBarColor);
   return (
     <div className={`${styles.levelbar}`}>

@@ -14,7 +14,7 @@ const useGetBattleByRoomId = () => {
   const [battle, setBattle] = useState<Battle | null>(null); // Almacena la batalla recuperada
   const [loading, setLoading] = useState(false);
   const [currentRoomId, setCurrentRoomId] = useState<string | null>(null); // Para almacenar el roomId actual
-
+  
   // Función que suscribirá a la batalla en Firestore por roomId
   const subscribeToBattleByRoomId = (roomId: string) => {
     // Si el roomId no ha cambiado, no volver a suscribirse

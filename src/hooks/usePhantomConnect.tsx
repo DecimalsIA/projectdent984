@@ -35,7 +35,7 @@ const usePhantomConnect = (userId: string) => {
 
         const appUrl = 'https://pambii-front.vercel.app'; // URL de tu aplicación
         const redirectLink = `https://pambii-front.vercel.app/api/phantom-redirect?userId=${userId}`; // Añadir la dirección de la billetera a la URL de redirección
-        const cluster = 'devnet'; // o 'testnet', 'devnet'
+        const cluster = 'mainnet'; // o 'testnet', 'mainnet'
 
         const publicKey = bs58.encode(dappKeyPair.publicKey);
 

@@ -1,7 +1,7 @@
 import { clusterApiUrl, Connection, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import { getDocumentByUserId } from "../getDocumentByUserId";
 
-const NETWORK = clusterApiUrl("devnet");
+const NETWORK = clusterApiUrl("mainnet");
 
 export interface TransferParams {
   fromPubkey?: PublicKey;

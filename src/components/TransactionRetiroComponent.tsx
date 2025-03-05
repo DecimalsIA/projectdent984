@@ -40,7 +40,7 @@ const TransactionRetiroComponent: React.FC<ExplorationCardGameProps> = ({
   // Este useEffect solo se ejecutará una vez cuando el componente se monte
   useEffect(() => {
     const createTransaction = async () => {
-      const connection = new Connection('https://api.devnet.solana.com');
+      const connection = new Connection('https://api.mainnet.solana.com');
       const programId = new PublicKey(
         '3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe',
       ); // Program ID del contrato

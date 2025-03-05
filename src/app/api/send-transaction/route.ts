@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Connection, Transaction } from '@solana/web3.js';
 
-const SOLANA_NETWORK = 'https://api.devnet.solana.com';
+const SOLANA_NETWORK = 'https://api.mainnet.solana.com';
 const connection = new Connection(SOLANA_NETWORK);
 
 export async function POST(request: Request) {

@@ -8,9 +8,9 @@ import {
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { buildBuyInstruction } from '@/instructions/buyInstruction';
 
-// Configuración de la red Solana Devnet
-const network = 'https://api.devnet.solana.com';
-const connection = new Connection(clusterApiUrl('devnet'));
+// Configuración de la red Solana mainnet
+const network = 'https://api.mainnet.solana.com';
+const connection = new Connection(clusterApiUrl('mainnet'));
 
 
 // Función para construir una transacción basada en el tipo de operación

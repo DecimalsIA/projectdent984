@@ -2,7 +2,7 @@ import { Connection, PublicKey, Transaction, TransactionInstruction, clusterApiU
 import bs58 from 'bs58';
 import BN from 'bn.js';
 
-const connection = new Connection(clusterApiUrl('devnet'));
+const connection = new Connection(clusterApiUrl('mainnet'));
 
 export const createTransaction = async (
   programId: string,

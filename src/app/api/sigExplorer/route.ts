@@ -5,7 +5,7 @@ import { AnchorProvider, Program, Idl } from '@project-serum/anchor';
 import idl from '../../../components/game_explorer.json'; // Ajusta la ruta según sea necesario
 
 const programId = new PublicKey(idl.metadata.address); // ID del programa
-const network = 'https://api.devnet.solana.com'; // Red de Solana
+const network = 'https://api.mainnet.solana.com'; // Red de Solana
 
 export async function POST(request: Request) {
   try {

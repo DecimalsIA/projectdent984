@@ -5,7 +5,7 @@ import { viewContractBalance } from '@/utils/viewContractBalance';
 // Asegúrate de tener la ruta correcta
 
 const useContractBalance = () => {
-  const connection = new Connection('https://api.devnet.solana.com');
+  const connection = new Connection('https://api.mainnet.solana.com');
   const programId = new PublicKey(
     '3SSUkmt5HfEqgEmM6ArkTUzTgQdGDJrRGh29GYyJshfe',
   ); // Tu programId

@@ -1,5 +1,5 @@
 import { clusterApiUrl, Connection, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
-const NETWORK = clusterApiUrl("devnet");
+const NETWORK = clusterApiUrl("mainnet");
 export const buyBee = async (phantomWalletPublicKey: PublicKey) => {
   const connection = new Connection(NETWORK);
   if (!phantomWalletPublicKey) throw new Error("missing public key from user");

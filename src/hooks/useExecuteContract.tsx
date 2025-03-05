@@ -17,7 +17,7 @@ interface UseExecuteContractProps {
 }
 
 export const useExecuteContract = ({ userId }: UseExecuteContractProps) => {
-  const connection = new Connection(clusterApiUrl('devnet'));
+  const connection = new Connection(clusterApiUrl('mainnet'));
   const [isExecuting, setIsExecuting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

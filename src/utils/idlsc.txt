@@ -3,7 +3,7 @@ import { Program, AnchorProvider } from '@project-serum/anchor';
 import idl from './pambii_explorer.json';
 
 // Define the network and connection
-const network = 'https://api.devnet.solana.com';
+const network = 'https://api.mainnet.solana.com';
 const connection = new Connection(network);
 
 // Define the provider after the connection

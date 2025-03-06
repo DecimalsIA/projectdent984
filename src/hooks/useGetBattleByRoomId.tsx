@@ -8,7 +8,7 @@ interface Battle {
   acceptances: any; // Dependiendo de la estructura que tengas para acceptances
   timestamp: Date;
   // Otros campos de la batalla que puedas tener
-}
+} 
 
 const useGetBattleByRoomId = () => {
   const [battle, setBattle] = useState<Battle | null>(null); // Almacena la batalla recuperada
